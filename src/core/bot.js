@@ -15,11 +15,11 @@ async function processMessage(user, message) {
     `;
     }
 
-    if (text === "1" || text === "promo") {
-        const product = getRandomProduct();
+    if (text === "promo") {
+    const product = await getRandomProduct();
 
-        return `
-🔥 *OFERTA IMPERDÍVEL!*
+    return `
+🔥 *OFERTA REAL!*
 
 🛍️ ${product.title}
 💰 ${product.price}
