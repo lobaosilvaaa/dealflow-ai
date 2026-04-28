@@ -6,10 +6,10 @@ function startScheduler(bot) {
 
     setInterval(async () => {
         try {
-            const chats = getChats();
+            const chats = await getChats();
 
-            if (chats.length === 0) {
-                console.log("⚠️ Nenhum chat registrado ainda");
+            if (!chats || chats.length === 0) {
+                console.log("⚠️ Nenhum chat no banco");
                 return;
             }
 
@@ -17,21 +17,26 @@ function startScheduler(bot) {
 
             for (const chatId of chats) {
                 try {
-                    // 🔥 Aqui usamos o core para gerar a mensagem
+                    // 🧠 Gera mensagem via core
                     const mensagem = await processMessage(chatId, "promo");
 
+                    // 📤 Envia mensagem
                     await bot.telegram.sendMessage(chatId, mensagem);
 
                     console.log("📤 Enviado para:", chatId);
                 } catch (err) {
-                    console.error("❌ Erro ao enviar para", chatId, err.message);
+                    console.error(
+                        `❌ Erro ao enviar para ${chatId}:`,
+                        err.message
+                    );
                 }
             }
         } catch (error) {
             console.error("❌ Erro no scheduler:", error.message);
         }
-    }, 60000); // 1 minuto (teste)
-
+    }, 60000); // ⏱️ 1 minuto (ajustável)
 }
 
-module.exports = { startScheduler };
+module.exports = {
+    startScheduler,
+};
