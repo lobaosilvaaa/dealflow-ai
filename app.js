@@ -1,7 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 
-const { startTelegramBot } = require("./src/adapters/telegram/telegram");
+// ✅ IMPORTAR OS DOIS
+const { startTelegramBot, bot } = require("./src/adapters/telegram/telegram");
+const { startScheduler } = require("./src/services/scheduler");
 
 const app = express();
 
@@ -15,5 +17,8 @@ app.listen(PORT, () => {
     console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
 
-// INICIAR TELEGRAM
+// 🚀 INICIAR BOT
 startTelegramBot();
+
+// ⏰ INICIAR SCHEDULER (AGORA FUNCIONA)
+startScheduler(bot);

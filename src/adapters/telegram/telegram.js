@@ -1,20 +1,43 @@
 const { Telegraf } = require("telegraf");
 const { processMessage } = require("../../core/bot");
+const { addChat } = require("../../database/chats");
 
+// 🔐 Token do .env
 const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
+// 📩 Recebimento de mensagens
 bot.on("text", async (ctx) => {
-    const user = ctx.from.id;
-    const message = ctx.message.text;
+    try {
+        const chatId = ctx.chat.id;
+        const message = ctx.message.text;
 
-    const resposta = await processMessage(user, message);
+        console.log("📩 Mensagem recebida:");
+        console.log("Chat ID:", chatId);
+        console.log("Mensagem:", message);
 
-    await ctx.reply(resposta);
+        // 📌 Registrar chat automaticamente
+        addChat(chatId);
+
+        // 🧠 Processar no core
+        const resposta = await processMessage(chatId, message);
+
+        // 📤 Enviar resposta
+        await ctx.reply(resposta);
+
+        console.log("✅ Resposta enviada");
+    } catch (error) {
+        console.error("❌ Erro no Telegram:", error.message);
+    }
 });
 
+// 🚀 Inicialização do bot
 function startTelegramBot() {
     bot.launch();
     console.log("🤖 Telegram bot rodando...");
 }
 
-module.exports = { startTelegramBot };
+// 📦 Exportação
+module.exports = {
+    startTelegramBot,
+    bot,
+};
