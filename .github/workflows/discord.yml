@@ -12,39 +12,84 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send Commit Log to Discord
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Extract Commit Info
+        id: commit
+        run: |
+          echo "MESSAGE=${{ github.event.head_commit.message }}" >> $GITHUB_OUTPUT
+          echo "AUTHOR=${{ github.event.head_commit.author.name }}" >> $GITHUB_OUTPUT
+          echo "URL=${{ github.event.head_commit.url }}" >> $GITHUB_OUTPUT
+          echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
+          COMMIT_TYPE="📦 Commit"
+
+          if [[ "${{ github.event.head_commit.message }}" == feat* ]]; then
+            COMMIT_TYPE="✨ Feature"
+            COLOR=5763719
+          elif [[ "${{ github.event.head_commit.message }}" == fix* ]]; then
+            COMMIT_TYPE="🐛 Fix"
+            COLOR=15548997
+          elif [[ "${{ github.event.head_commit.message }}" == refactor* ]]; then
+            COMMIT_TYPE="♻️ Refactor"
+            COLOR=16776960
+          elif [[ "${{ github.event.head_commit.message }}" == docs* ]]; then
+            COMMIT_TYPE="📝 Documentation"
+            COLOR=3447003
+          else
+            COLOR=10181046
+          fi
+
+          echo "TYPE=$COMMIT_TYPE" >> $GITHUB_OUTPUT
+          echo "COLOR=$COLOR" >> $GITHUB_OUTPUT
+
+      - name: Count Changed Files
+        id: files
+        run: |
+          FILE_COUNT=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }} | wc -l)
+          echo "COUNT=$FILE_COUNT" >> $GITHUB_OUTPUT
+
+      - name: Send Discord Webhook
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          COMMIT_MESSAGE="${{ github.event.head_commit.message }}"
-          COMMIT_AUTHOR="${{ github.event.head_commit.author.name }}"
-          COMMIT_URL="${{ github.event.head_commit.url }}"
-          REPO_NAME="${{ github.repository }}"
-
           curl -H "Content-Type: application/json" \
           -X POST \
           -d "{
+            \"username\": \"DealFlowAI Logs\",
+            \"avatar_url\": \"https://cdn.discordapp.com/attachments/1502737278227714190/1502752178526490884/ChatGPT_Image_9_de_mai._de_2026_15_28_42.png?ex=6a00da87&is=69ff8907&hm=71a1662320703578b0958b5e8279367ef4972002b30efc72369a37ca5376df25&",
             \"embeds\": [{
               \"title\": \"🚀 Novo Commit - DealFlowAI\",
-              \"description\": \"${COMMIT_MESSAGE}\",
-              \"color\": 5814783,
+              \"description\": \"${{ steps.commit.outputs.MESSAGE }}\",
+              \"color\": ${{ steps.commit.outputs.COLOR }},
               \"fields\": [
                 {
-                  \"name\": \"👤 Autor\",
-                  \"value\": \"${COMMIT_AUTHOR}\",
+                  \"name\": \"📌 Tipo\",
+                  \"value\": \"${{ steps.commit.outputs.TYPE }}\",
                   \"inline\": true
                 },
                 {
-                  \"name\": \"📦 Repositório\",
-                  \"value\": \"${REPO_NAME}\",
+                  \"name\": \"👤 Autor\",
+                  \"value\": \"${{ steps.commit.outputs.AUTHOR }}\",
+                  \"inline\": true
+                },
+                {
+                  \"name\": \"🌿 Branch\",
+                  \"value\": \"${{ steps.commit.outputs.BRANCH }}\",
+                  \"inline\": true
+                },
+                {
+                  \"name\": \"📁 Arquivos Alterados\",
+                  \"value\": \"${{ steps.files.outputs.COUNT }} arquivos\",
                   \"inline\": true
                 }
               ],
               \"footer\": {
                 \"text\": \"DealFlowAI Commit Logs\"
               },
-              \"url\": \"${COMMIT_URL}\",
-              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",
+              \"url\": \"${{ steps.commit.outputs.URL }}\"
             }]
           }" \
           $DISCORD_WEBHOOK
