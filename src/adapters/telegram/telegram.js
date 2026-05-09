@@ -27,7 +27,9 @@ bot.on("text", async (ctx) => {
         // 📡 Runtime log - mensagem recebida
         sendRuntimeLog(
             "📨 Nova Mensagem Recebida",
-            `Usuário: ${username}\nChat ID: ${chatId}\nMensagem: ${message}`
+            `Usuário: ${username}\nChat ID: ${chatId}\nMensagem: ${message}`,
+            3447003,
+            "telegram-bot"
         );
 
         // 🧠 Processar no core
@@ -41,7 +43,9 @@ bot.on("text", async (ctx) => {
         // 📡 Runtime log - resposta enviada
         sendRuntimeLog(
             "✅ Resposta Enviada",
-            `Resposta enviada para ${username}`
+            `Resposta enviada para ${username}`,
+            5763719,
+            "telegram-bot"
         );
 
     } catch (error) {
@@ -50,8 +54,9 @@ bot.on("text", async (ctx) => {
         // 🚨 Runtime log - erro
         sendRuntimeLog(
             "❌ Telegram Bot Error",
-            error.message,
-            15548997
+            error.stack || error.message,
+            15548997,
+            "telegram-bot"
         );
     }
 });
@@ -65,7 +70,9 @@ function startTelegramBot() {
     // 📡 Runtime log - bot online
     sendRuntimeLog(
         "🟢 Telegram Bot Online",
-        "O bot do Telegram foi iniciado com sucesso."
+        "O bot do Telegram foi iniciado com sucesso.",
+        5763719,
+        "telegram-bot"
     );
 }
 
@@ -76,7 +83,8 @@ process.once("SIGINT", () => {
     sendRuntimeLog(
         "🛑 Telegram Bot Offline",
         "O bot do Telegram foi encerrado via SIGINT.",
-        16776960
+        16776960,
+        "telegram-bot"
     );
 
     bot.stop("SIGINT");
@@ -88,7 +96,8 @@ process.once("SIGTERM", () => {
     sendRuntimeLog(
         "🛑 Telegram Bot Offline",
         "O bot do Telegram foi encerrado via SIGTERM.",
-        16776960
+        16776960,
+        "telegram-bot"
     );
 
     bot.stop("SIGTERM");
@@ -101,7 +110,8 @@ process.on("uncaughtException", (error) => {
     sendRuntimeLog(
         "🚨 Uncaught Exception",
         error.stack || error.message,
-        15548997
+        15548997,
+        "telegram-bot"
     );
 });
 
@@ -111,7 +121,8 @@ process.on("unhandledRejection", (reason) => {
     sendRuntimeLog(
         "🚨 Unhandled Rejection",
         String(reason),
-        15548997
+        15548997,
+        "telegram-bot"
     );
 });
 
