@@ -19,22 +19,56 @@ function getMemoryUsage() {
     return `${Math.round(used)} MB`;
 }
 
+function getStatusInfo(status) {
+    switch (status) {
+        case "healthy":
+            return {
+                emoji: "🟢 Healthy",
+                color: 5763719,
+            };
+
+        case "warning":
+            return {
+                emoji: "🟡 Warning",
+                color: 16776960,
+            };
+
+        case "offline":
+            return {
+                emoji: "🔴 Offline",
+                color: 15548997,
+            };
+
+        default:
+            return {
+                emoji: "⚪ Unknown",
+                color: 9807270,
+            };
+    }
+}
+
 async function sendRuntimeLog(
     title,
     description,
-    color = 5763719,
     service = "core",
-    status = "healthy"
+    status = "healthy",
+    category = "⚙️ System Events"
 ) {
     try {
         const uptime = formatUptime(process.uptime());
 
-        const statusEmoji =
-            status === "healthy"
-                ? "🟢 Healthy"
-                : status === "warning"
-                ? "🟡 Warning"
-                : "🔴 Offline";
+        const memoryUsage = getMemoryUsage();
+
+        const statusInfo = getStatusInfo(status);
+
+        // ⚠️ Memory alert
+        const memoryValue = parseInt(memoryUsage);
+
+        let memoryStatus = "✅ Normal";
+
+        if (memoryValue >= 200) {
+            memoryStatus = "⚠️ High";
+        }
 
         await axios.post(webhookUrl, {
             username: "DealFlowAI Runtime",
@@ -46,12 +80,19 @@ async function sendRuntimeLog(
                 {
                     title,
                     description,
-                    color,
+
+                    color: statusInfo.color,
 
                     fields: [
                         {
+                            name: "📂 Category",
+                            value: category,
+                            inline: true,
+                        },
+                        {
                             name: "🖥️ Environment",
-                            value: process.env.NODE_ENV || "development",
+                            value:
+                                process.env.NODE_ENV || "development",
                             inline: true,
                         },
                         {
@@ -61,7 +102,7 @@ async function sendRuntimeLog(
                         },
                         {
                             name: "📡 Status",
-                            value: statusEmoji,
+                            value: statusInfo.emoji,
                             inline: true,
                         },
                         {
@@ -71,12 +112,17 @@ async function sendRuntimeLog(
                         },
                         {
                             name: "💾 Memory",
-                            value: getMemoryUsage(),
+                            value: `${memoryUsage} (${memoryStatus})`,
                             inline: true,
                         },
                         {
                             name: "💻 Host",
                             value: os.hostname(),
+                            inline: true,
+                        },
+                        {
+                            name: "🕒 Started At",
+                            value: new Date().toLocaleString(),
                             inline: true,
                         },
                     ],

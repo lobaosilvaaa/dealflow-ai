@@ -37,12 +37,17 @@ jobs:
         env:
           DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
+          STARTED_AT=$(date '+%H:%M:%S')
+
           PAYLOAD=$(jq -n \
             --arg username "DealFlowAI Deploy" \
             --arg avatar_url "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png" \
             --arg title "🚀 Deploy Started" \
             --arg description "O deploy do DealFlowAI foi iniciado." \
             --arg branch "${{ steps.data.outputs.BRANCH }}" \
+            --arg environment "production" \
+            --arg workflow "deploy.yml" \
+            --arg started_at "$STARTED_AT" \
             --arg author "${{ steps.data.outputs.AUTHOR }}" \
             --arg commit "${{ steps.data.outputs.MESSAGE }}" \
             '{
@@ -59,6 +64,21 @@ jobs:
                     {
                       name: "🌿 Branch",
                       value: $branch,
+                      inline: true
+                    },
+                    {
+                      name: "🖥️ Environment",
+                      value: $environment,
+                      inline: true
+                    },
+                    {
+                      name: "⚙️ Workflow",
+                      value: $workflow,
+                      inline: true
+                    },
+                    {
+                      name: "🕒 Started At",
+                      value: $started_at,
                       inline: true
                     },
                     {

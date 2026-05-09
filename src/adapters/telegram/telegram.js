@@ -27,9 +27,10 @@ bot.on("text", async (ctx) => {
         // 📡 Runtime log - mensagem recebida
         sendRuntimeLog(
             "📨 Nova Mensagem Recebida",
-            `Usuário: ${username}\nChat ID: ${chatId}\nMensagem: ${message}`,
-            3447003,
-            "telegram-bot"
+            `Usuário: ${username}\nChat ID: ${chatId}`,
+            "telegram-bot",
+            "healthy",
+            "📨 Message Events"
         );
 
         // 🧠 Processar no core
@@ -44,8 +45,9 @@ bot.on("text", async (ctx) => {
         sendRuntimeLog(
             "✅ Resposta Enviada",
             `Resposta enviada para ${username}`,
-            5763719,
-            "telegram-bot"
+            "telegram-bot",
+            "healthy",
+            "📨 Message Events"
         );
 
     } catch (error) {
@@ -53,10 +55,11 @@ bot.on("text", async (ctx) => {
 
         // 🚨 Runtime log - erro
         sendRuntimeLog(
-            "❌ Telegram Bot Error",
+            "🚨 Telegram Bot Error",
             error.stack || error.message,
-            15548997,
-            "telegram-bot"
+            "telegram-bot",
+            "offline",
+            "🚨 Error Events"
         );
     }
 });
@@ -71,8 +74,9 @@ function startTelegramBot() {
     sendRuntimeLog(
         "🟢 Telegram Bot Online",
         "O bot do Telegram foi iniciado com sucesso.",
-        5763719,
-        "telegram-bot"
+        "telegram-bot",
+        "healthy",
+        "🤖 Bot Events"
     );
 }
 
@@ -81,10 +85,11 @@ process.once("SIGINT", () => {
     console.log("🛑 Encerrando Telegram Bot (SIGINT)");
 
     sendRuntimeLog(
-        "🛑 Telegram Bot Offline",
+        "🔴 Telegram Bot Offline",
         "O bot do Telegram foi encerrado via SIGINT.",
-        16776960,
-        "telegram-bot"
+        "telegram-bot",
+        "offline",
+        "🤖 Bot Events"
     );
 
     bot.stop("SIGINT");
@@ -94,10 +99,11 @@ process.once("SIGTERM", () => {
     console.log("🛑 Encerrando Telegram Bot (SIGTERM)");
 
     sendRuntimeLog(
-        "🛑 Telegram Bot Offline",
+        "🔴 Telegram Bot Offline",
         "O bot do Telegram foi encerrado via SIGTERM.",
-        16776960,
-        "telegram-bot"
+        "telegram-bot",
+        "offline",
+        "🤖 Bot Events"
     );
 
     bot.stop("SIGTERM");
@@ -110,8 +116,9 @@ process.on("uncaughtException", (error) => {
     sendRuntimeLog(
         "🚨 Uncaught Exception",
         error.stack || error.message,
-        15548997,
-        "telegram-bot"
+        "telegram-bot",
+        "offline",
+        "🚨 Error Events"
     );
 });
 
@@ -121,8 +128,9 @@ process.on("unhandledRejection", (reason) => {
     sendRuntimeLog(
         "🚨 Unhandled Rejection",
         String(reason),
-        15548997,
-        "telegram-bot"
+        "telegram-bot",
+        "warning",
+        "🚨 Error Events"
     );
 });
 
