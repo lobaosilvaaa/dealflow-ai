@@ -26,7 +26,7 @@ jobs:
 
           FILES=$(git diff --name-only HEAD^ HEAD | wc -l)
 
-          FILE_LIST=$(git diff --name-only HEAD^ HEAD | sed 's/^/• /' | head -5)
+          FILE_LIST=$(git diff --name-only HEAD^ HEAD | awk '{print "• " $0}' | head -5)
 
           echo "FILES=$FILES" >> $GITHUB_OUTPUT
 
