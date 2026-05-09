@@ -3,20 +3,38 @@ const os = require("os");
 
 const webhookUrl = process.env.DISCORD_RUNTIME_WEBHOOK;
 
+function formatUptime(seconds) {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+
+    if (h > 0) return `${h}h ${m}m`;
+    if (m > 0) return `${m}m ${s}s`;
+
+    return `${s}s`;
+}
+
+function getMemoryUsage() {
+    const used = process.memoryUsage().heapUsed / 1024 / 1024;
+    return `${Math.round(used)} MB`;
+}
+
 async function sendRuntimeLog(
     title,
     description,
     color = 5763719,
-    service = "core"
+    service = "core",
+    status = "healthy"
 ) {
     try {
-        const uptimeSeconds = process.uptime();
+        const uptime = formatUptime(process.uptime());
 
-        const hours = Math.floor(uptimeSeconds / 3600);
-        const minutes = Math.floor((uptimeSeconds % 3600) / 60);
-        const seconds = Math.floor(uptimeSeconds % 60);
-
-        const uptime = `${hours}h ${minutes}m ${seconds}s`;
+        const statusEmoji =
+            status === "healthy"
+                ? "🟢 Healthy"
+                : status === "warning"
+                ? "🟡 Warning"
+                : "🔴 Offline";
 
         await axios.post(webhookUrl, {
             username: "DealFlowAI Runtime",
@@ -43,12 +61,17 @@ async function sendRuntimeLog(
                         },
                         {
                             name: "📡 Status",
-                            value: "healthy",
+                            value: statusEmoji,
                             inline: true,
                         },
                         {
                             name: "⏱️ Uptime",
                             value: uptime,
+                            inline: true,
+                        },
+                        {
+                            name: "💾 Memory",
+                            value: getMemoryUsage(),
                             inline: true,
                         },
                         {
