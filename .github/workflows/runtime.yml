@@ -12,11 +12,11 @@ jobs:
         env:
           DISCORD_RUNTIME_WEBHOOK: ${{ secrets.DISCORD_RUNTIME_WEBHOOK }}
         run: |
-          curl -X POST $DISCORD_RUNTIME_WEBHOOK \
+          curl -X POST "$DISCORD_RUNTIME_WEBHOOK" \
           -H "Content-Type: application/json" \
           -d '{
             "username": "DealFlowAI Runtime",
-            "avatar_url": "assets/LogoDealFlowAI.png",
+            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "♻️ Runtime Event",
               "description": "DealFlowAI runtime system initialized successfully.",
