@@ -8,33 +8,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Make script executable
+        run: chmod +x .github/scripts/discord-webhook.sh
+
       - name: Send Runtime Log
         env:
           DISCORD_RUNTIME_WEBHOOK: ${{ secrets.DISCORD_RUNTIME_WEBHOOK }}
         run: |
-          curl -X POST "$DISCORD_RUNTIME_WEBHOOK" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "username": "DealFlowAI Runtime",
-            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png",
-            "embeds": [{
-              "title": "♻️ Runtime Event",
-              "description": "DealFlowAI runtime system initialized successfully.",
-              "color": 5763719,
-              "fields": [
-                {
-                  "name": "🖥️ Environment",
-                  "value": "production",
-                  "inline": true
-                },
-                {
-                  "name": "📡 Status",
-                  "value": "Online",
-                  "inline": true
-                }
-              ],
-              "footer": {
-                "text": "DealFlowAI Runtime Logs"
-              }
-            }]
-          }'
+          ./.github/scripts/discord-webhook.sh \
+          "$DISCORD_RUNTIME_WEBHOOK" \
+          "DealFlowAI Runtime" \
+          "♻️ Runtime Event" \
+          "DealFlowAI runtime system initialized successfully." \
+          5763719

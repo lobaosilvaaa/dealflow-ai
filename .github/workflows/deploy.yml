@@ -13,6 +13,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Make script executable
+        run: chmod +x .github/scripts/discord-webhook.sh
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -25,17 +28,12 @@ jobs:
         env:
           DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST "$DISCORD_DEPLOY_WEBHOOK" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "username": "DealFlowAI Deploy",
-            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png",
-            "embeds": [{
-              "title": "🚀 Deploy Started",
-              "description": "O deploy do DealFlowAI foi iniciado.",
-              "color": 16776960
-            }]
-          }'
+          ./.github/scripts/discord-webhook.sh \
+          "$DISCORD_DEPLOY_WEBHOOK" \
+          "DealFlowAI Deploy" \
+          "🚀 Deploy Started" \
+          "O deploy do DealFlowAI foi iniciado." \
+          16776960
 
       - name: Run Build
         run: |
@@ -52,31 +50,21 @@ jobs:
         env:
           DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST "$DISCORD_DEPLOY_WEBHOOK" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "username": "DealFlowAI Deploy",
-            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png",
-            "embeds": [{
-              "title": "✅ Deploy Successful",
-              "description": "DealFlowAI implantado com sucesso.",
-              "color": 5763719
-            }]
-          }'
+          ./.github/scripts/discord-webhook.sh \
+          "$DISCORD_DEPLOY_WEBHOOK" \
+          "DealFlowAI Deploy" \
+          "✅ Deploy Successful" \
+          "DealFlowAI implantado com sucesso." \
+          5763719
 
       - name: Notify Deploy Failed
         if: failure()
         env:
           DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST "$DISCORD_DEPLOY_WEBHOOK" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "username": "DealFlowAI Deploy",
-            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png",
-            "embeds": [{
-              "title": "❌ Deploy Failed",
-              "description": "O deploy do DealFlowAI falhou.",
-              "color": 15548997
-            }]
-          }'
+          ./.github/scripts/discord-webhook.sh \
+          "$DISCORD_DEPLOY_WEBHOOK" \
+          "DealFlowAI Deploy" \
+          "❌ Deploy Failed" \
+          "O deploy do DealFlowAI falhou." \
+          15548997
