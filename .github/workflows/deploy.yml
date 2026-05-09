@@ -50,6 +50,9 @@ jobs:
             --arg started_at "$STARTED_AT" \
             --arg author "${{ steps.data.outputs.AUTHOR }}" \
             --arg commit "${{ steps.data.outputs.MESSAGE }}" \
+            --arg repo "${{ steps.data.outputs.REPO }}" \
+            --arg url "${{ steps.data.outputs.URL }}" \
+            --arg pipeline "${{ github.run_id }}" \
             '{
               username: $username,
               avatar_url: $avatar_url,
@@ -59,6 +62,7 @@ jobs:
                   title: $title,
                   description: $description,
                   color: 16776960,
+                  url: $url,
 
                   fields: [
                     {
@@ -84,6 +88,16 @@ jobs:
                     {
                       name: "👤 Triggered By",
                       value: $author,
+                      inline: true
+                    },
+                    {
+                      name: "📦 Repository",
+                      value: $repo,
+                      inline: true
+                    },
+                    {
+                      name: "🆔 Pipeline",
+                      value: $pipeline,
                       inline: true
                     },
                     {
@@ -132,6 +146,9 @@ jobs:
             --arg commit "${{ steps.data.outputs.MESSAGE }}" \
             --arg duration "${DURATION}s" \
             --arg workflow "deploy.yml" \
+            --arg repo "${{ steps.data.outputs.REPO }}" \
+            --arg url "${{ steps.data.outputs.URL }}" \
+            --arg pipeline "${{ github.run_id }}" \
             --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
             '{
               username: $username,
@@ -142,6 +159,7 @@ jobs:
                   title: $title,
                   description: $description,
                   color: 5763719,
+                  url: $url,
 
                   fields: [
                     {
@@ -167,6 +185,16 @@ jobs:
                     {
                       name: "⚙️ Workflow",
                       value: $workflow,
+                      inline: true
+                    },
+                    {
+                      name: "📦 Repository",
+                      value: $repo,
+                      inline: true
+                    },
+                    {
+                      name: "🆔 Pipeline",
+                      value: $pipeline,
                       inline: true
                     },
                     {
@@ -206,6 +234,9 @@ jobs:
             --arg commit "${{ steps.data.outputs.MESSAGE }}" \
             --arg duration "${DURATION}s" \
             --arg workflow "deploy.yml" \
+            --arg repo "${{ steps.data.outputs.REPO }}" \
+            --arg url "${{ steps.data.outputs.URL }}" \
+            --arg pipeline "${{ github.run_id }}" \
             '{
               username: $username,
               avatar_url: $avatar_url,
@@ -215,6 +246,7 @@ jobs:
                   title: $title,
                   description: $description,
                   color: 15548997,
+                  url: $url,
 
                   fields: [
                     {
@@ -235,6 +267,16 @@ jobs:
                     {
                       name: "⚙️ Workflow",
                       value: $workflow,
+                      inline: true
+                    },
+                    {
+                      name: "📦 Repository",
+                      value: $repo,
+                      inline: true
+                    },
+                    {
+                      name: "🆔 Pipeline",
+                      value: $pipeline,
                       inline: true
                     },
                     {

@@ -8,6 +8,8 @@ const bot = new Telegraf(process.env.TELEGRAM_TOKEN);
 
 // 📩 Recebimento de mensagens
 bot.on("text", async (ctx) => {
+    const startTime = Date.now();
+
     try {
         const chatId = ctx.chat.id;
         const message = ctx.message.text;
@@ -39,7 +41,10 @@ bot.on("text", async (ctx) => {
         // 📤 Enviar resposta
         await ctx.reply(resposta);
 
+        const latency = Date.now() - startTime;
+
         console.log("✅ Resposta enviada");
+        console.log(`⚡ Latência: ${latency}ms`);
 
         // 📡 Runtime log - resposta enviada
         sendRuntimeLog(
@@ -47,7 +52,8 @@ bot.on("text", async (ctx) => {
             `Resposta enviada para ${username}`,
             "telegram-bot",
             "healthy",
-            "📨 Message Events"
+            "📨 Message Events",
+            latency
         );
 
     } catch (error) {

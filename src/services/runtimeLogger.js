@@ -16,7 +16,21 @@ function formatUptime(seconds) {
 
 function getMemoryUsage() {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
-    return `${Math.round(used)} MB`;
+    return Math.round(used);
+}
+
+function getCpuUsage() {
+    const load = os.loadavg()[0];
+
+    return `${load.toFixed(2)}%`;
+}
+
+function truncate(text, max = 1000) {
+    if (!text) return "N/A";
+
+    return text.length > max
+        ? text.substring(0, max) + "..."
+        : text;
 }
 
 function getStatusInfo(status) {
@@ -52,22 +66,74 @@ async function sendRuntimeLog(
     description,
     service = "core",
     status = "healthy",
-    category = "⚙️ System Events"
+    category = "⚙️ System Events",
+    latency = null
 ) {
     try {
         const uptime = formatUptime(process.uptime());
 
         const memoryUsage = getMemoryUsage();
 
+        const cpuUsage = getCpuUsage();
+
         const statusInfo = getStatusInfo(status);
 
-        // ⚠️ Memory alert
-        const memoryValue = parseInt(memoryUsage);
-
+        // ⚠️ Memory Alert
         let memoryStatus = "✅ Normal";
 
-        if (memoryValue >= 200) {
+        if (memoryUsage >= 200) {
             memoryStatus = "⚠️ High";
+        }
+
+        const fields = [
+            {
+                name: "📂 Category",
+                value: category,
+                inline: true,
+            },
+            {
+                name: "🖥️ Environment",
+                value: process.env.NODE_ENV || "development",
+                inline: true,
+            },
+            {
+                name: "⚙️ Service",
+                value: service,
+                inline: true,
+            },
+            {
+                name: "📡 Status",
+                value: statusInfo.emoji,
+                inline: true,
+            },
+            {
+                name: "⏱️ Uptime",
+                value: uptime,
+                inline: true,
+            },
+            {
+                name: "💾 Memory",
+                value: `${memoryUsage} MB (${memoryStatus})`,
+                inline: true,
+            },
+            {
+                name: "🧠 CPU",
+                value: cpuUsage,
+                inline: true,
+            },
+            {
+                name: "💻 Host",
+                value: os.hostname(),
+                inline: true,
+            },
+        ];
+
+        if (latency) {
+            fields.push({
+                name: "⚡ Latency",
+                value: `${latency}ms`,
+                inline: true,
+            });
         }
 
         await axios.post(webhookUrl, {
@@ -79,53 +145,12 @@ async function sendRuntimeLog(
             embeds: [
                 {
                     title,
-                    description,
+
+                    description: truncate(description),
 
                     color: statusInfo.color,
 
-                    fields: [
-                        {
-                            name: "📂 Category",
-                            value: category,
-                            inline: true,
-                        },
-                        {
-                            name: "🖥️ Environment",
-                            value:
-                                process.env.NODE_ENV || "development",
-                            inline: true,
-                        },
-                        {
-                            name: "⚙️ Service",
-                            value: service,
-                            inline: true,
-                        },
-                        {
-                            name: "📡 Status",
-                            value: statusInfo.emoji,
-                            inline: true,
-                        },
-                        {
-                            name: "⏱️ Uptime",
-                            value: uptime,
-                            inline: true,
-                        },
-                        {
-                            name: "💾 Memory",
-                            value: `${memoryUsage} (${memoryStatus})`,
-                            inline: true,
-                        },
-                        {
-                            name: "💻 Host",
-                            value: os.hostname(),
-                            inline: true,
-                        },
-                        {
-                            name: "🕒 Started At",
-                            value: new Date().toLocaleString(),
-                            inline: true,
-                        },
-                    ],
+                    fields,
 
                     footer: {
                         text: "DealFlowAI Runtime Logs",
