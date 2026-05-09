@@ -62,51 +62,72 @@ jobs:
             TYPE="🛠️ Chore"
           fi
 
+          PAYLOAD=$(jq -n \
+            --arg username "DealFlowAI Logs" \
+            --arg avatar_url "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png" \
+            --arg title "🚀 Novo Commit - DealFlowAI" \
+            --arg description "$MESSAGE" \
+            --arg url "${{ steps.data.outputs.URL }}" \
+            --arg type "$TYPE" \
+            --arg author "${{ steps.data.outputs.AUTHOR }}" \
+            --arg branch "${{ steps.data.outputs.BRANCH }}" \
+            --arg files "${{ steps.data.outputs.FILES }} alterados" \
+            --arg file_list "${{ steps.data.outputs.FILE_LIST }}" \
+            --arg repo "${{ steps.data.outputs.REPO }}" \
+            --arg timestamp "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            --argjson color "$COLOR" \
+            '{
+              username: $username,
+              avatar_url: $avatar_url,
+              embeds: [
+                {
+                  title: $title,
+                  description: $description,
+                  color: $color,
+                  url: $url,
+
+                  fields: [
+                    {
+                      name: "📌 Tipo",
+                      value: $type,
+                      inline: true
+                    },
+                    {
+                      name: "👤 Autor",
+                      value: $author,
+                      inline: true
+                    },
+                    {
+                      name: "🌿 Branch",
+                      value: $branch,
+                      inline: true
+                    },
+                    {
+                      name: "📁 Arquivos",
+                      value: $files,
+                      inline: true
+                    },
+                    {
+                      name: "📄 Alterações",
+                      value: $file_list,
+                      inline: false
+                    },
+                    {
+                      name: "📦 Repositório",
+                      value: $repo,
+                      inline: false
+                    }
+                  ],
+
+                  footer: {
+                    text: "DealFlowAI Commit Logs"
+                  },
+
+                  timestamp: $timestamp
+                }
+              ]
+            }')
+
           curl -X POST "$DISCORD_COMMIT_WEBHOOK" \
           -H "Content-Type: application/json" \
-          -d "{
-            \"username\": \"DealFlowAI Logs\",
-            \"avatar_url\": \"https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png\",
-            \"embeds\": [{
-              \"title\": \"🚀 Novo Commit - DealFlowAI\",
-              \"description\": \"$MESSAGE\",
-              \"color\": $COLOR,
-              \"url\": \"${{ steps.data.outputs.URL }}\",
-              \"fields\": [
-                {
-                  \"name\": \"📌 Tipo\",
-                  \"value\": \"$TYPE\",
-                  \"inline\": true
-                },
-                {
-                  \"name\": \"👤 Autor\",
-                  \"value\": \"${{ steps.data.outputs.AUTHOR }}\",
-                  \"inline\": true
-                },
-                {
-                  \"name\": \"🌿 Branch\",
-                  \"value\": \"${{ steps.data.outputs.BRANCH }}\",
-                  \"inline\": true
-                },
-                {
-                  \"name\": \"📁 Arquivos\",
-                  \"value\": \"${{ steps.data.outputs.FILES }} alterados\",
-                  \"inline\": true
-                },
-                {
-                  \"name\": \"📄 Alterações\",
-                  \"value\": \"${{ steps.data.outputs.FILE_LIST }}\",
-                  \"inline\": false
-                },
-                {
-                  \"name\": \"📦 Repositório\",
-                  \"value\": \"${{ steps.data.outputs.REPO }}\",
-                  \"inline\": false
-                }
-              ],
-              \"footer\": {
-                \"text\": \"DealFlowAI Commit Logs\"
-              },
-              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
-            }]
-          }"
+          -d "$PAYLOAD"
