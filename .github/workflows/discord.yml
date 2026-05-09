@@ -25,7 +25,16 @@ jobs:
           echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
           FILES=$(git diff --name-only HEAD^ HEAD | wc -l)
+
+          FILE_LIST=$(git diff --name-only HEAD^ HEAD | sed 's/^/• /' | head -5)
+
           echo "FILES=$FILES" >> $GITHUB_OUTPUT
+
+          {
+            echo "FILE_LIST<<EOF"
+            echo "$FILE_LIST"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
 
       - name: Send Discord Webhook
         env:
@@ -48,11 +57,15 @@ jobs:
           elif [[ "$MESSAGE" == docs* ]]; then
             COLOR=3447003
             TYPE="📝 Docs"
+          elif [[ "$MESSAGE" == chore* ]]; then
+            COLOR=9807270
+            TYPE="🛠️ Chore"
           fi
 
           curl -X POST $DISCORD_WEBHOOK \
           -H "Content-Type: application/json" \
           -d "{
+            \"username\": \"DealFlowAI Logs\",
             \"embeds\": [{
               \"title\": \"🚀 Novo Commit - DealFlowAI\",
               \"description\": \"$MESSAGE\",
@@ -80,6 +93,11 @@ jobs:
                   \"inline\": true
                 },
                 {
+                  \"name\": \"📄 Alterações\",
+                  \"value\": \"${{ steps.data.outputs.FILE_LIST }}\",
+                  \"inline\": false
+                },
+                {
                   \"name\": \"📦 Repositório\",
                   \"value\": \"${{ steps.data.outputs.REPO }}\",
                   \"inline\": false
@@ -87,6 +105,7 @@ jobs:
               ],
               \"footer\": {
                 \"text\": \"DealFlowAI Commit Logs\"
-              }
+              },
+              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
             }]
           }"
