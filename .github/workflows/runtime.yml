@@ -18,9 +18,15 @@ jobs:
         env:
           DISCORD_RUNTIME_WEBHOOK: ${{ secrets.DISCORD_RUNTIME_WEBHOOK }}
         run: |
+          DESCRIPTION="DealFlowAI runtime system initialized successfully.
+
+          🖥️ Environment: production
+          📡 Status: Online
+          ⚙️ Workflow: runtime.yml"
+
           ./.github/scripts/discord-webhook.sh \
           "$DISCORD_RUNTIME_WEBHOOK" \
           "DealFlowAI Runtime" \
           "♻️ Runtime Event" \
-          "DealFlowAI runtime system initialized successfully." \
+          "$DESCRIPTION" \
           5763719
