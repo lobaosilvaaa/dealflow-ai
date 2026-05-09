@@ -15,6 +15,7 @@ jobs:
           curl -X POST $DISCORD_RUNTIME_WEBHOOK \
           -H "Content-Type: application/json" \
           -d '{
+            "username": "DealFlowAI Runtime",
             "embeds": [{
               "title": "♻️ Runtime Event",
               "description": "DealFlowAI runtime system initialized successfully.",
