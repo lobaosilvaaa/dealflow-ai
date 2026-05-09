@@ -16,6 +16,7 @@ jobs:
           -H "Content-Type: application/json" \
           -d '{
             "username": "DealFlowAI Runtime",
+            "avatar_url": "assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "♻️ Runtime Event",
               "description": "DealFlowAI runtime system initialized successfully.",

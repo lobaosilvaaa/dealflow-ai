@@ -28,6 +28,8 @@ jobs:
           curl -X POST $DISCORD_DEPLOY_WEBHOOK \
           -H "Content-Type: application/json" \
           -d '{
+          "username": "DealFlowAI Deploy",
+            "avatar_url": "assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "🚀 Deploy Started",
               "description": "O deploy do DealFlowAI foi iniciado.",
@@ -53,6 +55,8 @@ jobs:
           curl -X POST $DISCORD_DEPLOY_WEBHOOK \
           -H "Content-Type: application/json" \
           -d '{
+            "username": "DealFlowAI Deploy",
+            "avatar_url": "assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "✅ Deploy Successful",
               "description": "DealFlowAI implantado com sucesso.",
@@ -68,6 +72,8 @@ jobs:
           curl -X POST $DISCORD_DEPLOY_WEBHOOK \
           -H "Content-Type: application/json" \
           -d '{
+            "username": "DealFlowAI Deploy",
+            "avatar_url": "assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "❌ Deploy Failed",
               "description": "O deploy do DealFlowAI falhou.",
