@@ -15,9 +15,6 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Make script executable
-        run: chmod +x .github/scripts/discord-webhook.sh
-
       - name: Extract Data
         id: data
         run: |
@@ -39,7 +36,7 @@ jobs:
             echo "EOF"
           } >> $GITHUB_OUTPUT
 
-      - name: Send Commit Log
+      - name: Send Discord Webhook
         env:
           DISCORD_COMMIT_WEBHOOK: ${{ secrets.DISCORD_COMMIT_WEBHOOK }}
         run: |
@@ -65,24 +62,51 @@ jobs:
             TYPE="🛠️ Chore"
           fi
 
-          DESCRIPTION="$MESSAGE
-
-          📌 Tipo: $TYPE
-          👤 Autor: ${{ steps.data.outputs.AUTHOR }}
-          🌿 Branch: ${{ steps.data.outputs.BRANCH }}
-
-          📁 Arquivos:
-          ${{ steps.data.outputs.FILES }} alterados
-
-          📄 Alterações:
-          ${{ steps.data.outputs.FILE_LIST }}
-
-          📦 Repositório:
-          ${{ steps.data.outputs.REPO }}"
-
-          ./.github/scripts/discord-webhook.sh \
-          "$DISCORD_COMMIT_WEBHOOK" \
-          "DealFlowAI Logs" \
-          "🚀 Novo Commit - DealFlowAI" \
-          "$DESCRIPTION" \
-          "$COLOR"
+          curl -X POST "$DISCORD_COMMIT_WEBHOOK" \
+          -H "Content-Type: application/json" \
+          -d "{
+            \"username\": \"DealFlowAI Logs\",
+            \"avatar_url\": \"https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png\",
+            \"embeds\": [{
+              \"title\": \"🚀 Novo Commit - DealFlowAI\",
+              \"description\": \"$MESSAGE\",
+              \"color\": $COLOR,
+              \"url\": \"${{ steps.data.outputs.URL }}\",
+              \"fields\": [
+                {
+                  \"name\": \"📌 Tipo\",
+                  \"value\": \"$TYPE\",
+                  \"inline\": true
+                },
+                {
+                  \"name\": \"👤 Autor\",
+                  \"value\": \"${{ steps.data.outputs.AUTHOR }}\",
+                  \"inline\": true
+                },
+                {
+                  \"name\": \"🌿 Branch\",
+                  \"value\": \"${{ steps.data.outputs.BRANCH }}\",
+                  \"inline\": true
+                },
+                {
+                  \"name\": \"📁 Arquivos\",
+                  \"value\": \"${{ steps.data.outputs.FILES }} alterados\",
+                  \"inline\": true
+                },
+                {
+                  \"name\": \"📄 Alterações\",
+                  \"value\": \"${{ steps.data.outputs.FILE_LIST }}\",
+                  \"inline\": false
+                },
+                {
+                  \"name\": \"📦 Repositório\",
+                  \"value\": \"${{ steps.data.outputs.REPO }}\",
+                  \"inline\": false
+                }
+              ],
+              \"footer\": {
+                \"text\": \"DealFlowAI Commit Logs\"
+              },
+              \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+            }]
+          }"
