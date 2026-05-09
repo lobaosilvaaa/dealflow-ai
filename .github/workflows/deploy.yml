@@ -23,9 +23,9 @@ jobs:
 
       - name: Notify Deploy Started
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST $DISCORD_WEBHOOK \
+          curl -X POST $DISCORD_DEPLOY_WEBHOOK \
           -H "Content-Type: application/json" \
           -d '{
             "embeds": [{
@@ -48,9 +48,9 @@ jobs:
       - name: Notify Deploy Success
         if: success()
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST $DISCORD_WEBHOOK \
+          curl -X POST $DISCORD_DEPLOY_WEBHOOK \
           -H "Content-Type: application/json" \
           -d '{
             "embeds": [{
@@ -63,9 +63,9 @@ jobs:
       - name: Notify Deploy Failed
         if: failure()
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST $DISCORD_WEBHOOK \
+          curl -X POST $DISCORD_DEPLOY_WEBHOOK \
           -H "Content-Type: application/json" \
           -d '{
             "embeds": [{

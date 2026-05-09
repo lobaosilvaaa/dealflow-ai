@@ -38,7 +38,7 @@ jobs:
 
       - name: Send Discord Webhook
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_COMMIT_WEBHOOK: ${{ secrets.DISCORD_COMMIT_WEBHOOK }}
         run: |
           MESSAGE="${{ steps.data.outputs.MESSAGE }}"
 
@@ -62,7 +62,7 @@ jobs:
             TYPE="🛠️ Chore"
           fi
 
-          curl -X POST $DISCORD_WEBHOOK \
+          curl -X POST $DISCORD_COMMIT_WEBHOOK \
           -H "Content-Type: application/json" \
           -d "{
             \"username\": \"DealFlowAI Logs\",
