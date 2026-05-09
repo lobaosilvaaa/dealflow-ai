@@ -1,0 +1,38 @@
+name: DealFlowAI Runtime Logs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Runtime Log
+        env:
+          DISCORD_RUNTIME_WEBHOOK: ${{ secrets.DISCORD_RUNTIME_WEBHOOK }}
+        run: |
+          curl -X POST $DISCORD_RUNTIME_WEBHOOK \
+          -H "Content-Type: application/json" \
+          -d '{
+            "embeds": [{
+              "title": "♻️ Runtime Event",
+              "description": "DealFlowAI runtime system initialized successfully.",
+              "color": 5763719,
+              "fields": [
+                {
+                  "name": "🖥️ Environment",
+                  "value": "production",
+                  "inline": true
+                },
+                {
+                  "name": "📡 Status",
+                  "value": "Online",
+                  "inline": true
+                }
+              ],
+              "footer": {
+                "text": "DealFlowAI Runtime Logs"
+              }
+            }]
+          }'
