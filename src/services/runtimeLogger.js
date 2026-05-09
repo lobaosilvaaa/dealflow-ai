@@ -97,6 +97,11 @@ async function sendRuntimeLog(
                 inline: true,
             },
             {
+                name: "\u200b",
+                value: "\u200b",
+                inline: false,
+            },
+            {
                 name: "⚙️ Service",
                 value: service,
                 inline: true,
@@ -107,6 +112,11 @@ async function sendRuntimeLog(
                 inline: true,
             },
             {
+                name: "\u200b",
+                value: "\u200b",
+                inline: false,
+            },
+            {
                 name: "⏱️ Uptime",
                 value: uptime,
                 inline: true,
@@ -115,6 +125,11 @@ async function sendRuntimeLog(
                 name: "💾 Memory",
                 value: `${memoryUsage} MB (${memoryStatus})`,
                 inline: true,
+            },
+            {
+                name: "\u200b",
+                value: "\u200b",
+                inline: false,
             },
             {
                 name: "🧠 CPU",
