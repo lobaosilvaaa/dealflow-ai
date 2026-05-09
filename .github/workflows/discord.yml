@@ -66,7 +66,7 @@ jobs:
           -H "Content-Type: application/json" \
           -d "{
             \"username\": \"DealFlowAI Logs\",
-            \"avatar_url\": \"https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/assets/LogoDealFlowAI.png\",
+            \"avatar_url\": \"https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/refs/heads/main/src/assets/LogoDealFlowAI.png\",
             \"embeds\": [{
               \"title\": \"🚀 Novo Commit - DealFlowAI\",
               \"description\": \"$MESSAGE\",
