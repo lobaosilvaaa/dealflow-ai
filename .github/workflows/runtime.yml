@@ -16,7 +16,7 @@ jobs:
           -H "Content-Type: application/json" \
           -d '{
             "username": "DealFlowAI Runtime",
-            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/refs/heads/main/src/assets/LogoDealFlowAI.png",
+            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "♻️ Runtime Event",
               "description": "DealFlowAI runtime system initialized successfully.",
