@@ -25,11 +25,11 @@ jobs:
         env:
           DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST $DISCORD_DEPLOY_WEBHOOK \
+          curl -X POST "$DISCORD_DEPLOY_WEBHOOK" \
           -H "Content-Type: application/json" \
           -d '{
-          "username": "DealFlowAI Deploy",
-            "avatar_url": "assets/LogoDealFlowAI.png",
+            "username": "DealFlowAI Deploy",
+            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "🚀 Deploy Started",
               "description": "O deploy do DealFlowAI foi iniciado.",
@@ -52,11 +52,11 @@ jobs:
         env:
           DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST $DISCORD_DEPLOY_WEBHOOK \
+          curl -X POST "$DISCORD_DEPLOY_WEBHOOK" \
           -H "Content-Type: application/json" \
           -d '{
             "username": "DealFlowAI Deploy",
-            "avatar_url": "assets/LogoDealFlowAI.png",
+            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "✅ Deploy Successful",
               "description": "DealFlowAI implantado com sucesso.",
@@ -69,11 +69,11 @@ jobs:
         env:
           DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
         run: |
-          curl -X POST $DISCORD_DEPLOY_WEBHOOK \
+          curl -X POST "$DISCORD_DEPLOY_WEBHOOK" \
           -H "Content-Type: application/json" \
           -d '{
             "username": "DealFlowAI Deploy",
-            "avatar_url": "assets/LogoDealFlowAI.png",
+            "avatar_url": "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/assets/LogoDealFlowAI.png",
             "embeds": [{
               "title": "❌ Deploy Failed",
               "description": "O deploy do DealFlowAI falhou.",
