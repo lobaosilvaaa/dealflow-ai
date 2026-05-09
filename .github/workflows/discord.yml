@@ -62,7 +62,6 @@ jobs:
             TYPE="🛠️ Chore"
           fi
 
-          echo "Webhook loaded successfully"
           curl -X POST $DISCORD_COMMIT_WEBHOOK \
           -H "Content-Type: application/json" \
           -d "{
