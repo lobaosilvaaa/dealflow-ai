@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const session = require("express-session");
 
 const {
     startTelegramBot,
@@ -25,6 +26,25 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
 
+// 📦 Middlewares
+app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+}));
+
+// 🔐 Middleware de autenticação
+function isAuthenticated(req, res, next) {
+
+    if (req.session.authenticated) {
+        return next();
+    }
+
+    return res.redirect("/login");
+}
+
 // 🌐 Rota principal
 app.get("/", (req, res) => {
 
@@ -32,8 +52,49 @@ app.get("/", (req, res) => {
 
 });
 
-// 📊 Dashboard administrativo
-app.get("/dashboard", async (req, res) => {
+// 🔐 Login (GET)
+app.get("/login", (req, res) => {
+
+    res.render("login");
+
+});
+
+// 🔐 Login (POST)
+app.post("/login", (req, res) => {
+
+    const { username, password } = req.body;
+
+    if (
+        username === process.env.ADMIN_USER &&
+        password === process.env.ADMIN_PASSWORD
+    ) {
+
+        req.session.authenticated = true;
+
+        console.log("🔐 Login administrativo realizado");
+
+        return res.redirect("/dashboard");
+    }
+
+    return res.send("❌ Login inválido");
+
+});
+
+// 🚪 Logout
+app.get("/logout", (req, res) => {
+
+    req.session.destroy(() => {
+
+        console.log("🚪 Logout realizado");
+
+        res.redirect("/login");
+
+    });
+
+});
+
+// 📊 Dashboard protegido
+app.get("/dashboard", isAuthenticated, async (req, res) => {
 
     try {
 
@@ -54,7 +115,9 @@ app.get("/dashboard", async (req, res) => {
             error.message
         );
 
-        res.status(500).send("Erro ao carregar dashboard");
+        res.status(500).send(
+            "❌ Erro ao carregar dashboard"
+        );
 
     }
 
