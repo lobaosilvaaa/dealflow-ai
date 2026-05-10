@@ -96,23 +96,65 @@ async function sendRuntimeLog(
                 {
                     title,
 
-                    description: `
-${truncate(description)}
-
-📂 **Category:** ${category}
-📡 **Status:** ${statusInfo.emoji}
-⚙️ **Service:** ${service}
-
-🖥️ **Environment:** ${process.env.NODE_ENV || "development"}
-⏱️ **Uptime:** ${uptime}
-⚡ **Latency:** ${latency ? `${latency}ms` : "N/A"}
-
-💾 **Memory:** ${memoryUsage} MB (${memoryStatus})
-🧠 **CPU:** ${cpuUsage}
-💻 **Host:** ${os.hostname()}
-`,
+                    description: truncate(description),
 
                     color: statusInfo.color,
+
+                    fields: [
+                        {
+                            name: "📡 Status",
+                            value: statusInfo.emoji,
+                            inline: true,
+                        },
+                        {
+                            name: "⚙️ Service",
+                            value: service,
+                            inline: true,
+                        },
+                        {
+                            name: "📂 Category",
+                            value: category,
+                            inline: true,
+                        },
+
+                        {
+                            name: "🖥️ Environment",
+                            value: process.env.NODE_ENV || "development",
+                            inline: true,
+                        },
+                        {
+                            name: "⏱️ Uptime",
+                            value: uptime,
+                            inline: true,
+                        },
+                        {
+                            name: "⚡ Latency",
+                            value: latency ? `${latency}ms` : "N/A",
+                            inline: true,
+                        },
+
+                        {
+                            name: "💾 Memory",
+                            value: `${memoryUsage} MB (${memoryStatus})`,
+                            inline: true,
+                        },
+                        {
+                            name: "🧠 CPU",
+                            value: cpuUsage,
+                            inline: true,
+                        },
+                        {
+                            name: "\u200b",
+                            value: "\u200b",
+                            inline: true,
+                        },
+
+                        {
+                            name: "💻 Host",
+                            value: os.hostname(),
+                            inline: false,
+                        },
+                    ],
 
                     footer: {
                         text: "DealFlowAI Runtime Logs",
