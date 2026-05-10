@@ -89,11 +89,6 @@ async function sendRuntimeLog(
             {
                 name: "📂 Category",
                 value: category,
-                inline: true,
-            },
-            {
-                name: "\u200b",
-                value: "\u200b",
                 inline: false,
             },
             {
