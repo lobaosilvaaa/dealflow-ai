@@ -111,37 +111,25 @@ async function sendRuntimeLog(
                             value: service,
                             inline: true,
                         },
-
                         {
                             name: "🖥️ Environment",
                             value: process.env.NODE_ENV || "development",
                             inline: true,
                         },
+
+                        {
+                            name: "💾 Resources",
+                            value: `${memoryUsage} MB • ${cpuUsage}`,
+                            inline: true,
+                        },
+                        {
+                            name: "⏱️ Runtime",
+                            value: `${uptime} • ${latency ? `${latency}ms` : "N/A"}`,
+                            inline: true,
+                        },
                         {
                             name: "📂 Category",
                             value: category,
-                            inline: true,
-                        },
-
-                        {
-                            name: "💾 Memory",
-                            value: `${memoryUsage} MB (${memoryStatus})`,
-                            inline: true,
-                        },
-                        {
-                            name: "🧠 CPU",
-                            value: cpuUsage,
-                            inline: true,
-                        },
-
-                        {
-                            name: "⏱️ Uptime",
-                            value: uptime,
-                            inline: true,
-                        },
-                        {
-                            name: "⚡ Latency",
-                            value: latency ? `${latency}ms` : "N/A",
                             inline: true,
                         },
 
