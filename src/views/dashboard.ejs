@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DealFlow AI Dashboard</title>
+
+    <style>
+        body {
+            background: #0f172a;
+            color: white;
+            font-family: Arial;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #38bdf8;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <h1>🚀 DealFlow AI Dashboard</h1>
+
+    <div class="card">
+        <h2>📤 Promoções enviadas</h2>
+        <p>
+            <%= sentPromos %>
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>👥 Usuários registrados</h2>
+        <p>
+            <%= totalUsers %>
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>⏱️ Uptime</h2>
+        <p>
+            <%= Math.floor(uptime) %> segundos
+        </p>
+    </div>
+
+</body>
+
+</html>
