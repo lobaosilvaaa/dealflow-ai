@@ -1,40 +1,64 @@
 const { getChats } = require("../database/chats");
-const { processMessage } = require("../core/bot");
+
+const {
+    getCategory,
+    getFrequency,
+} = require("../database/settings");
+
+const { getRandomProduct } = require("./products");
+const { generateCopy } = require("./copy");
+
+const userIntervals = {};
 
 function startScheduler(bot) {
+
     console.log("⏰ Scheduler iniciado...");
 
     setInterval(async () => {
-        try {
-            const chats = await getChats();
 
-            if (!chats || chats.length === 0) {
-                console.log("⚠️ Nenhum chat no banco");
-                return;
-            }
+        const chats = await getChats();
 
-            console.log(`📊 Enviando para ${chats.length} chat(s)...`);
+        for (const chatId of chats) {
 
-            for (const chatId of chats) {
+            if (userIntervals[chatId]) continue;
+
+            const frequency = await getFrequency(chatId);
+
+            userIntervals[chatId] = setInterval(async () => {
+
                 try {
-                    // 🧠 Gera mensagem via core
-                    const mensagem = await processMessage(chatId, "promo");
 
-                    // 📤 Envia mensagem
+                    const category = await getCategory(chatId);
+
+                    const product = await getRandomProduct(category);
+
+                    const mensagem = generateCopy(product);
+
                     await bot.telegram.sendMessage(chatId, mensagem);
 
-                    console.log("📤 Enviado para:", chatId);
+                    console.log(
+                        `📤 Promo enviada para ${chatId}`
+                    );
+
                 } catch (err) {
+
                     console.error(
                         `❌ Erro ao enviar para ${chatId}:`,
                         err.message
                     );
+
                 }
-            }
-        } catch (error) {
-            console.error("❌ Erro no scheduler:", error.message);
+
+            }, frequency * 60000);
+
+            console.log(
+                `⏰ Scheduler configurado para ${chatId} (${frequency} min)`
+            );
+
         }
-    }, 60000); // ⏱️ 1 minuto (ajustável)
+
+    }, 10000);
+
 }
 
 module.exports = {

@@ -18,6 +18,15 @@ db.serialize(() => {
         category TEXT DEFAULT 'geral'
         )
     `);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS user_settings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id TEXT UNIQUE,
+            category TEXT DEFAULT 'geral',
+            frequency INTEGER DEFAULT 60
+        )
+    `);
 });
 
 module.exports = db;

@@ -4,6 +4,8 @@ const { generateCopy } = require("../services/copy");
 const {
     setCategory,
     getCategory,
+    setFrequency,
+    getFrequency,
 } = require("../database/settings");
 
 async function processMessage(user, message) {
@@ -18,6 +20,7 @@ async function processMessage(user, message) {
 
     // 🚀 START
     if (text === "/start") {
+
         return `
 🚀 Bem-vindo ao DealFlow AI!
 
@@ -27,15 +30,20 @@ Automação inteligente de promoções via Telegram.
 
 menu → abrir menu
 promo → receber promoção
-/categoria NOME → definir categoria
 
-Exemplo:
+🎯 Categorias:
  /categoria gamer
+ /categoria audio
+ /categoria smartwatch
+
+⏰ Frequência:
+ /frequencia 5
     `;
     }
 
     // 📊 MENU
     if (text === "menu") {
+
         return `
 📊 *MENU DEALFLOW AI*
 
@@ -46,6 +54,9 @@ Exemplo:
 • gamer
 • audio
 • smartwatch
+
+⏰ Frequência:
+ /frequencia 5
 
 Digite:
 🔥 promo
@@ -62,6 +73,7 @@ ou
         const category = parts[1];
 
         if (!category) {
+
             return `
 ❌ Informe uma categoria.
 
@@ -85,19 +97,50 @@ Agora suas promoções serão personalizadas.
     `;
     }
 
+    // ⏰ DEFINIR FREQUÊNCIA
+    if (text.startsWith("/frequencia")) {
+
+        const parts = text.split(" ");
+
+        const frequency = parseInt(parts[1]);
+
+        if (!frequency || frequency <= 0) {
+
+            return `
+❌ Informe uma frequência válida.
+
+Exemplo:
+ /frequencia 5
+      `;
+        }
+
+        // 💾 Salva frequência
+        setFrequency(user, frequency);
+
+        return `
+✅ Frequência atualizada!
+
+⏰ Nova frequência:
+${frequency} minuto(s)
+
+As promoções automáticas seguirão essa frequência.
+    `;
+    }
+
     // 🔥 PROMOÇÕES
     if (text === "1" || text === "promo") {
 
         try {
 
-            // 🎯 Busca categoria do usuário
+            // 🎯 Categoria do usuário
             const category = await getCategory(user);
 
-            // 🛍️ Busca produto da categoria
+            // 🛍️ Produto da categoria
             const product = await getRandomProduct(category);
 
             // ⚠️ Segurança
             if (!product) {
+
                 return `
 ⚠️ Nenhuma promoção encontrada no momento.
 
@@ -105,7 +148,7 @@ Tente novamente mais tarde.
         `;
             }
 
-            // ✍️ Gera copy automática
+            // ✍️ Copy automática
             return generateCopy(product);
 
         } catch (error) {
@@ -126,6 +169,9 @@ Tente novamente em instantes.
     // ❓ AJUDA
     if (text === "2" || text === "ajuda") {
 
+        const category = await getCategory(user);
+        const frequency = await getFrequency(user);
+
         return `
 ❓ *AJUDA DEALFLOW AI*
 
@@ -138,6 +184,17 @@ promo → receber promoção
  /categoria gamer
  /categoria audio
  /categoria smartwatch
+
+⏰ Frequência:
+ /frequencia 5
+
+📌 Configuração atual:
+
+🎯 Categoria:
+${category}
+
+⏰ Frequência:
+${frequency} minuto(s)
 
 🚀 Mais recursos em breve!
     `;
