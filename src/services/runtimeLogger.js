@@ -112,9 +112,9 @@ async function sendRuntimeLog(
                             inline: true,
                         },
                         {
-                            name: "📂 Category",
-                            value: category,
-                            inline: true,
+                            name: "\u200b",
+                            value: "\u200b",
+                            inline: false,
                         },
 
                         {
@@ -122,6 +122,17 @@ async function sendRuntimeLog(
                             value: process.env.NODE_ENV || "development",
                             inline: true,
                         },
+                        {
+                            name: "📂 Category",
+                            value: category,
+                            inline: true,
+                        },
+                        {
+                            name: "\u200b",
+                            value: "\u200b",
+                            inline: false,
+                        },
+
                         {
                             name: "⏱️ Uptime",
                             value: uptime,
@@ -131,6 +142,11 @@ async function sendRuntimeLog(
                             name: "⚡ Latency",
                             value: latency ? `${latency}ms` : "N/A",
                             inline: true,
+                        },
+                        {
+                            name: "\u200b",
+                            value: "\u200b",
+                            inline: false,
                         },
 
                         {
@@ -146,7 +162,7 @@ async function sendRuntimeLog(
                         {
                             name: "\u200b",
                             value: "\u200b",
-                            inline: true,
+                            inline: false,
                         },
 
                         {
