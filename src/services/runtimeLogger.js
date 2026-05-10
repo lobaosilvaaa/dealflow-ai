@@ -16,6 +16,7 @@ function formatUptime(seconds) {
 
 function getMemoryUsage() {
     const used = process.memoryUsage().heapUsed / 1024 / 1024;
+
     return Math.round(used);
 }
 
@@ -85,72 +86,6 @@ async function sendRuntimeLog(
             memoryStatus = "⚠️ High";
         }
 
-        const fields = [
-            {
-                name: "📂 Category",
-                value: category,
-                inline: false,
-            },
-            {
-                name: "🖥️ Environment",
-                value: process.env.NODE_ENV || "development",
-                inline: false,
-            },
-            {
-                name: "⚙️ Service",
-                value: service,
-                inline: false,
-            },
-            {
-                name: "\u200b",
-                value: "\u200b",
-                inline: false,
-            },
-            {
-                name: "📡 Status",
-                value: statusInfo.emoji,
-                inline: true,
-            },
-            {
-                name: "\u200b",
-                value: "\u200b",
-                inline: false,
-            },
-            {
-                name: "⏱️ Uptime",
-                value: uptime,
-                inline: true,
-            },
-            {
-                name: "💾 Memory",
-                value: `${memoryUsage} MB (${memoryStatus})`,
-                inline: true,
-            },
-            {
-                name: "\u200b",
-                value: "\u200b",
-                inline: false,
-            },
-            {
-                name: "🧠 CPU",
-                value: cpuUsage,
-                inline: true,
-            },
-            {
-                name: "💻 Host",
-                value: os.hostname(),
-                inline: true,
-            },
-        ];
-
-        if (latency) {
-            fields.push({
-                name: "⚡ Latency",
-                value: `${latency}ms`,
-                inline: true,
-            });
-        }
-
         await axios.post(webhookUrl, {
             username: "DealFlowAI Runtime",
 
@@ -161,11 +96,23 @@ async function sendRuntimeLog(
                 {
                     title,
 
-                    description: truncate(description),
+                    description: `
+${truncate(description)}
+
+📂 **Category:** ${category}
+📡 **Status:** ${statusInfo.emoji}
+⚙️ **Service:** ${service}
+
+🖥️ **Environment:** ${process.env.NODE_ENV || "development"}
+⏱️ **Uptime:** ${uptime}
+⚡ **Latency:** ${latency ? `${latency}ms` : "N/A"}
+
+💾 **Memory:** ${memoryUsage} MB (${memoryStatus})
+🧠 **CPU:** ${cpuUsage}
+💻 **Host:** ${os.hostname()}
+`,
 
                     color: statusInfo.color,
-
-                    fields,
 
                     footer: {
                         text: "DealFlowAI Runtime Logs",
