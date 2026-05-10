@@ -111,11 +111,6 @@ async function sendRuntimeLog(
                             value: service,
                             inline: true,
                         },
-                        {
-                            name: "\u200b",
-                            value: "\u200b",
-                            inline: false,
-                        },
 
                         {
                             name: "🖥️ Environment",
@@ -126,27 +121,6 @@ async function sendRuntimeLog(
                             name: "📂 Category",
                             value: category,
                             inline: true,
-                        },
-                        {
-                            name: "\u200b",
-                            value: "\u200b",
-                            inline: false,
-                        },
-
-                        {
-                            name: "⏱️ Uptime",
-                            value: uptime,
-                            inline: true,
-                        },
-                        {
-                            name: "⚡ Latency",
-                            value: latency ? `${latency}ms` : "N/A",
-                            inline: true,
-                        },
-                        {
-                            name: "\u200b",
-                            value: "\u200b",
-                            inline: false,
                         },
 
                         {
@@ -159,10 +133,16 @@ async function sendRuntimeLog(
                             value: cpuUsage,
                             inline: true,
                         },
+
                         {
-                            name: "\u200b",
-                            value: "\u200b",
-                            inline: false,
+                            name: "⏱️ Uptime",
+                            value: uptime,
+                            inline: true,
+                        },
+                        {
+                            name: "⚡ Latency",
+                            value: latency ? `${latency}ms` : "N/A",
+                            inline: true,
                         },
 
                         {
