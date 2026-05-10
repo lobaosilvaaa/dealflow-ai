@@ -10,6 +10,10 @@ const {
     isActive,
 } = require("../database/settings");
 
+const {
+    getStats,
+} = require("../database/stats");
+
 async function processMessage(user, message) {
 
     // 🔒 Validação básica
@@ -44,6 +48,9 @@ promo → receber promoção
 🎛️ Controle:
  /pausar
  /ativar
+
+📊 Estatísticas:
+ /stats
     `;
     }
 
@@ -60,6 +67,8 @@ promo → receber promoção
 1️⃣ Promoções
 2️⃣ Ajuda
 
+━━━━━━━━━━━━━━━
+
 🎯 Categoria atual:
 ${category}
 
@@ -71,11 +80,6 @@ ${active ? "🟢 Ativado" : "🔴 Pausado"}
 
 ━━━━━━━━━━━━━━━
 
-🎯 Categorias:
-• gamer
-• audio
-• smartwatch
-
 📌 Comandos:
 
 🔥 promo
@@ -83,6 +87,7 @@ ${active ? "🟢 Ativado" : "🔴 Pausado"}
 ⏰ /frequencia 5
 ⏸️ /pausar
 ▶️ /ativar
+📊 /stats
     `;
     }
 
@@ -170,6 +175,36 @@ As promoções automáticas voltarão a ser enviadas.
     `;
     }
 
+    // 📊 STATS
+    if (text === "/stats") {
+
+        const stats = await getStats();
+
+        const category = await getCategory(user);
+        const frequency = await getFrequency(user);
+        const active = await isActive(user);
+
+        return `
+📊 *DEALFLOW AI STATS*
+
+📤 Promoções enviadas:
+${stats.sent_promos}
+
+━━━━━━━━━━━━━━━
+
+📌 Suas configurações:
+
+🎯 Categoria:
+${category}
+
+⏰ Frequência:
+${frequency} minuto(s)
+
+🎛️ Status:
+${active ? "🟢 Ativado" : "🔴 Pausado"}
+    `;
+    }
+
     // 🔥 PROMOÇÕES
     if (text === "1" || text === "promo") {
 
@@ -231,6 +266,9 @@ promo → receber promoção
 🎛️ Controle:
  /pausar
  /ativar
+
+📊 Estatísticas:
+ /stats
 
 ━━━━━━━━━━━━━━━
 

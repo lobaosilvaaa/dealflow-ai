@@ -6,10 +6,14 @@ const {
     isActive,
 } = require("../database/settings");
 
+const {
+    incrementPromos,
+} = require("../database/stats");
+
 const { getRandomProduct } = require("./products");
 const { generateCopy } = require("./copy");
 
-// ⏰ Controle de schedulers por usuário
+// ⏰ Controle de schedulers individuais
 const userIntervals = {};
 
 function startScheduler(bot) {
@@ -30,24 +34,24 @@ function startScheduler(bot) {
 
             for (const chatId of chats) {
 
-                // 🔒 Evita duplicação de interval
+                // 🔒 Evita duplicação de scheduler
                 if (userIntervals[chatId]) {
                     continue;
                 }
 
-                // ⏰ Frequência personalizada
+                // ⏰ Frequência individual
                 const frequency = await getFrequency(chatId);
 
                 console.log(
                     `⏰ Scheduler configurado para ${chatId} (${frequency} min)`
                 );
 
-                // 🚀 Cria scheduler individual
+                // 🚀 Scheduler individual
                 userIntervals[chatId] = setInterval(async () => {
 
                     try {
 
-                        // 🎛️ Verifica se usuário está ativo
+                        // 🎛️ Verifica se promoções estão ativas
                         const active = await isActive(chatId);
 
                         if (!active) {
@@ -61,20 +65,25 @@ function startScheduler(bot) {
                         const product = await getRandomProduct(category);
 
                         if (!product) {
+
                             console.log(
-                                `⚠️ Nenhum produto para ${chatId}`
+                                `⚠️ Nenhum produto encontrado para ${chatId}`
                             );
+
                             return;
                         }
 
-                        // ✍️ Copy automática
+                        // ✍️ Gera copy automática
                         const mensagem = generateCopy(product);
 
-                        // 📤 Envio
+                        // 📤 Envia mensagem
                         await bot.telegram.sendMessage(
                             chatId,
                             mensagem
                         );
+
+                        // 📊 Incrementa estatísticas
+                        incrementPromos();
 
                         console.log(
                             `📤 Promo enviada para ${chatId}`
