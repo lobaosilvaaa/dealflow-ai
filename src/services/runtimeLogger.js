@@ -92,6 +92,11 @@ async function sendRuntimeLog(
                 inline: true,
             },
             {
+                name: "\u200b",
+                value: "\u200b",
+                inline: false,
+            },
+            {
                 name: "🖥️ Environment",
                 value: process.env.NODE_ENV || "development",
                 inline: true,
@@ -105,6 +110,11 @@ async function sendRuntimeLog(
                 name: "⚙️ Service",
                 value: service,
                 inline: true,
+            },
+            {
+                name: "\u200b",
+                value: "\u200b",
+                inline: false,
             },
             {
                 name: "📡 Status",
@@ -122,6 +132,11 @@ async function sendRuntimeLog(
                 inline: true,
             },
             {
+                name: "\u200b",
+                value: "\u200b",
+                inline: false,
+            },
+            {
                 name: "💾 Memory",
                 value: `${memoryUsage} MB (${memoryStatus})`,
                 inline: true,
@@ -135,6 +150,11 @@ async function sendRuntimeLog(
                 name: "🧠 CPU",
                 value: cpuUsage,
                 inline: true,
+            },
+            {
+                name: "\u200b",
+                value: "\u200b",
+                inline: false,
             },
             {
                 name: "💻 Host",
