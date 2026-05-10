@@ -58,9 +58,44 @@ function getFrequency(chatId) {
 
 }
 
+function setActive(chatId, active) {
+
+    db.run(`
+        INSERT INTO user_settings (chat_id, active)
+        VALUES (?, ?)
+        ON CONFLICT(chat_id)
+        DO UPDATE SET active=excluded.active
+    `, [chatId, active]);
+
+}
+
+function isActive(chatId) {
+
+    return new Promise((resolve, reject) => {
+
+        db.get(
+            "SELECT active FROM user_settings WHERE chat_id = ?",
+            [chatId],
+            (err, row) => {
+
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(row ? row.active === 1 : true);
+                }
+
+            }
+        );
+
+    });
+
+}
+
 module.exports = {
     setCategory,
     getCategory,
     setFrequency,
     getFrequency,
+    setActive,
+    isActive,
 };

@@ -3,56 +3,101 @@ const { getChats } = require("../database/chats");
 const {
     getCategory,
     getFrequency,
+    isActive,
 } = require("../database/settings");
 
 const { getRandomProduct } = require("./products");
 const { generateCopy } = require("./copy");
 
+// ⏰ Controle de schedulers por usuário
 const userIntervals = {};
 
 function startScheduler(bot) {
 
     console.log("⏰ Scheduler iniciado...");
 
+    // 🔄 Verifica novos usuários periodicamente
     setInterval(async () => {
 
-        const chats = await getChats();
+        try {
 
-        for (const chatId of chats) {
+            const chats = await getChats();
 
-            if (userIntervals[chatId]) continue;
+            if (!chats || chats.length === 0) {
+                console.log("⚠️ Nenhum chat registrado");
+                return;
+            }
 
-            const frequency = await getFrequency(chatId);
+            for (const chatId of chats) {
 
-            userIntervals[chatId] = setInterval(async () => {
-
-                try {
-
-                    const category = await getCategory(chatId);
-
-                    const product = await getRandomProduct(category);
-
-                    const mensagem = generateCopy(product);
-
-                    await bot.telegram.sendMessage(chatId, mensagem);
-
-                    console.log(
-                        `📤 Promo enviada para ${chatId}`
-                    );
-
-                } catch (err) {
-
-                    console.error(
-                        `❌ Erro ao enviar para ${chatId}:`,
-                        err.message
-                    );
-
+                // 🔒 Evita duplicação de interval
+                if (userIntervals[chatId]) {
+                    continue;
                 }
 
-            }, frequency * 60000);
+                // ⏰ Frequência personalizada
+                const frequency = await getFrequency(chatId);
 
-            console.log(
-                `⏰ Scheduler configurado para ${chatId} (${frequency} min)`
+                console.log(
+                    `⏰ Scheduler configurado para ${chatId} (${frequency} min)`
+                );
+
+                // 🚀 Cria scheduler individual
+                userIntervals[chatId] = setInterval(async () => {
+
+                    try {
+
+                        // 🎛️ Verifica se usuário está ativo
+                        const active = await isActive(chatId);
+
+                        if (!active) {
+                            return;
+                        }
+
+                        // 🎯 Categoria personalizada
+                        const category = await getCategory(chatId);
+
+                        // 🛍️ Produto
+                        const product = await getRandomProduct(category);
+
+                        if (!product) {
+                            console.log(
+                                `⚠️ Nenhum produto para ${chatId}`
+                            );
+                            return;
+                        }
+
+                        // ✍️ Copy automática
+                        const mensagem = generateCopy(product);
+
+                        // 📤 Envio
+                        await bot.telegram.sendMessage(
+                            chatId,
+                            mensagem
+                        );
+
+                        console.log(
+                            `📤 Promo enviada para ${chatId}`
+                        );
+
+                    } catch (err) {
+
+                        console.error(
+                            `❌ Erro ao enviar para ${chatId}:`,
+                            err.message
+                        );
+
+                    }
+
+                }, frequency * 60000);
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "❌ Erro no scheduler:",
+                error.message
             );
 
         }

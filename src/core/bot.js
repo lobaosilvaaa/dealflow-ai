@@ -6,6 +6,8 @@ const {
     getCategory,
     setFrequency,
     getFrequency,
+    setActive,
+    isActive,
 } = require("../database/settings");
 
 async function processMessage(user, message) {
@@ -38,11 +40,19 @@ promo → receber promoção
 
 ⏰ Frequência:
  /frequencia 5
+
+🎛️ Controle:
+ /pausar
+ /ativar
     `;
     }
 
     // 📊 MENU
     if (text === "menu") {
+
+        const category = await getCategory(user);
+        const frequency = await getFrequency(user);
+        const active = await isActive(user);
 
         return `
 📊 *MENU DEALFLOW AI*
@@ -50,18 +60,29 @@ promo → receber promoção
 1️⃣ Promoções
 2️⃣ Ajuda
 
+🎯 Categoria atual:
+${category}
+
+⏰ Frequência:
+${frequency} minuto(s)
+
+🎛️ Status:
+${active ? "🟢 Ativado" : "🔴 Pausado"}
+
+━━━━━━━━━━━━━━━
+
 🎯 Categorias:
 • gamer
 • audio
 • smartwatch
 
-⏰ Frequência:
- /frequencia 5
+📌 Comandos:
 
-Digite:
 🔥 promo
-ou
-1
+🎯 /categoria gamer
+⏰ /frequencia 5
+⏸️ /pausar
+▶️ /ativar
     `;
     }
 
@@ -84,7 +105,6 @@ Exemplos:
       `;
         }
 
-        // 💾 Salva categoria
         setCategory(user, category);
 
         return `
@@ -114,7 +134,6 @@ Exemplo:
       `;
         }
 
-        // 💾 Salva frequência
         setFrequency(user, frequency);
 
         return `
@@ -127,18 +146,39 @@ As promoções automáticas seguirão essa frequência.
     `;
     }
 
+    // ⏸️ PAUSAR
+    if (text === "/pausar") {
+
+        setActive(user, 0);
+
+        return `
+⏸️ Promoções pausadas com sucesso.
+
+Você não receberá promoções automáticas até ativar novamente.
+    `;
+    }
+
+    // ▶️ ATIVAR
+    if (text === "/ativar") {
+
+        setActive(user, 1);
+
+        return `
+▶️ Promoções ativadas novamente.
+
+As promoções automáticas voltarão a ser enviadas.
+    `;
+    }
+
     // 🔥 PROMOÇÕES
     if (text === "1" || text === "promo") {
 
         try {
 
-            // 🎯 Categoria do usuário
             const category = await getCategory(user);
 
-            // 🛍️ Produto da categoria
             const product = await getRandomProduct(category);
 
-            // ⚠️ Segurança
             if (!product) {
 
                 return `
@@ -148,7 +188,6 @@ Tente novamente mais tarde.
         `;
             }
 
-            // ✍️ Copy automática
             return generateCopy(product);
 
         } catch (error) {
@@ -171,6 +210,7 @@ Tente novamente em instantes.
 
         const category = await getCategory(user);
         const frequency = await getFrequency(user);
+        const active = await isActive(user);
 
         return `
 ❓ *AJUDA DEALFLOW AI*
@@ -188,6 +228,12 @@ promo → receber promoção
 ⏰ Frequência:
  /frequencia 5
 
+🎛️ Controle:
+ /pausar
+ /ativar
+
+━━━━━━━━━━━━━━━
+
 📌 Configuração atual:
 
 🎯 Categoria:
@@ -195,6 +241,9 @@ ${category}
 
 ⏰ Frequência:
 ${frequency} minuto(s)
+
+🎛️ Status:
+${active ? "🟢 Ativado" : "🔴 Pausado"}
 
 🚀 Mais recursos em breve!
     `;

@@ -8,19 +8,20 @@ db.serialize(() => {
 
     // 📊 Chats registrados
     db.run(`
-        CREATE TABLE IF NOT EXISTS chats (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        chat_id TEXT UNIQUE
+            CREATE TABLE IF NOT EXISTS chats (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id TEXT UNIQUE
         )
     `);
 
     // ⚙️ Configurações do usuário
     db.run(`
         CREATE TABLE IF NOT EXISTS user_settings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        chat_id TEXT UNIQUE,
-        category TEXT DEFAULT 'geral',
-        frequency INTEGER DEFAULT 60
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id TEXT UNIQUE,
+            category TEXT DEFAULT 'geral',
+            frequency INTEGER DEFAULT 60,
+            active INTEGER DEFAULT 1
         )
     `);
 
