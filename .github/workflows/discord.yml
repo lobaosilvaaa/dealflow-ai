@@ -81,6 +81,11 @@ jobs:
               avatar_url: $avatar_url,
               embeds: [
                 {
+                  author: {
+                    name: "DealFlowAI Runtime",
+                    icon_url:
+                      "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png"
+                  },
                   title: $title,
                   description: $description,
                   color: $color,

@@ -38,7 +38,7 @@ function getStatusInfo(status) {
     switch (status) {
         case "healthy":
             return {
-                emoji: "🟢 Healthy",
+                emoji: "🟢 Operational",
                 color: 5763719,
             };
 
@@ -94,6 +94,12 @@ async function sendRuntimeLog(
 
             embeds: [
                 {
+                    author: {
+                        name: "DealFlowAI Runtime",
+                        icon_url:
+                            "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png",
+                    },
+
                     title,
 
                     description: truncate(description),
@@ -113,18 +119,23 @@ async function sendRuntimeLog(
                         },
                         {
                             name: "🖥️ Environment",
-                            value: process.env.NODE_ENV || "development",
+                            value:
+                                process.env.NODE_ENV === "production"
+                                    ? "PROD"
+                                    : "DEV",
                             inline: true,
                         },
 
                         {
-                            name: "💾 Resources",
+                            name: "💾 Performance",
                             value: `${memoryUsage} MB • ${cpuUsage}`,
                             inline: true,
                         },
                         {
                             name: "⏱️ Runtime",
-                            value: `${uptime} • ${latency ? `${latency}ms` : "N/A"}`,
+                            value: `Up: ${uptime} • ${
+                                latency ? `${latency}ms` : "N/A"
+                            }`,
                             inline: true,
                         },
                         {

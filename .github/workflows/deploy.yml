@@ -45,7 +45,7 @@ jobs:
             --arg title "🚀 Deploy Started" \
             --arg description "O deploy do DealFlowAI foi iniciado." \
             --arg branch "${{ steps.data.outputs.BRANCH }}" \
-            --arg environment "production" \
+            --arg environment "PROD" \
             --arg workflow "deploy.yml" \
             --arg started_at "$STARTED_AT" \
             --arg author "${{ steps.data.outputs.AUTHOR }}" \
@@ -59,6 +59,11 @@ jobs:
 
               embeds: [
                 {
+                  author: {
+                    name: "DealFlowAI Deploy",
+                    icon_url: $avatar_url
+                  },
+
                   title: $title,
                   description: $description,
                   color: 16776960,
@@ -91,13 +96,13 @@ jobs:
                       inline: true
                     },
                     {
-                      name: "📦 Repository",
-                      value: $repo,
+                      name: "🆔 Pipeline",
+                      value: $pipeline,
                       inline: true
                     },
                     {
-                      name: "🆔 Pipeline",
-                      value: $pipeline,
+                      name: "📦 Repository",
+                      value: $repo,
                       inline: true
                     },
                     {
@@ -141,7 +146,7 @@ jobs:
             --arg title "✅ Deploy Successful" \
             --arg description "DealFlowAI implantado com sucesso." \
             --arg branch "${{ steps.data.outputs.BRANCH }}" \
-            --arg environment "production" \
+            --arg environment "PROD" \
             --arg author "${{ steps.data.outputs.AUTHOR }}" \
             --arg commit "${{ steps.data.outputs.MESSAGE }}" \
             --arg duration "${DURATION}s" \
@@ -156,6 +161,11 @@ jobs:
 
               embeds: [
                 {
+                  author: {
+                    name: "DealFlowAI Deploy",
+                    icon_url: $avatar_url
+                  },
+
                   title: $title,
                   description: $description,
                   color: 5763719,
@@ -188,13 +198,13 @@ jobs:
                       inline: true
                     },
                     {
-                      name: "📦 Repository",
-                      value: $repo,
+                      name: "🆔 Pipeline",
+                      value: $pipeline,
                       inline: true
                     },
                     {
-                      name: "🆔 Pipeline",
-                      value: $pipeline,
+                      name: "📦 Repository",
+                      value: $repo,
                       inline: true
                     },
                     {
@@ -209,86 +219,6 @@ jobs:
                   },
 
                   timestamp: $timestamp
-                }
-              ]
-            }')
-
-          curl -X POST "$DISCORD_DEPLOY_WEBHOOK" \
-          -H "Content-Type: application/json" \
-          -d "$PAYLOAD"
-
-      - name: Notify Deploy Failed
-        if: failure()
-        env:
-          DISCORD_DEPLOY_WEBHOOK: ${{ secrets.DISCORD_DEPLOY_WEBHOOK }}
-        run: |
-          DURATION=$(( $(date +%s) - $START_TIME ))
-
-          PAYLOAD=$(jq -n \
-            --arg username "DealFlowAI Deploy" \
-            --arg avatar_url "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png" \
-            --arg title "❌ Deploy Failed" \
-            --arg description "O deploy do DealFlowAI falhou." \
-            --arg branch "${{ steps.data.outputs.BRANCH }}" \
-            --arg author "${{ steps.data.outputs.AUTHOR }}" \
-            --arg commit "${{ steps.data.outputs.MESSAGE }}" \
-            --arg duration "${DURATION}s" \
-            --arg workflow "deploy.yml" \
-            --arg repo "${{ steps.data.outputs.REPO }}" \
-            --arg url "${{ steps.data.outputs.URL }}" \
-            --arg pipeline "${{ github.run_id }}" \
-            '{
-              username: $username,
-              avatar_url: $avatar_url,
-
-              embeds: [
-                {
-                  title: $title,
-                  description: $description,
-                  color: 15548997,
-                  url: $url,
-
-                  fields: [
-                    {
-                      name: "🌿 Branch",
-                      value: $branch,
-                      inline: true
-                    },
-                    {
-                      name: "👤 Triggered By",
-                      value: $author,
-                      inline: true
-                    },
-                    {
-                      name: "⏱️ Duration",
-                      value: $duration,
-                      inline: true
-                    },
-                    {
-                      name: "⚙️ Workflow",
-                      value: $workflow,
-                      inline: true
-                    },
-                    {
-                      name: "📦 Repository",
-                      value: $repo,
-                      inline: true
-                    },
-                    {
-                      name: "🆔 Pipeline",
-                      value: $pipeline,
-                      inline: true
-                    },
-                    {
-                      name: "📦 Commit",
-                      value: $commit,
-                      inline: false
-                    }
-                  ],
-
-                  footer: {
-                    text: "DealFlowAI Deploy Pipeline"
-                  }
                 }
               ]
             }')
