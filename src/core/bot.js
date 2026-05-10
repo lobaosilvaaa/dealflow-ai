@@ -1,7 +1,13 @@
 const { getRandomProduct } = require("../services/products");
 const { generateCopy } = require("../services/copy");
 
+const {
+    setCategory,
+    getCategory,
+} = require("../database/settings");
+
 async function processMessage(user, message) {
+
     // 🔒 Validação básica
     if (!message) {
         return "❌ Mensagem inválida.";
@@ -10,26 +16,36 @@ async function processMessage(user, message) {
     // 🧠 Normalização
     const text = message.trim().toLowerCase();
 
-    // 🚀 Comando inicial
+    // 🚀 START
     if (text === "/start") {
         return `
 🚀 Bem-vindo ao DealFlow AI!
 
 Automação inteligente de promoções via Telegram.
 
-Digite:
-📊 menu → para ver opções
-🔥 promo → para receber uma oferta
+📊 Comandos disponíveis:
+
+menu → abrir menu
+promo → receber promoção
+/categoria NOME → definir categoria
+
+Exemplo:
+ /categoria gamer
     `;
     }
 
-    // 📊 Menu principal
+    // 📊 MENU
     if (text === "menu") {
         return `
 📊 *MENU DEALFLOW AI*
 
 1️⃣ Promoções
 2️⃣ Ajuda
+
+🎯 Categorias:
+• gamer
+• audio
+• smartwatch
 
 Digite:
 🔥 promo
@@ -38,18 +54,54 @@ ou
     `;
     }
 
-    // 🔥 Promoções
-    if (text === "1" || text === "promo") {
-        try {
-            // 🛍️ Busca produto
-            const product = await getRandomProduct();
+    // 🎯 DEFINIR CATEGORIA
+    if (text.startsWith("/categoria")) {
 
-            // ⚠️ Fallback de segurança
+        const parts = text.split(" ");
+
+        const category = parts[1];
+
+        if (!category) {
+            return `
+❌ Informe uma categoria.
+
+Exemplos:
+ /categoria gamer
+ /categoria audio
+ /categoria smartwatch
+      `;
+        }
+
+        // 💾 Salva categoria
+        setCategory(user, category);
+
+        return `
+✅ Categoria definida com sucesso!
+
+🎯 Nova categoria:
+${category}
+
+Agora suas promoções serão personalizadas.
+    `;
+    }
+
+    // 🔥 PROMOÇÕES
+    if (text === "1" || text === "promo") {
+
+        try {
+
+            // 🎯 Busca categoria do usuário
+            const category = await getCategory(user);
+
+            // 🛍️ Busca produto da categoria
+            const product = await getRandomProduct(category);
+
+            // ⚠️ Segurança
             if (!product) {
                 return `
-⚠️ Nenhuma promoção disponível no momento.
+⚠️ Nenhuma promoção encontrada no momento.
 
-Tente novamente em instantes.
+Tente novamente mais tarde.
         `;
             }
 
@@ -57,38 +109,49 @@ Tente novamente em instantes.
             return generateCopy(product);
 
         } catch (error) {
-            console.error("❌ Erro ao gerar promoção:", error.message);
+
+            console.error(
+                "❌ Erro ao gerar promoção:",
+                error.message
+            );
 
             return `
 ❌ Erro ao buscar promoção.
 
-Tente novamente mais tarde.
-        `;
+Tente novamente em instantes.
+      `;
         }
     }
 
-    // ❓ Ajuda
+    // ❓ AJUDA
     if (text === "2" || text === "ajuda") {
+
         return `
 ❓ *AJUDA DEALFLOW AI*
 
-Comandos disponíveis:
+📊 Comandos:
 
-📊 menu → abre o menu
-🔥 promo → recebe oferta automática
+menu → abrir menu
+promo → receber promoção
 
-Mais recursos em breve 🚀
+🎯 Categorias:
+ /categoria gamer
+ /categoria audio
+ /categoria smartwatch
+
+🚀 Mais recursos em breve!
     `;
     }
 
-    // ❌ Comando inválido
+    // ❌ COMANDO INVÁLIDO
     return `
 ❌ Comando não reconhecido.
 
 Digite:
 📊 menu
+
 para ver as opções disponíveis.
-    `;
+  `;
 }
 
 module.exports = {
