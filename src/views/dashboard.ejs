@@ -2,26 +2,192 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <title>DealFlow AI Dashboard</title>
+
+    <title>
+        DealFlow AI Dashboard
+    </title>
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+
             background: #0f172a;
             color: white;
             font-family: Arial;
-            padding: 40px;
+
+            padding: 30px;
+
         }
 
         h1 {
+
             color: #38bdf8;
+            margin-bottom: 30px;
+
+        }
+
+        .topbar {
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 30px;
+
+        }
+
+        .logout {
+
+            background: #ef4444;
+            color: white;
+
+            border: none;
+
+            padding: 10px 15px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            text-decoration: none;
+
+        }
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 20px;
+
+            margin-bottom: 30px;
+
         }
 
         .card {
+
             background: #1e293b;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+
+            padding: 25px;
+
+            border-radius: 12px;
+
+        }
+
+        .card h2 {
+
+            margin-bottom: 15px;
+
+            color: #f8fafc;
+
+        }
+
+        .card p {
+
+            font-size: 28px;
+
+            font-weight: bold;
+
+            color: #38bdf8;
+
+        }
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            background: #1e293b;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+
+        }
+
+        th {
+
+            background: #334155;
+
+            padding: 15px;
+
+            text-align: left;
+
+        }
+
+        td {
+
+            padding: 15px;
+
+            border-top: 1px solid #334155;
+
+        }
+
+        .status-active {
+
+            color: #22c55e;
+            font-weight: bold;
+
+        }
+
+        .status-paused {
+
+            color: #ef4444;
+            font-weight: bold;
+
+        }
+
+        .actions {
+
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+
+        }
+
+        button {
+
+            border: none;
+
+            padding: 8px 12px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+        }
+
+        .btn-pause {
+
+            background: #f59e0b;
+            color: white;
+
+        }
+
+        .btn-activate {
+
+            background: #22c55e;
+            color: white;
+
+        }
+
+        .btn-delete {
+
+            background: #ef4444;
+            color: white;
+
         }
     </style>
 
@@ -29,65 +195,171 @@
 
 <body>
 
-    <h1>🚀 DealFlow AI Dashboard</h1>
+    <div class="topbar">
 
-    <div class="card">
-        <h2>📤 Promoções enviadas</h2>
-        <p>
-            <%= sentPromos %>
-        </p>
+        <h1>
+            🚀 DealFlow AI Dashboard
+        </h1>
+
+        <a href="/logout" class="logout">
+            🚪 Logout
+        </a>
+
     </div>
 
-    <div class="card">
-        <h2>👥 Usuários registrados</h2>
-        <p>
-            <%= totalUsers %>
-        </p>
-    </div>
+    <!-- 📊 Cards -->
+    <div class="cards">
 
-    <div class="card">
-        <h2>⏱️ Uptime</h2>
-        <p>
-            <%= Math.floor(uptime) %> segundos
-        </p>
-    </div>
+        <div class="card">
 
-    <div class="card">
+            <h2>
+                📤 Promoções enviadas
+            </h2>
 
-        <h2>👥 Usuários</h2>
-
-        <table width="100%">
-
-            <tr>
-            <th align="left">Chat ID</th>
-            <th align="left">Categoria</th>
-            <th align="left">Frequência</th>
-            <th align="left">Status</th>
-            </tr>
-
-            <% users.forEach(user => { %>
-
-                <tr>
-                    <td><%= user.chat_id %></td>
-
-                    <td>
-                    <%= user.category %>
-                    </td>
-
-                    <td>
-                    <%= user.frequency %> min
-                    </td>
-
-                    <td>
-                    <%= user.active ? '🟢 Ativo' : '🔴 Pausado' %>
-                    </td>
-                </tr>
-
-            <% }) %>
-
-        </table>
+            <p>
+                <%= sentPromos %>
+            </p>
 
         </div>
+
+        <div class="card">
+
+            <h2>
+                👥 Usuários registrados
+            </h2>
+
+            <p>
+                <%= totalUsers %>
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>
+                ⏱️ Uptime
+            </h2>
+
+            <p>
+                <%= Math.floor(uptime) %>s
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- 👥 Usuários -->
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Chat ID
+                </th>
+
+                <th>
+                    Categoria
+                </th>
+
+                <th>
+                    Frequência
+                </th>
+
+                <th>
+                    Status
+                </th>
+
+                <th>
+                    Ações
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <% users.forEach(user=> { %>
+
+                <tr>
+
+                    <td>
+                        <%= user.chat_id %>
+                    </td>
+
+                    <td>
+                        <%= user.category %>
+                    </td>
+
+                    <td>
+                        <%= user.frequency %> min
+                    </td>
+
+                    <td>
+
+                        <% if (user.active) { %>
+
+                            <span class="status-active">
+                                🟢 Ativo
+                            </span>
+
+                            <% } else { %>
+
+                                <span class="status-paused">
+                                    🔴 Pausado
+                                </span>
+
+                                <% } %>
+
+                    </td>
+
+                    <td>
+
+                        <div class="actions">
+
+                            <% if (user.active) { %>
+
+                                <form method="POST" action="/admin/pause/<%= user.chat_id %>">
+
+                                    <button class="btn-pause">
+                                        ⏸️ Pausar
+                                    </button>
+
+                                </form>
+
+                                <% } else { %>
+
+                                    <form method="POST" action="/admin/activate/<%= user.chat_id %>">
+
+                                        <button class="btn-activate">
+                                            ▶️ Ativar
+                                        </button>
+
+                                    </form>
+
+                                    <% } %>
+
+                                        <form method="POST" action="/admin/delete/<%= user.chat_id %>">
+
+                                            <button class="btn-delete">
+                                                🗑️ Remover
+                                            </button>
+
+                                        </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                <% }) %>
+
+        </tbody>
+
+    </table>
 
 </body>
 

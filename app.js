@@ -22,11 +22,13 @@ const {
 
 const {
     getAllUsers,
+    updateUserStatus,
+    deleteUser,
 } = require("./src/database/settings");
 
 const app = express();
 
-// 🚀 Configuração do EJS
+// 🚀 Configuração EJS
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
 
@@ -39,7 +41,7 @@ app.use(session({
     saveUninitialized: false,
 }));
 
-// 🔐 Middleware de autenticação
+// 🔐 Middleware auth
 function isAuthenticated(req, res, next) {
 
     if (req.session.authenticated) {
@@ -49,21 +51,21 @@ function isAuthenticated(req, res, next) {
     return res.redirect("/login");
 }
 
-// 🌐 Rota principal
+// 🌐 Home
 app.get("/", (req, res) => {
 
     res.send("🚀 DealFlow AI rodando");
 
 });
 
-// 🔐 Login (GET)
+// 🔐 Login page
 app.get("/login", (req, res) => {
 
     res.render("login");
 
 });
 
-// 🔐 Login (POST)
+// 🔐 Login auth
 app.post("/login", (req, res) => {
 
     const { username, password } = req.body;
@@ -97,7 +99,7 @@ app.get("/logout", (req, res) => {
 
 });
 
-// 📊 Dashboard protegido
+// 📊 Dashboard
 app.get("/dashboard", isAuthenticated, async (req, res) => {
 
     try {
@@ -130,7 +132,58 @@ app.get("/dashboard", isAuthenticated, async (req, res) => {
 
 });
 
-// 🚀 Inicialização do servidor
+// ▶️ Ativar usuário
+app.post(
+    "/admin/activate/:chatId",
+    isAuthenticated,
+    (req, res) => {
+
+        updateUserStatus(req.params.chatId, 1);
+
+        console.log(
+            `▶️ Usuário ativado: ${req.params.chatId}`
+        );
+
+        res.redirect("/dashboard");
+
+    }
+);
+
+// ⏸️ Pausar usuário
+app.post(
+    "/admin/pause/:chatId",
+    isAuthenticated,
+    (req, res) => {
+
+        updateUserStatus(req.params.chatId, 0);
+
+        console.log(
+            `⏸️ Usuário pausado: ${req.params.chatId}`
+        );
+
+        res.redirect("/dashboard");
+
+    }
+);
+
+// 🗑️ Remover usuário
+app.post(
+    "/admin/delete/:chatId",
+    isAuthenticated,
+    (req, res) => {
+
+        deleteUser(req.params.chatId);
+
+        console.log(
+            `🗑️ Usuário removido: ${req.params.chatId}`
+        );
+
+        res.redirect("/dashboard");
+
+    }
+);
+
+// 🚀 Inicialização
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
@@ -141,8 +194,8 @@ app.listen(PORT, () => {
 
 });
 
-// 🤖 Inicializa Telegram
+// 🤖 Telegram
 startTelegramBot();
 
-// ⏰ Inicializa Scheduler
+// ⏰ Scheduler
 startScheduler(bot);

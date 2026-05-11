@@ -116,6 +116,25 @@ function getAllUsers() {
 
 }
 
+function updateUserStatus(chatId, active) {
+
+    db.run(`
+        UPDATE user_settings
+        SET active = ?
+        WHERE chat_id = ?
+    `, [active, chatId]);
+
+}
+
+function deleteUser(chatId) {
+
+    db.run(`
+        DELETE FROM user_settings
+        WHERE chat_id = ?
+    `, [chatId]);
+
+}
+
 module.exports = {
     setCategory,
     getCategory,
@@ -124,4 +143,6 @@ module.exports = {
     setActive,
     isActive,
     getAllUsers,
+    updateUserStatus,
+    deleteUser
 };
