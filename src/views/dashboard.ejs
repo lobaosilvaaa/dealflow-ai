@@ -52,6 +52,43 @@
         </p>
     </div>
 
+    <div class="card">
+
+        <h2>👥 Usuários</h2>
+
+        <table width="100%">
+
+            <tr>
+            <th align="left">Chat ID</th>
+            <th align="left">Categoria</th>
+            <th align="left">Frequência</th>
+            <th align="left">Status</th>
+            </tr>
+
+            <% users.forEach(user => { %>
+
+                <tr>
+                    <td><%= user.chat_id %></td>
+
+                    <td>
+                    <%= user.category %>
+                    </td>
+
+                    <td>
+                    <%= user.frequency %> min
+                    </td>
+
+                    <td>
+                    <%= user.active ? '🟢 Ativo' : '🔴 Pausado' %>
+                    </td>
+                </tr>
+
+            <% }) %>
+
+        </table>
+
+        </div>
+
 </body>
 
 </html>

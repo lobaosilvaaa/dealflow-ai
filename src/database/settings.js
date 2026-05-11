@@ -91,6 +91,31 @@ function isActive(chatId) {
 
 }
 
+function getAllUsers() {
+
+    return new Promise((resolve, reject) => {
+
+        db.all(`
+        SELECT
+            chat_id,
+            category,
+            frequency,
+            active
+        FROM user_settings
+        `, [], (err, rows) => {
+
+        if (err) {
+            reject(err);
+        } else {
+            resolve(rows);
+        }
+
+        });
+
+    });
+
+}
+
 module.exports = {
     setCategory,
     getCategory,
@@ -98,4 +123,5 @@ module.exports = {
     getFrequency,
     setActive,
     isActive,
+    getAllUsers,
 };

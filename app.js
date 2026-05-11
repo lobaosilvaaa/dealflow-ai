@@ -20,6 +20,10 @@ const {
     getChats,
 } = require("./src/database/chats");
 
+const {
+    getAllUsers,
+} = require("./src/database/settings");
+
 const app = express();
 
 // 🚀 Configuração do EJS
@@ -102,10 +106,13 @@ app.get("/dashboard", isAuthenticated, async (req, res) => {
 
         const chats = await getChats();
 
+        const users = await getAllUsers();
+
         res.render("dashboard", {
             sentPromos: stats.sent_promos,
             totalUsers: chats.length,
             uptime: process.uptime(),
+            users,
         });
 
     } catch (error) {
