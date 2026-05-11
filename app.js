@@ -35,6 +35,8 @@ app.set("views", "./src/views");
 // 📦 Middlewares
 app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static("public"));
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
