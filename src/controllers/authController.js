@@ -1,12 +1,17 @@
+const jwt =
+    require("jsonwebtoken");
+
 const logger =
     require("../services/logger");
 
+// 📄 Página login
 function loginPage(req, res) {
 
     res.render("login");
 
 }
 
+// 🔐 Login dashboard
 function login(req, res) {
 
     const {
@@ -48,6 +53,7 @@ function login(req, res) {
 
 }
 
+// 🚪 Logout
 function logout(req, res) {
 
     logger.info(
@@ -62,6 +68,70 @@ function logout(req, res) {
 
 }
 
+// 🔑 Login API JWT
+function apiLogin(req, res) {
+
+    const {
+        username,
+        password
+    } = req.body;
+
+    if (
+
+        username ===
+        process.env.ADMIN_USER
+
+        &&
+
+        password ===
+        process.env.ADMIN_PASSWORD
+
+    ) {
+
+        const token =
+            jwt.sign(
+
+                {
+                    username
+                },
+
+                process.env.JWT_SECRET,
+
+                {
+                    expiresIn: "24h"
+                }
+
+            );
+
+        logger.info(
+            "Token JWT gerado"
+        );
+
+        return res.json({
+
+            success: true,
+
+            token,
+
+        });
+
+    }
+
+    logger.warn(
+        `Tentativa JWT inválida: ${username}`
+    );
+
+    return res.status(401).json({
+
+        success: false,
+
+        error:
+            "Credenciais inválidas"
+
+    });
+
+}
+
 module.exports = {
 
     loginPage,
@@ -69,5 +139,7 @@ module.exports = {
     login,
 
     logout,
+
+    apiLogin,
 
 };

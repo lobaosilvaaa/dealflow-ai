@@ -7,13 +7,34 @@ const {
     loginPage,
     login,
     logout,
+    apiLogin,
 
-} = require("../controllers/authController");
+} = require(
+    "../controllers/authController"
+);
 
-router.get("/login", loginPage);
+// 🌐 Login dashboard
+router.get(
+    "/login",
+    loginPage
+);
 
-router.post("/login", login);
+// 🔐 Login dashboard
+router.post(
+    "/login",
+    login
+);
 
-router.get("/logout", logout);
+// 🚪 Logout
+router.get(
+    "/logout",
+    logout
+);
+
+// 🔑 Login API JWT
+router.post(
+    "/api/login",
+    apiLogin
+);
 
 module.exports = router;

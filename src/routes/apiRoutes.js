@@ -13,30 +13,44 @@ const {
 );
 
 const {
-    isAuthenticated,
+
+    verifyToken,
+
 } = require(
-    "../middlewares/authMiddleware"
+    "../middlewares/jwtMiddleware"
 );
 
 // 📊 Estatísticas
 router.get(
+
     "/api/stats",
-    isAuthenticated,
+
+    verifyToken,
+
     stats
+
 );
 
 // 👥 Usuários
 router.get(
+
     "/api/users",
-    isAuthenticated,
+
+    verifyToken,
+
     users
+
 );
 
 // 📜 Logs
 router.get(
+
     "/api/logs",
-    isAuthenticated,
+
+    verifyToken,
+
     logs
+
 );
 
 module.exports = router;
