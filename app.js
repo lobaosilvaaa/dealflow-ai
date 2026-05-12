@@ -5,20 +5,24 @@ const express = require("express");
 const session =
     require("express-session");
 
+// 🤖 Telegram
 const {
+
     startTelegramBot,
     bot,
+
 } = require(
     "./src/adapters/telegram/telegram"
 );
 
+// ⏰ Scheduler
 const {
     startScheduler,
 } = require(
     "./src/services/scheduler"
 );
 
-// 📦 Rotas
+// 🌐 Rotas
 const authRoutes =
     require("./src/routes/authRoutes");
 
@@ -28,20 +32,33 @@ const dashboardRoutes =
 const adminRoutes =
     require("./src/routes/adminRoutes");
 
+const apiRoutes =
+    require("./src/routes/apiRoutes");
+
 const app = express();
 
 // 🚀 Configuração EJS
-app.set("view engine", "ejs");
+app.set(
+    "view engine",
+    "ejs"
+);
 
-app.set("views", "./src/views");
+app.set(
+    "views",
+    "./src/views"
+);
 
 // 📦 Middlewares
 app.use(express.urlencoded({
     extended: true
 }));
 
+app.use(express.json());
+
 // 🌐 Arquivos estáticos
-app.use(express.static("public"));
+app.use(
+    express.static("public")
+);
 
 // 🔐 Sessão
 app.use(session({
@@ -61,6 +78,8 @@ app.use(authRoutes);
 app.use(dashboardRoutes);
 
 app.use(adminRoutes);
+
+app.use(apiRoutes);
 
 // 🏠 Home
 app.get("/", (req, res) => {
