@@ -1,3 +1,7 @@
+const fs = require("fs");
+
+const path = require("path");
+
 const {
     getStats,
 } = require("../database/stats");
@@ -14,11 +18,39 @@ async function dashboard(req, res) {
 
     try {
 
-        const stats = await getStats();
+        const stats =
+            await getStats();
 
-        const chats = await getChats();
+        const chats =
+            await getChats();
 
-        const users = await getAllUsers();
+        const users =
+            await getAllUsers();
+
+        // 📜 Caminho do log
+        const logPath = path.join(
+            __dirname,
+            "../logs/app.log"
+        );
+
+        let logs = [];
+
+        // 📖 Lê logs
+        if (fs.existsSync(logPath)) {
+
+            const content =
+                fs.readFileSync(
+                    logPath,
+                    "utf8"
+                );
+
+            logs = content
+                .split("\n")
+                .filter(Boolean)
+                .reverse()
+                .slice(0, 10);
+
+        }
 
         res.render("dashboard", {
 
@@ -32,6 +64,8 @@ async function dashboard(req, res) {
                 process.uptime(),
 
             users,
+
+            logs,
 
         });
 
