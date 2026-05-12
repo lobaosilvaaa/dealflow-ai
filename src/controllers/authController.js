@@ -1,3 +1,6 @@
+const logger =
+    require("../services/logger");
+
 function loginPage(req, res) {
 
     res.render("login");
@@ -6,31 +9,52 @@ function loginPage(req, res) {
 
 function login(req, res) {
 
-    const { username, password } = req.body;
+    const {
+        username,
+        password
+    } = req.body;
 
     if (
-        username === process.env.ADMIN_USER &&
-        password === process.env.ADMIN_PASSWORD
+
+        username ===
+        process.env.ADMIN_USER
+
+        &&
+
+        password ===
+        process.env.ADMIN_PASSWORD
+
     ) {
 
         req.session.authenticated = true;
 
-        console.log(
-            "🔐 Login administrativo realizado"
+        logger.info(
+            "Login administrativo realizado"
         );
 
-        return res.redirect("/dashboard");
+        return res.redirect(
+            "/dashboard"
+        );
+
     }
 
-    return res.send("❌ Login inválido");
+    logger.warn(
+        `Tentativa de login inválida: ${username}`
+    );
+
+    return res.send(
+        "❌ Login inválido"
+    );
 
 }
 
 function logout(req, res) {
 
-    req.session.destroy(() => {
+    logger.info(
+        "Logout realizado"
+    );
 
-        console.log("🚪 Logout realizado");
+    req.session.destroy(() => {
 
         res.redirect("/login");
 
@@ -39,7 +63,11 @@ function logout(req, res) {
 }
 
 module.exports = {
+
     loginPage,
+
     login,
+
     logout,
+
 };

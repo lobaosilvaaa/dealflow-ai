@@ -3,42 +3,79 @@ const {
     updateUserStatus,
     deleteUser,
 
-} = require("../database/settings");
+} = require(
+    "../database/settings"
+);
 
+const logger =
+    require("../services/logger");
+
+// ▶️ Ativar usuário
 function activate(req, res) {
 
+    const chatId =
+        req.params.chatId;
+
     updateUserStatus(
-        req.params.chatId,
+        chatId,
         1
     );
 
-    res.redirect("/dashboard");
+    logger.info(
+        `Usuário ativado: ${chatId}`
+    );
+
+    res.redirect(
+        "/dashboard"
+    );
 
 }
 
+// ⏸️ Pausar usuário
 function pause(req, res) {
 
+    const chatId =
+        req.params.chatId;
+
     updateUserStatus(
-        req.params.chatId,
+        chatId,
         0
     );
 
-    res.redirect("/dashboard");
+    logger.info(
+        `Usuário pausado: ${chatId}`
+    );
+
+    res.redirect(
+        "/dashboard"
+    );
 
 }
 
+// 🗑️ Remover usuário
 function remove(req, res) {
 
-    deleteUser(
-        req.params.chatId
+    const chatId =
+        req.params.chatId;
+
+    deleteUser(chatId);
+
+    logger.info(
+        `Usuário removido: ${chatId}`
     );
 
-    res.redirect("/dashboard");
+    res.redirect(
+        "/dashboard"
+    );
 
 }
 
 module.exports = {
+
     activate,
+
     pause,
+
     remove,
+
 };
