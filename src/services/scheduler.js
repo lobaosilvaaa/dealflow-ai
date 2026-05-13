@@ -1,120 +1,129 @@
-const { getChats } = require("../database/chats");
+const {
+
+    getAllUsers,
+
+} = require(
+    "../database/settings"
+);
 
 const {
-    getCategory,
-    getFrequency,
-    isActive,
-} = require("../database/settings");
+
+    getRandomProduct,
+
+} = require(
+    "./products"
+);
 
 const {
+
     incrementPromos,
-} = require("../database/stats");
 
-const { getRandomProduct } = require("./products");
-const { generateCopy } = require("./copy");
+} = require(
+    "../database/stats"
+);
 
-// ⏰ Controle de schedulers individuais
-const userIntervals = {};
+const {
+    logger
+} = require(
+    "./logger"
+);
 
+// ⏰ Inicializa scheduler
 function startScheduler(bot) {
 
-    console.log("⏰ Scheduler iniciado...");
+    console.log(
+        "⏰ Scheduler iniciado..."
+    );
 
-    // 🔄 Verifica novos usuários periodicamente
     setInterval(async () => {
 
         try {
 
-            const chats = await getChats();
+            const users =
+                await getAllUsers();
 
-            if (!chats || chats.length === 0) {
-                console.log("⚠️ Nenhum chat registrado");
-                return;
-            }
+            for (const user of users) {
 
-            for (const chatId of chats) {
+                // ⛔ Usuário pausado
+                if (!user.active) {
 
-                // 🔒 Evita duplicação de scheduler
-                if (userIntervals[chatId]) {
                     continue;
+
                 }
 
-                // ⏰ Frequência individual
-                const frequency = await getFrequency(chatId);
+                const {
 
-                console.log(
-                    `⏰ Scheduler configurado para ${chatId} (${frequency} min)`
+                    chat_id,
+                    category,
+                    frequency
+
+                } = user;
+
+                // 🎯 Produto aleatório
+                const product =
+                    getRandomProduct(category);
+
+                if (!product) {
+
+                    continue;
+
+                }
+
+                const message = `
+
+🔥 OFERTA IMPERDÍVEL!
+
+🛍️ ${product.name}
+✨ ${product.description}
+
+💰 ${product.price}
+⚠️ Estoque limitado!
+
+👉 Compre agora:
+${product.link}
+
+`;
+
+                // 📤 Envia promoção
+                await bot.telegram.sendMessage(
+
+                    chat_id,
+
+                    message
+
                 );
 
-                // 🚀 Scheduler individual
-                userIntervals[chatId] = setInterval(async () => {
+                // 📊 Incrementa estatísticas
+                await incrementPromos();
 
-                    try {
+                logger.info(
+                    `Promo enviada para ${chat_id}`
+                );
 
-                        // 🎛️ Verifica se promoções estão ativas
-                        const active = await isActive(chatId);
-
-                        if (!active) {
-                            return;
-                        }
-
-                        // 🎯 Categoria personalizada
-                        const category = await getCategory(chatId);
-
-                        // 🛍️ Produto
-                        const product = await getRandomProduct(category);
-
-                        if (!product) {
-
-                            console.log(
-                                `⚠️ Nenhum produto encontrado para ${chatId}`
-                            );
-
-                            return;
-                        }
-
-                        // ✍️ Gera copy automática
-                        const mensagem = generateCopy(product);
-
-                        // 📤 Envia mensagem
-                        await bot.telegram.sendMessage(
-                            chatId,
-                            mensagem
-                        );
-
-                        // 📊 Incrementa estatísticas
-                        incrementPromos();
-
-                        console.log(
-                            `📤 Promo enviada para ${chatId}`
-                        );
-
-                    } catch (err) {
-
-                        console.error(
-                            `❌ Erro ao enviar para ${chatId}:`,
-                            err.message
-                        );
-
-                    }
-
-                }, frequency * 60000);
+                console.log(
+                    `📤 Promo enviada para ${chat_id}`
+                );
 
             }
 
         } catch (error) {
 
-            console.error(
-                "❌ Erro no scheduler:",
-                error.message
+            console.log(
+                `❌ Erro no scheduler: ${error.message}`
+            );
+
+            logger.error(
+                `Erro no scheduler: ${error.message}`
             );
 
         }
 
-    }, 10000);
+    }, 60000);
 
 }
 
 module.exports = {
+
     startScheduler,
+
 };

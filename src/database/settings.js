@@ -1,148 +1,234 @@
-const db = require("./db");
+const db =
+    require("./db");
 
-function setCategory(chatId, category) {
-    db.run(`
-        INSERT INTO user_settings (chat_id, category)
-        VALUES (?, ?)
-        ON CONFLICT(chat_id)
-        DO UPDATE SET category=excluded.category
-    `, [chatId, category]);
-}
+// 💾 Salvar configurações
+function saveSettings(
 
-function getCategory(chatId) {
-    return new Promise((resolve, reject) => {
-        db.get(
-            "SELECT category FROM user_settings WHERE chat_id = ?",
-            [chatId],
-            (err, row) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(row ? row.category : "geral");
-                }
-            }
-        );
-    });
-}
+    chatId,
+    category,
+    frequency
 
-function setFrequency(chatId, frequency) {
-
-    db.run(`
-        INSERT INTO user_settings (chat_id, frequency)
-        VALUES (?, ?)
-        ON CONFLICT(chat_id)
-        DO UPDATE SET frequency=excluded.frequency
-    `, [chatId, frequency]);
-
-}
-
-function getFrequency(chatId) {
+) {
 
     return new Promise((resolve, reject) => {
 
-        db.get(
-            "SELECT frequency FROM user_settings WHERE chat_id = ?",
-            [chatId],
-            (err, row) => {
+        db.run(
 
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(row ? row.frequency : 60);
+            `
+            INSERT OR REPLACE INTO user_settings (
+
+                chat_id,
+                category,
+                frequency,
+                active
+
+            )
+
+            VALUES (?, ?, ?, 1)
+            `,
+
+            [
+
+                chatId,
+                category,
+                frequency
+
+            ],
+
+            error => {
+
+                if (error) {
+
+                    return reject(error);
+
                 }
 
+                resolve();
+
             }
+
         );
 
     });
 
 }
 
-function setActive(chatId, active) {
-
-    db.run(`
-        INSERT INTO user_settings (chat_id, active)
-        VALUES (?, ?)
-        ON CONFLICT(chat_id)
-        DO UPDATE SET active=excluded.active
-    `, [chatId, active]);
-
-}
-
-function isActive(chatId) {
+// 📥 Buscar configurações
+function getSettings(chatId) {
 
     return new Promise((resolve, reject) => {
 
         db.get(
-            "SELECT active FROM user_settings WHERE chat_id = ?",
-            [chatId],
-            (err, row) => {
 
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(row ? row.active === 1 : true);
+            `
+            SELECT *
+            FROM user_settings
+            WHERE chat_id = ?
+            `,
+
+            [chatId],
+
+            (error, row) => {
+
+                if (error) {
+
+                    return reject(error);
+
                 }
 
+                resolve(row);
+
             }
+
         );
 
     });
 
 }
 
+// 👥 Buscar todos usuários
 function getAllUsers() {
 
     return new Promise((resolve, reject) => {
 
-        db.all(`
-        SELECT
-            chat_id,
-            category,
-            frequency,
-            active
-        FROM user_settings
-        `, [], (err, rows) => {
+        db.all(
 
-        if (err) {
-            reject(err);
-        } else {
-            resolve(rows);
-        }
+            `
+            SELECT *
+            FROM user_settings
+            ORDER BY rowid DESC
+            `,
 
-        });
+            [],
+
+            (error, rows) => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve(rows);
+
+            }
+
+        );
 
     });
 
 }
 
-function updateUserStatus(chatId, active) {
+// ⏸️ Pausar usuário
+function pauseUser(chatId) {
 
-    db.run(`
-        UPDATE user_settings
-        SET active = ?
-        WHERE chat_id = ?
-    `, [active, chatId]);
+    return new Promise((resolve, reject) => {
+
+        db.run(
+
+            `
+            UPDATE user_settings
+            SET active = 0
+            WHERE chat_id = ?
+            `,
+
+            [chatId],
+
+            error => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve();
+
+            }
+
+        );
+
+    });
 
 }
 
+// ▶️ Ativar usuário
+function activateUser(chatId) {
+
+    return new Promise((resolve, reject) => {
+
+        db.run(
+
+            `
+            UPDATE user_settings
+            SET active = 1
+            WHERE chat_id = ?
+            `,
+
+            [chatId],
+
+            error => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve();
+
+            }
+
+        );
+
+    });
+
+}
+
+// 🗑️ Remover usuário
 function deleteUser(chatId) {
 
-    db.run(`
-        DELETE FROM user_settings
-        WHERE chat_id = ?
-    `, [chatId]);
+    return new Promise((resolve, reject) => {
+
+        db.run(
+
+            `
+            DELETE FROM user_settings
+            WHERE chat_id = ?
+            `,
+
+            [chatId],
+
+            error => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve();
+
+            }
+
+        );
+
+    });
 
 }
 
 module.exports = {
-    setCategory,
-    getCategory,
-    setFrequency,
-    getFrequency,
-    setActive,
-    isActive,
+
+    saveSettings,
+
+    getSettings,
+
     getAllUsers,
-    updateUserStatus,
-    deleteUser
+
+    pauseUser,
+
+    activateUser,
+
+    deleteUser,
+
 };

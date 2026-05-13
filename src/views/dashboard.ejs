@@ -95,7 +95,7 @@
             📜 Logs Recentes
         </h2>
 
-        <div class="logs-container">
+        <div class="logs-container" id="logsContainer">
 
             <% logs.forEach(log=> { %>
 
@@ -227,14 +227,41 @@
     <!-- 🚀 Dashboard JS -->
     <script src="/js/dashboard.js"></script>
 
-    <!-- 🔄 Auto Refresh -->
+    <!-- 🔌 Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+
     <script>
 
-        setInterval(() => {
+        const socket = io();
 
-            location.reload();
+        // 📡 Novo log realtime
+        socket.on("new-log", data => {
 
-        }, 10000);
+            console.log(
+                "Novo log:",
+                data.message
+            );
+
+            const logsContainer =
+                document.getElementById(
+                    "logsContainer"
+                );
+
+            const logItem =
+                document.createElement("div");
+
+            logItem.classList.add(
+                "log-item"
+            );
+
+            logItem.innerText =
+                data.message;
+
+            logsContainer.prepend(
+                logItem
+            );
+
+        });
 
     </script>
 

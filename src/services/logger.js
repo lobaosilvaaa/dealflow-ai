@@ -1,40 +1,80 @@
-const winston = require("winston");
+const winston =
+    require("winston");
 
-const logger = winston.createLogger({
+// 🔌 Socket.IO
+let io = null;
 
-    level: "info",
+// 🔗 Vincula socket
+function setSocket(serverIo) {
 
-    format: winston.format.combine(
+    io = serverIo;
 
-        winston.format.timestamp(),
+}
 
-        winston.format.printf(({
+// 🚀 Logger
+const logger =
+    winston.createLogger({
 
-            timestamp,
-            level,
+        level: "info",
+
+        format:
+            winston.format.combine(
+
+                winston.format.timestamp(),
+
+                winston.format.printf(({
+
+                    timestamp,
+                    level,
+                    message
+
+                }) => {
+
+                    return `[${timestamp}] ${level.toUpperCase()}: ${message}`;
+
+                })
+
+            ),
+
+        transports: [
+
+            new winston.transports.File({
+
+                filename:
+                    "src/logs/app.log"
+
+            }),
+
+            new winston.transports.Console()
+
+        ]
+
+    });
+
+// 📡 Realtime logs
+const originalInfo =
+    logger.info.bind(logger);
+
+logger.info = (message) => {
+
+    originalInfo(message);
+
+    if (io) {
+
+        io.emit("new-log", {
+
             message
 
-        }) => {
+        });
 
-            return `[${timestamp}] ${level.toUpperCase()}: ${message}`;
+    }
 
-        })
+};
 
-    ),
+module.exports = {
 
-    transports: [
+    logger,
 
-        new winston.transports.File({
+    setSocket,
 
-            filename:
-                "src/logs/app.log"
-
-        }),
-
-        new winston.transports.Console()
-
-    ]
-
-});
-
-module.exports = logger;
+};

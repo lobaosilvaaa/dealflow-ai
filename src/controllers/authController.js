@@ -1,8 +1,11 @@
 const jwt =
     require("jsonwebtoken");
 
-const logger =
-    require("../services/logger");
+const {
+    logger
+} = require(
+    "../services/logger"
+);
 
 // 📄 Página login
 function loginPage(req, res) {

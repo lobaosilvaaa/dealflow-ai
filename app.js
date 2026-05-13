@@ -5,12 +5,26 @@ const express = require("express");
 const session =
     require("express-session");
 
+const http =
+    require("http");
+
+const {
+    Server,
+} = require("socket.io");
+
 // 📚 Swagger
 const swaggerUi =
     require("swagger-ui-express");
 
 const swaggerSpec =
     require("./src/config/swagger");
+
+// 🔊 Logger Socket
+const {
+    setSocket,
+} = require(
+    "./src/services/logger"
+);
 
 // 🤖 Telegram
 const {
@@ -43,6 +57,26 @@ const apiRoutes =
     require("./src/routes/apiRoutes");
 
 const app = express();
+
+// 🌐 HTTP Server
+const server =
+    http.createServer(app);
+
+// 🔌 Socket.IO
+const io =
+    new Server(server);
+
+// 🔗 Vincula socket ao logger
+setSocket(io);
+
+// 🔌 Conexão realtime
+io.on("connection", socket => {
+
+    console.log(
+        "🔌 Cliente realtime conectado"
+    );
+
+});
 
 // 🚀 Configuração EJS
 app.set(
@@ -112,7 +146,7 @@ app.get("/", (req, res) => {
 const PORT =
     process.env.PORT || 3000;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
 
     console.log(
         `🚀 Servidor rodando na porta ${PORT}`

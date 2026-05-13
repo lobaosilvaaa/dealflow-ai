@@ -1,80 +1,123 @@
 const {
 
-    updateUserStatus,
+    pauseUser,
+    activateUser,
     deleteUser,
 
 } = require(
     "../database/settings"
 );
 
-const logger =
-    require("../services/logger");
+const {
+    logger
+} = require(
+    "../services/logger"
+);
 
-// ▶️ Ativar usuário
-function activate(req, res) {
+// ⏸️ Pausar usuário
+async function pause(req, res) {
 
-    const chatId =
-        req.params.chatId;
+    try {
 
-    updateUserStatus(
-        chatId,
-        1
-    );
+        const {
+            chatId
+        } = req.params;
 
-    logger.info(
-        `Usuário ativado: ${chatId}`
-    );
+        await pauseUser(chatId);
 
-    res.redirect(
-        "/dashboard"
-    );
+        logger.info(
+            `Usuário pausado: ${chatId}`
+        );
+
+        res.redirect(
+            "/dashboard"
+        );
+
+    } catch (error) {
+
+        logger.error(
+            `Erro ao pausar usuário: ${error.message}`
+        );
+
+        res.send(
+            "❌ Erro ao pausar usuário"
+        );
+
+    }
 
 }
 
-// ⏸️ Pausar usuário
-function pause(req, res) {
+// ▶️ Ativar usuário
+async function activate(req, res) {
 
-    const chatId =
-        req.params.chatId;
+    try {
 
-    updateUserStatus(
-        chatId,
-        0
-    );
+        const {
+            chatId
+        } = req.params;
 
-    logger.info(
-        `Usuário pausado: ${chatId}`
-    );
+        await activateUser(chatId);
 
-    res.redirect(
-        "/dashboard"
-    );
+        logger.info(
+            `Usuário ativado: ${chatId}`
+        );
+
+        res.redirect(
+            "/dashboard"
+        );
+
+    } catch (error) {
+
+        logger.error(
+            `Erro ao ativar usuário: ${error.message}`
+        );
+
+        res.send(
+            "❌ Erro ao ativar usuário"
+        );
+
+    }
 
 }
 
 // 🗑️ Remover usuário
-function remove(req, res) {
+async function remove(req, res) {
 
-    const chatId =
-        req.params.chatId;
+    try {
 
-    deleteUser(chatId);
+        const {
+            chatId
+        } = req.params;
 
-    logger.info(
-        `Usuário removido: ${chatId}`
-    );
+        await deleteUser(chatId);
 
-    res.redirect(
-        "/dashboard"
-    );
+        logger.info(
+            `Usuário removido: ${chatId}`
+        );
+
+        res.redirect(
+            "/dashboard"
+        );
+
+    } catch (error) {
+
+        logger.error(
+            `Erro ao remover usuário: ${error.message}`
+        );
+
+        res.send(
+            "❌ Erro ao remover usuário"
+        );
+
+    }
 
 }
 
 module.exports = {
 
-    activate,
-
     pause,
+
+    activate,
 
     remove,
 

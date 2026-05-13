@@ -10,3 +10,14 @@
 [2026-05-12T23:18:59.411Z] INFO: Logout realizado
 [2026-05-12T23:20:25.853Z] INFO: Token JWT gerado
 [2026-05-13T00:01:15.047Z] INFO: Login administrativo realizado
+[2026-05-13T21:13:38.970Z] INFO: Login administrativo realizado
+[2026-05-13T21:13:49.087Z] ERROR: Erro ao ativar usuário: activateUser is not a function
+[2026-05-13T21:20:34.824Z] INFO: Login administrativo realizado
+[2026-05-13T21:20:40.630Z] INFO: Usuário ativado: 7999895751.0
+[2026-05-13T21:22:52.839Z] INFO: Login administrativo realizado
+[2026-05-13T21:23:00.254Z] INFO: Usuário pausado: 7999895751.0
+[2026-05-13T21:23:03.615Z] INFO: Usuário ativado: 7999895751.0
+[2026-05-13T21:23:43.407Z] INFO: Promo enviada para 7999895751.0
+[2026-05-13T21:24:43.019Z] INFO: Promo enviada para 7999895751.0
+[2026-05-13T21:25:42.988Z] INFO: Promo enviada para 7999895751.0
+[2026-05-13T21:26:43.008Z] INFO: Promo enviada para 7999895751.0
