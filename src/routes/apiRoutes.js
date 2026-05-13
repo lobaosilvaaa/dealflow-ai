@@ -20,6 +20,18 @@ const {
     "../middlewares/jwtMiddleware"
 );
 
+/**
+ * @swagger
+ * /api/stats:
+ *   get:
+ *     summary: Retorna estatísticas
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Estatísticas da plataforma
+ */
+
 // 📊 Estatísticas
 router.get(
 
@@ -31,6 +43,18 @@ router.get(
 
 );
 
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Retorna usuários
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de usuários
+ */
+
 // 👥 Usuários
 router.get(
 
@@ -41,6 +65,18 @@ router.get(
     users
 
 );
+
+/**
+ * @swagger
+ * /api/logs:
+ *   get:
+ *     summary: Retorna logs
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logs recentes
+ */
 
 // 📜 Logs
 router.get(

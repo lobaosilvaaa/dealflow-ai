@@ -5,6 +5,13 @@ const express = require("express");
 const session =
     require("express-session");
 
+// 📚 Swagger
+const swaggerUi =
+    require("swagger-ui-express");
+
+const swaggerSpec =
+    require("./src/config/swagger");
+
 // 🤖 Telegram
 const {
 
@@ -71,6 +78,17 @@ app.use(session({
     saveUninitialized: false,
 
 }));
+
+// 📚 Swagger Docs
+app.use(
+
+    "/api/docs",
+
+    swaggerUi.serve,
+
+    swaggerUi.setup(swaggerSpec)
+
+);
 
 // 🌐 Rotas
 app.use(authRoutes);
