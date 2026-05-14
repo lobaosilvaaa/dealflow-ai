@@ -254,12 +254,37 @@
                 "log-item"
             );
 
-            logItem.innerText =
-                data.message;
+            logItem.style.animation =
+                "fadeIn 0.3s ease";
+
+            logItem.innerHTML = `
+
+                <span class="log-time">
+                    [${data.timestamp}]
+                </span>
+
+                ${data.message}
+
+            `;
 
             logsContainer.prepend(
                 logItem
             );
+
+            // 🔥 Limita feed
+            if (
+
+                logsContainer.children.length > 10
+
+            ) {
+
+                logsContainer.removeChild(
+
+                    logsContainer.lastChild
+
+                );
+
+            }
 
         });
 

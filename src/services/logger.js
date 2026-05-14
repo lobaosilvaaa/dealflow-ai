@@ -63,7 +63,10 @@ logger.info = (message) => {
 
         io.emit("new-log", {
 
-            message
+            message,
+
+            timestamp:
+                new Date().toLocaleTimeString(),
 
         });
 
