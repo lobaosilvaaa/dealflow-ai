@@ -161,3 +161,26 @@
 [2026-05-15 18:53:58] INFO: Promo enviada para 7999895751.0
 [2026-05-15 18:54:15] WARN: Encerrando aplicação...
 [2026-05-15 18:54:15] WARN: Encerrando aplicação...
+[2026-05-15 19:21:33] INFO: Live Metrics iniciado
+[2026-05-15 19:21:33] INFO: Telegram bot iniciado
+[2026-05-15 19:21:33] INFO: Scheduler iniciado
+[2026-05-15 19:21:33] INFO: Servidor rodando na porta 3000
+[2026-05-15 19:21:44] INFO: Login administrativo realizado
+[2026-05-15 19:21:44] INFO: Cliente realtime conectado: xRZTogWjD6QZwUruAAAB
+[2026-05-15 19:21:44] INFO: Promo enviada para 7999895751
+[2026-05-15 19:21:44] INFO: Promo enviada para 7999895751.0
+[2026-05-15 19:22:11] INFO: Usuário pausado: 7999895751
+[2026-05-15 19:22:11] WARN: Cliente realtime desconectado: xRZTogWjD6QZwUruAAAB
+[2026-05-15 19:22:11] INFO: Cliente realtime conectado: DsB0lStuQU4iDjy2AAAD
+[2026-05-15 19:22:13] INFO: Usuário ativado: 7999895751
+[2026-05-15 19:22:13] WARN: Cliente realtime desconectado: DsB0lStuQU4iDjy2AAAD
+[2026-05-15 19:22:13] INFO: Cliente realtime conectado: fhhgMtrntpqtuY6jAAAF
+[2026-05-15 19:22:31] WARN: JWT ausente
+[2026-05-15 19:22:31] WARN: Cliente realtime desconectado: fhhgMtrntpqtuY6jAAAF
+[2026-05-15 19:22:40] INFO: Cliente realtime conectado: uMTTv_VJOlIqcaYRAAAH
+[2026-05-15 19:22:44] INFO: Promo enviada para 7999895751
+[2026-05-15 19:22:44] INFO: Logout realizado
+[2026-05-15 19:22:44] WARN: Cliente realtime desconectado: uMTTv_VJOlIqcaYRAAAH
+[2026-05-15 19:22:48] WARN: Encerrando aplicação...
+[2026-05-15 19:22:48] WARN: Encerrando aplicação...
+[2026-05-15 19:22:48] WARN: Servidor encerrado

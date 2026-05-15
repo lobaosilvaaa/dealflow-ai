@@ -91,19 +91,27 @@ const io =
 // 🔗 Socket no logger
 setSocket(io);
 
-// 📡 Inicializa live metrics
+// 📡 Inicializa métricas realtime
 startLiveMetrics(io);
 
-// 🔌 Cliente realtime
-io.on("connection", () => {
+// 🔌 Cliente realtime conectado
+io.on("connection", socket => {
 
     logger.info(
-        "Cliente realtime conectado"
+        `Cliente realtime conectado: ${socket.id}`
     );
+
+    socket.on("disconnect", () => {
+
+        logger.warn(
+            `Cliente realtime desconectado: ${socket.id}`
+        );
+
+    });
 
 });
 
-// ⚙️ Configurações
+// ⚙️ Configuração
 const PORT =
     process.env.PORT || 3000;
 
@@ -193,11 +201,19 @@ app.get("/health", (req, res) => {
 
         success: true,
 
+        status:
+            "online",
+
         uptime:
-            process.uptime(),
+            Math.floor(
+                process.uptime()
+            ),
 
         timestamp:
             new Date(),
+
+        environment:
+            process.env.NODE_ENV || "development",
 
     });
 
@@ -220,11 +236,37 @@ server.listen(PORT, async () => {
 
 });
 
-// 🤖 Inicializa Telegram
-startTelegramBot();
+// 🚀 Bootstrap principal
+async function bootstrap() {
 
-// ⏰ Inicializa Scheduler
-startScheduler(bot);
+    try {
+
+        // 🤖 Telegram
+        startTelegramBot();
+
+        logger.info(
+            "Telegram bot iniciado"
+        );
+
+        // ⏰ Scheduler
+        startScheduler(bot);
+
+        logger.info(
+            "Scheduler iniciado"
+        );
+
+    } catch (error) {
+
+        logger.error(
+            `Erro bootstrap: ${error.message}`
+        );
+
+    }
+
+}
+
+// 🚀 Inicializa serviços
+bootstrap();
 
 // 🛑 Shutdown seguro
 process.on(
@@ -233,21 +275,45 @@ process.on(
 
     async () => {
 
-        logger.warn(
-            "Encerrando aplicação..."
-        );
+        try {
 
-        await sendRuntimeLog(
+            logger.warn(
+                "Encerrando aplicação..."
+            );
 
-            "🛑 Sistema Offline",
+            await sendRuntimeLog(
 
-            "DealFlow AI foi encerrado.",
+                "🛑 Sistema Offline",
 
-            "warn"
+                "DealFlow AI foi encerrado.",
 
-        );
+                "warn"
 
-        process.exit();
+            );
+
+            // 🔌 Fecha Socket.IO
+            io.close();
+
+            // 🌐 Fecha servidor HTTP
+            server.close(() => {
+
+                logger.warn(
+                    "Servidor encerrado"
+                );
+
+                process.exit(0);
+
+            });
+
+        } catch (error) {
+
+            logger.error(
+                `Erro shutdown: ${error.message}`
+            );
+
+            process.exit(1);
+
+        }
 
     }
 
