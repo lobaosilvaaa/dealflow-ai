@@ -23,6 +23,7 @@ const swaggerSpec =
 // 🔊 Logger
 const {
 
+    logger,
     setSocket,
     sendRuntimeLog,
 
@@ -30,7 +31,7 @@ const {
     "./src/services/logger"
 );
 
-// 📊 Métricas
+// 📊 Banco
 const {
     getStats,
 } = require(
@@ -83,61 +84,32 @@ const server =
 
 // 🔌 Socket.IO
 const io =
-    new Server(server);
+    new Server(server, {
 
-// 🔗 Vincula Socket.IO ao logger
+        cors: {
+
+            origin: "*",
+
+        },
+
+    });
+
+// 🔗 Logger realtime
 setSocket(io);
 
-// 🔌 Cliente realtime
-io.on("connection", socket => {
+io.on("connection", () => {
 
-    console.log(
-        "🔌 Cliente realtime conectado"
+    logger.info(
+        "Cliente realtime conectado"
     );
 
 });
 
-// 📡 Live Metrics
-setInterval(async () => {
+// 🚀 Configurações
+const PORT =
+    process.env.PORT || 3000;
 
-    try {
-
-        const stats =
-            await getStats();
-
-        const users =
-            await getAllUsers();
-
-        io.emit("live-metrics", {
-
-            promos:
-                stats.sent_promos,
-
-            users:
-                users.length,
-
-            uptime:
-                Math.floor(
-                    process.uptime()
-                ),
-
-        });
-
-    } catch (error) {
-
-        console.log(
-
-            "❌ Erro live metrics:",
-
-            error.message
-
-        );
-
-    }
-
-}, 3000);
-
-// 🚀 Configuração EJS
+// 🚀 EJS
 app.set(
     "view engine",
     "ejs"
@@ -157,7 +129,7 @@ app.use(express.urlencoded({
 
 app.use(express.json());
 
-// 🌐 Arquivos estáticos
+// 🌐 Static
 app.use(
     express.static("public")
 );
@@ -171,6 +143,17 @@ app.use(session({
     resave: false,
 
     saveUninitialized: false,
+
+    cookie: {
+
+        secure: false,
+
+        httpOnly: true,
+
+        maxAge:
+            1000 * 60 * 60 * 24
+
+    }
 
 }));
 
@@ -205,17 +188,68 @@ app.get("/", (req, res) => {
 
 });
 
-// 🚀 Inicializa servidor
-const PORT =
-    process.env.PORT || 3000;
+// ❤️ Healthcheck
+app.get("/health", (req, res) => {
 
+    res.json({
+
+        success: true,
+
+        uptime:
+            process.uptime(),
+
+        timestamp:
+            new Date(),
+
+    });
+
+});
+
+// 📡 Live Metrics
+setInterval(async () => {
+
+    try {
+
+        const stats =
+            await getStats();
+
+        const users =
+            await getAllUsers();
+
+        io.emit("live-metrics", {
+
+            promos:
+                stats.sent_promos,
+
+            users:
+                users.length,
+
+            uptime:
+                Math.floor(
+                    process.uptime()
+                ),
+
+        });
+
+    } catch (error) {
+
+        logger.error(
+
+            `Erro live metrics: ${error.message}`
+
+        );
+
+    }
+
+}, 3000);
+
+// 🚀 Inicialização servidor
 server.listen(PORT, async () => {
 
-    console.log(
-        `🚀 Servidor rodando na porta ${PORT}`
+    logger.info(
+        `Servidor rodando na porta ${PORT}`
     );
 
-    // 📢 Runtime log online
     await sendRuntimeLog(
 
         "🚀 Sistema Online",
@@ -226,18 +260,22 @@ server.listen(PORT, async () => {
 
 });
 
-// 🤖 Inicializa Telegram
+// 🤖 Telegram
 startTelegramBot();
 
-// ⏰ Inicializa Scheduler
+// ⏰ Scheduler
 startScheduler(bot);
 
-// 🛑 Encerramento seguro
+// 🛑 Shutdown seguro
 process.on(
 
     "SIGINT",
 
     async () => {
+
+        logger.warn(
+            "Encerrando aplicação..."
+        );
 
         await sendRuntimeLog(
 
@@ -255,16 +293,17 @@ process.on(
 
 );
 
-// ❌ Captura erros críticos
+// ❌ Erros críticos
 process.on(
 
     "uncaughtException",
 
     async error => {
 
-        console.log(
-            "❌ Uncaught Exception:",
-            error.message
+        logger.error(
+
+            `Uncaught Exception: ${error.message}`
+
         );
 
         await sendRuntimeLog(
@@ -281,16 +320,17 @@ process.on(
 
 );
 
-// ❌ Captura promise rejection
+// ❌ Promises rejeitadas
 process.on(
 
     "unhandledRejection",
 
     async error => {
 
-        console.log(
-            "❌ Unhandled Rejection:",
-            error
+        logger.error(
+
+            `Unhandled Rejection: ${error}`
+
         );
 
         await sendRuntimeLog(
