@@ -28,6 +28,9 @@ const {
     "./logger"
 );
 
+// ⏱️ Controle de último envio
+const lastSentMap = {};
+
 // ⏰ Inicializa scheduler
 function startScheduler(bot) {
 
@@ -58,6 +61,30 @@ function startScheduler(bot) {
                     frequency
 
                 } = user;
+
+                // ⏱️ Timestamp atual
+                const now =
+                    Date.now();
+
+                // ⏱️ Último envio
+                const lastSent =
+                    lastSentMap[chat_id] || 0;
+
+                // ⏱️ Frequência em ms
+                const frequencyMs =
+                    frequency * 60 * 1000;
+
+                // ⛔ Ainda não chegou o momento
+                if (
+
+                    now - lastSent <
+                    frequencyMs
+
+                ) {
+
+                    continue;
+
+                }
 
                 // 🎯 Produto aleatório
                 const product =
@@ -96,6 +123,10 @@ ${product.link}
                 // 📊 Incrementa estatísticas
                 await incrementPromos();
 
+                // ⏱️ Atualiza último envio
+                lastSentMap[chat_id] =
+                    now;
+
                 logger.info(
                     `Promo enviada para ${chat_id}`
                 );
@@ -118,7 +149,7 @@ ${product.link}
 
         }
 
-    }, 60000);
+    }, 10000);
 
 }
 
