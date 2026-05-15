@@ -95,3 +95,25 @@
 [2026-05-14 21:29:55] INFO: Servidor rodando na porta 3000
 [2026-05-14 21:30:03] WARN: Encerrando aplicação...
 [2026-05-14 21:30:03] WARN: Encerrando aplicação...
+[2026-05-15 09:30:42] INFO: Live Metrics iniciado
+[2026-05-15 09:30:42] INFO: Servidor rodando na porta 3000
+[2026-05-15 09:31:04] INFO: Login administrativo realizado
+[2026-05-15 09:31:42] INFO: Promo enviada para 7999895751.0
+[2026-05-15 09:32:29] INFO: Usuário pausado: 7999895751.0
+[2026-05-15 09:32:33] INFO: Usuário ativado: 7999895751.0
+[2026-05-15 09:32:42] INFO: Promo enviada para 7999895751.0
+[2026-05-15 09:33:05] INFO: Usuário pausado: 7999895751
+[2026-05-15 09:33:10] INFO: Usuário ativado: 7999895751
+[2026-05-15 09:33:42] INFO: Promo enviada para 7999895751
+[2026-05-15 09:33:42] INFO: Promo enviada para 7999895751.0
+[2026-05-15 09:33:49] WARN: Encerrando aplicação...
+[2026-05-15 09:34:10] INFO: Live Metrics iniciado
+[2026-05-15 09:34:10] INFO: Servidor rodando na porta 3000
+[2026-05-15 09:34:21] INFO: Login administrativo realizado
+[2026-05-15 09:34:26] INFO: Usuário pausado: 7999895751
+[2026-05-15 09:34:29] INFO: Usuário pausado: 7999895751.0
+[2026-05-15 09:34:30] INFO: Usuário ativado: 7999895751
+[2026-05-15 09:34:32] INFO: Usuário ativado: 7999895751.0
+[2026-05-15 09:34:44] INFO: Usuário pausado: 7999895751
+[2026-05-15 09:34:48] INFO: Usuário ativado: 7999895751
+[2026-05-15 09:35:00] WARN: Encerrando aplicação...

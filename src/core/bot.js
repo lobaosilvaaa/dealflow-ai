@@ -82,6 +82,10 @@ async function processMessage(ctx) {
         const frequency =
             settings?.frequency || 1;
 
+        // 🤖 Status atual
+        const active =
+            settings?.active ?? 1;
+
         // 🚀 COMANDO /categoria
         if (
 
@@ -116,7 +120,9 @@ Exemplo:
 
                 newCategory,
 
-                frequency
+                frequency,
+
+                active
 
             );
 
@@ -176,7 +182,9 @@ Exemplo:
 
                 category,
 
-                newFrequency
+                newFrequency,
+
+                active
 
             );
 
@@ -277,7 +285,7 @@ ${category}
 ${frequency} minuto(s)
 
 🤖 Status:
-🟢 Ativado
+${active ? "🟢 Ativado" : "🔴 Pausado"}
 
 `, {
 
@@ -354,8 +362,14 @@ As promoções automáticas voltarão a ser enviadas.
 
         }
 
-        // 🤖 Mensagem padrão
-        await ctx.reply(`
+        // 🤖 Menu principal
+        if (
+
+            text.toLowerCase() === "menu"
+
+        ) {
+
+            return ctx.reply(`
 
 🚀 DealFlow AI Online
 
@@ -372,6 +386,18 @@ promo
 
 `);
 
+        }
+
+        // 🤖 Resposta padrão
+        return ctx.reply(`
+
+❌ Comando não reconhecido.
+
+Digite:
+menu
+
+`);
+
     } catch (error) {
 
         console.log(error);
@@ -380,9 +406,20 @@ promo
             `Erro bot: ${error.message}`
         );
 
-        await ctx.reply(
-            "❌ Erro interno no bot."
-        );
+        try {
+
+            await ctx.reply(
+                "❌ Erro interno no bot."
+            );
+
+        } catch (replyError) {
+
+            console.log(
+                "Erro reply:",
+                replyError.message
+            );
+
+        }
 
     }
 
