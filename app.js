@@ -31,17 +31,11 @@ const {
     "./src/services/logger"
 );
 
-// 📊 Banco
+// 📡 Live Metrics
 const {
-    getStats,
+    startLiveMetrics,
 } = require(
-    "./src/database/stats"
-);
-
-const {
-    getAllUsers,
-} = require(
-    "./src/database/settings"
+    "./src/services/liveMetrics"
 );
 
 // 🤖 Telegram
@@ -94,9 +88,13 @@ const io =
 
     });
 
-// 🔗 Logger realtime
+// 🔗 Socket no logger
 setSocket(io);
 
+// 📡 Inicializa live metrics
+startLiveMetrics(io);
+
+// 🔌 Cliente realtime
 io.on("connection", () => {
 
     logger.info(
@@ -105,7 +103,7 @@ io.on("connection", () => {
 
 });
 
-// 🚀 Configurações
+// ⚙️ Configurações
 const PORT =
     process.env.PORT || 3000;
 
@@ -129,7 +127,7 @@ app.use(express.urlencoded({
 
 app.use(express.json());
 
-// 🌐 Static
+// 🌐 Arquivos estáticos
 app.use(
     express.static("public")
 );
@@ -205,45 +203,7 @@ app.get("/health", (req, res) => {
 
 });
 
-// 📡 Live Metrics
-setInterval(async () => {
-
-    try {
-
-        const stats =
-            await getStats();
-
-        const users =
-            await getAllUsers();
-
-        io.emit("live-metrics", {
-
-            promos:
-                stats.sent_promos,
-
-            users:
-                users.length,
-
-            uptime:
-                Math.floor(
-                    process.uptime()
-                ),
-
-        });
-
-    } catch (error) {
-
-        logger.error(
-
-            `Erro live metrics: ${error.message}`
-
-        );
-
-    }
-
-}, 3000);
-
-// 🚀 Inicialização servidor
+// 🚀 Inicializa servidor
 server.listen(PORT, async () => {
 
     logger.info(
@@ -260,10 +220,10 @@ server.listen(PORT, async () => {
 
 });
 
-// 🤖 Telegram
+// 🤖 Inicializa Telegram
 startTelegramBot();
 
-// ⏰ Scheduler
+// ⏰ Inicializa Scheduler
 startScheduler(bot);
 
 // 🛑 Shutdown seguro
@@ -293,7 +253,7 @@ process.on(
 
 );
 
-// ❌ Erros críticos
+// ❌ Exceções críticas
 process.on(
 
     "uncaughtException",
