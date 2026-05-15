@@ -1,6 +1,7 @@
 const body =
     document.body;
 
+// 📊 Dados iniciais
 const promos =
     Number(
         body.dataset.promos
@@ -11,12 +12,13 @@ const users =
         body.dataset.users
     );
 
+// 📈 Canvas chart
 const ctx =
-    document
-        .getElementById(
-            "promoChart"
-        );
+    document.getElementById(
+        "promoChart"
+    );
 
+// 🚀 Inicializa gráfico
 const chart =
     new Chart(ctx, {
 
@@ -47,6 +49,8 @@ const chart =
 
                 ],
 
+                borderWidth: 0,
+
             }]
 
         },
@@ -54,6 +58,12 @@ const chart =
         options: {
 
             responsive: true,
+
+            animation: {
+
+                duration: 500
+
+            },
 
             plugins: {
 
@@ -76,15 +86,74 @@ const chart =
 // 🔌 Socket realtime
 const socket = io();
 
+// 📡 Métricas realtime
 socket.on("live-metrics", data => {
 
-    chart.data.datasets[0].data = [
+    try {
 
-        data.promos,
-        data.users
+        // 🛡️ Validação defensiva
+        if (
 
-    ];
+            typeof data.promos !== "number" ||
+            typeof data.users !== "number"
 
-    chart.update();
+        ) {
+
+            return;
+
+        }
+
+        // 📊 Atualiza gráfico
+        chart.data.datasets[0].data = [
+
+            data.promos,
+            data.users
+
+        ];
+
+        chart.update();
+
+        // 📦 Atualiza cards
+        document.getElementById(
+            "promosCount"
+        ).innerText =
+            data.promos;
+
+        document.getElementById(
+            "usersCount"
+        ).innerText =
+            data.users;
+
+        document.getElementById(
+            "uptimeCount"
+        ).innerText =
+            `${data.uptime}s`;
+
+    } catch (error) {
+
+        console.log(
+            "Erro realtime frontend:",
+            error.message
+        );
+
+    }
+
+});
+
+// 🔌 Socket conectado
+socket.on("connect", () => {
+
+    console.log(
+        "🟢 Realtime conectado"
+    );
+
+});
+
+// 🔌 Socket desconectado
+socket.on("disconnect", () => {
+
+    console.log(
+        "🔴 Realtime desconectado"
+    );
 
 });
