@@ -7,27 +7,29 @@ const {
 } = require("../database/stats");
 
 const {
-    getAllChats,
-} = require("../database/chats");
-
-const {
     getAllUsers,
 } = require("../database/settings");
 
+const {
+    logger
+} = require(
+    "../services/logger"
+);
+
+// 📊 Dashboard principal
 async function dashboard(req, res) {
 
     try {
 
+        // 📊 Estatísticas
         const stats =
             await getStats();
 
-        const chats =
-            await getAllChats();
-
+        // 👥 Usuários
         const users =
             await getAllUsers();
 
-        // 📜 Caminho do log
+        // 📜 Caminho logs
         const logPath = path.join(
             __dirname,
             "../logs/app.log"
@@ -52,13 +54,14 @@ async function dashboard(req, res) {
 
         }
 
+        // 🚀 Render dashboard
         res.render("dashboard", {
 
             sentPromos:
-                stats.sent_promos,
+                stats?.sent_promos || 0,
 
             totalUsers:
-                chats.length,
+                users.length || 0,
 
             uptime:
                 process.uptime(),
@@ -71,13 +74,17 @@ async function dashboard(req, res) {
 
     } catch (error) {
 
-        console.error(
+        logger.error(
+            `Erro dashboard: ${error.message}`
+        );
+
+        console.log(
             "❌ Erro dashboard:",
             error.message
         );
 
         res.status(500).send(
-            "Erro interno"
+            "❌ Erro interno dashboard"
         );
 
     }
@@ -85,5 +92,7 @@ async function dashboard(req, res) {
 }
 
 module.exports = {
+
     dashboard,
+
 };
