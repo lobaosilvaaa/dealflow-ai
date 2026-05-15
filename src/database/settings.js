@@ -6,7 +6,8 @@ function saveSettings(
 
     chatId,
     category,
-    frequency
+    frequency,
+    active = 1
 
 ) {
 
@@ -24,14 +25,15 @@ function saveSettings(
 
             )
 
-            VALUES (?, ?, ?, 1)
+            VALUES (?, ?, ?, ?)
             `,
 
             [
 
                 chatId,
                 category,
-                frequency
+                frequency,
+                active
 
             ],
 
