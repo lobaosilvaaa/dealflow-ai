@@ -140,6 +140,72 @@ socket.on("live-metrics", data => {
 
 });
 
+// 📜 Logs realtime
+socket.on("new-log", data => {
+
+    try {
+
+        const logsContainer =
+            document.getElementById(
+                "logsContainer"
+            );
+
+        if (!logsContainer) {
+
+            return;
+
+        }
+
+        const logItem =
+            document.createElement("div");
+
+        logItem.classList.add(
+            "log-item"
+        );
+
+        logItem.style.animation =
+            "fadeIn 0.3s ease";
+
+        logItem.innerHTML = `
+
+            <span class="log-time">
+                [${data.timestamp}]
+            </span>
+
+            ${data.message}
+
+        `;
+
+        logsContainer.prepend(
+            logItem
+        );
+
+        // 🔥 Limita logs
+        if (
+
+            logsContainer.children.length > 10
+
+        ) {
+
+            logsContainer.removeChild(
+
+                logsContainer.lastChild
+
+            );
+
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Erro logs realtime:",
+            error.message
+        );
+
+    }
+
+});
+
 // 🔌 Socket conectado
 socket.on("connect", () => {
 

@@ -41,7 +41,7 @@
                 📤 Promoções enviadas
             </h2>
 
-            <p>
+            <p id="promosCount">
                 <%= sentPromos %>
             </p>
 
@@ -53,7 +53,7 @@
                 👥 Usuários registrados
             </h2>
 
-            <p>
+            <p id="usersCount">
                 <%= totalUsers %>
             </p>
 
@@ -65,7 +65,7 @@
                 ⏱️ Uptime
             </h2>
 
-            <p>
+            <p id="uptimeCount">
                 <%= Math.floor(uptime) %>s
             </p>
 
@@ -187,7 +187,9 @@
                                 <form method="POST" action="/admin/pause/<%= user.chat_id %>">
 
                                     <button class="btn-pause">
+
                                         ⏸️ Pausar
+
                                     </button>
 
                                 </form>
@@ -197,7 +199,9 @@
                                     <form method="POST" action="/admin/activate/<%= user.chat_id %>">
 
                                         <button class="btn-activate">
+
                                             ▶️ Ativar
+
                                         </button>
 
                                     </form>
@@ -207,7 +211,9 @@
                                         <form method="POST" action="/admin/delete/<%= user.chat_id %>">
 
                                             <button class="btn-delete">
+
                                                 🗑️ Remover
+
                                             </button>
 
                                         </form>
@@ -224,71 +230,11 @@
 
     </table>
 
-    <!-- 🚀 Dashboard JS -->
-    <script src="/js/dashboard.js"></script>
-
     <!-- 🔌 Socket.IO -->
     <script src="/socket.io/socket.io.js"></script>
 
-    <script>
-
-        const socket = io();
-
-        // 📡 Novo log realtime
-        socket.on("new-log", data => {
-
-            console.log(
-                "Novo log:",
-                data.message
-            );
-
-            const logsContainer =
-                document.getElementById(
-                    "logsContainer"
-                );
-
-            const logItem =
-                document.createElement("div");
-
-            logItem.classList.add(
-                "log-item"
-            );
-
-            logItem.style.animation =
-                "fadeIn 0.3s ease";
-
-            logItem.innerHTML = `
-
-                <span class="log-time">
-                    [${data.timestamp}]
-                </span>
-
-                ${data.message}
-
-            `;
-
-            logsContainer.prepend(
-                logItem
-            );
-
-            // 🔥 Limita feed
-            if (
-
-                logsContainer.children.length > 10
-
-            ) {
-
-                logsContainer.removeChild(
-
-                    logsContainer.lastChild
-
-                );
-
-            }
-
-        });
-
-    </script>
+    <!-- 🚀 Dashboard JS -->
+    <script src="/js/dashboard.js"></script>
 
 </body>
 
