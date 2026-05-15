@@ -1,63 +1,68 @@
-// 📊 Captura dados do HTML
-const sentPromos = Number(
-    document.body.dataset.promos
-);
+const body =
+    document.body;
 
-const totalUsers = Number(
-    document.body.dataset.users
-);
+const promos =
+    Number(
+        body.dataset.promos
+    );
 
-// 📈 Canvas
-const ctx = document.getElementById(
-    "promoChart"
-);
+const users =
+    Number(
+        body.dataset.users
+    );
 
-// 🚀 Chart.js
-new Chart(ctx, {
+const ctx =
+    document
+        .getElementById(
+            "promoChart"
+        );
 
-    type: "doughnut",
+const chart =
+    new Chart(ctx, {
 
-    data: {
+        type: "doughnut",
 
-        labels: [
-            "Promoções",
-            "Usuários"
-        ],
+        data: {
 
-        datasets: [{
+            labels: [
 
-            data: [
-                sentPromos,
-                totalUsers
+                "Promoções",
+                "Usuários"
+
             ],
 
-            backgroundColor: [
-                "#38bdf8",
-                "#22c55e"
-            ],
+            datasets: [{
 
-            borderWidth: 0
+                data: [
 
-        }]
+                    promos,
+                    users
 
-    },
+                ],
 
-    options: {
+                backgroundColor: [
 
-        responsive: true,
+                    "#38bdf8",
+                    "#22c55e"
 
-        maintainAspectRatio: false,
+                ],
 
-        plugins: {
+            }]
 
-            legend: {
+        },
 
-                labels: {
+        options: {
 
-                    color: "white",
+            responsive: true,
 
-                    font: {
-                        size: 16
+            plugins: {
+
+                legend: {
+
+                    labels: {
+
+                        color: "white"
+
                     }
 
                 }
@@ -66,6 +71,20 @@ new Chart(ctx, {
 
         }
 
-    }
+    });
+
+// 🔌 Socket realtime
+const socket = io();
+
+socket.on("live-metrics", data => {
+
+    chart.data.datasets[0].data = [
+
+        data.promos,
+        data.users
+
+    ];
+
+    chart.update();
 
 });

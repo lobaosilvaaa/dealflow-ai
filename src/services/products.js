@@ -1,47 +1,112 @@
 const products = {
-    gamer: [
-        {
-            title: "Mouse Gamer RGB",
-            price: "R$89,90",
-            link: "https://shopee.com.br/",
-        },
-    ],
-
-    audio: [
-        {
-            title: "Fone Bluetooth TWS",
-            price: "R$49,90",
-            link: "https://shopee.com.br/",
-        },
-    ],
-
-    smartwatch: [
-        {
-            title: "Smartwatch Ultra",
-            price: "R$129,90",
-            link: "https://shopee.com.br/",
-        },
-    ],
 
     geral: [
+
         {
-            title: "Oferta Especial",
-            price: "R$99,90",
-            link: "https://shopee.com.br/",
+
+            name:
+                "Mouse Gamer RGB",
+
+            description:
+                "Alta durabilidade",
+
+            price:
+                "R$89,90",
+
+            link:
+                "https://shopee.com.br"
+
         },
+
+        {
+
+            name:
+                "Teclado Mecânico",
+
+            description:
+                "Switch azul premium",
+
+            price:
+                "R$199,90",
+
+            link:
+                "https://amazon.com.br"
+
+        }
+
     ],
+
+    gamer: [
+
+        {
+
+            name:
+                "Headset Gamer Pro",
+
+            description:
+                "Som surround 7.1",
+
+            price:
+                "R$249,90",
+
+            link:
+                "https://kabum.com.br"
+
+        },
+
+        {
+
+            name:
+                "Mousepad RGB",
+
+            description:
+                "Iluminação premium",
+
+            price:
+                "R$59,90",
+
+            link:
+                "https://pichau.com.br"
+
+        }
+
+    ]
+
 };
 
-async function getRandomProduct(category = "geral") {
+// 🎯 Produto aleatório
+function getRandomProduct(category = "geral") {
 
-    const selected =
-        products[category] || products["geral"];
+    const categoryProducts =
+        products[category];
 
-    const index = Math.floor(Math.random() * selected.length);
+    if (
 
-    return selected[index];
+        !categoryProducts ||
+        categoryProducts.length === 0
+
+    ) {
+
+        return products.geral[0];
+
+    }
+
+    const randomIndex =
+        Math.floor(
+
+            Math.random() *
+            categoryProducts.length
+
+        );
+
+    return categoryProducts[
+        randomIndex
+    ];
+
 }
 
 module.exports = {
+
     getRandomProduct,
+
 };

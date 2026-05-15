@@ -1,196 +1,272 @@
-const { getRandomProduct } = require("../services/products");
-const { generateCopy } = require("../services/copy");
+const {
+
+    saveChat,
+    getAllChats,
+
+} = require(
+    "../database/chats"
+);
 
 const {
-    setCategory,
-    getCategory,
-    setFrequency,
-    getFrequency,
-    setActive,
-    isActive,
-} = require("../database/settings");
+
+    saveSettings,
+    getSettings,
+
+} = require(
+    "../database/settings"
+);
 
 const {
-    getStats,
-} = require("../database/stats");
 
-async function processMessage(user, message) {
+    incrementPromos,
 
-    // 🔒 Validação básica
-    if (!message) {
-        return "❌ Mensagem inválida.";
-    }
+} = require(
+    "../database/stats"
+);
 
-    // 🧠 Normalização
-    const text = message.trim().toLowerCase();
+const {
 
-    // 🚀 START
-    if (text === "/start") {
+    getRandomProduct,
 
-        return `
-🚀 Bem-vindo ao DealFlow AI!
+} = require(
+    "../services/products"
+);
 
-Automação inteligente de promoções via Telegram.
+const {
+    logger
+} = require(
+    "../services/logger"
+);
 
-📊 Comandos disponíveis:
+// 🚀 Processa mensagens
+async function processMessage(ctx) {
 
-menu → abrir menu
-promo → receber promoção
+    try {
 
-🎯 Categorias:
- /categoria gamer
- /categoria audio
- /categoria smartwatch
+        const chatId =
+            String(
+                ctx.chat.id
+            );
 
-⏰ Frequência:
- /frequencia 5
+        const text =
+            ctx.message.text;
 
-🎛️ Controle:
- /pausar
- /ativar
+        console.log(
+            "📩 Mensagem recebida:"
+        );
 
-📊 Estatísticas:
- /stats
-    `;
-    }
+        console.log(
+            `Chat ID: ${chatId}`
+        );
 
-    // 📊 MENU
-    if (text === "menu") {
+        console.log(
+            `Mensagem: ${text}`
+        );
 
-        const category = await getCategory(user);
-        const frequency = await getFrequency(user);
-        const active = await isActive(user);
+        // 💾 Salva chat
+        await saveChat(chatId);
 
-        return `
-📊 *MENU DEALFLOW AI*
+        console.log(
+            `💾 Chat salvo: ${chatId}`
+        );
 
-1️⃣ Promoções
-2️⃣ Ajuda
+        // 📥 Configurações atuais
+        const settings =
+            await getSettings(chatId);
 
-━━━━━━━━━━━━━━━
+        // 🎯 Categoria atual
+        const category =
+            settings?.category || "geral";
 
-🎯 Categoria atual:
-${category}
+        // ⏰ Frequência atual
+        const frequency =
+            settings?.frequency || 1;
 
-⏰ Frequência:
-${frequency} minuto(s)
+        // 🚀 COMANDO /categoria
+        if (
 
-🎛️ Status:
-${active ? "🟢 Ativado" : "🔴 Pausado"}
+            text.startsWith(
+                "/categoria"
+            )
 
-━━━━━━━━━━━━━━━
+        ) {
 
-📌 Comandos:
+            const parts =
+                text.split(" ");
 
-🔥 promo
-🎯 /categoria gamer
-⏰ /frequencia 5
-⏸️ /pausar
-▶️ /ativar
-📊 /stats
-    `;
-    }
+            const newCategory =
+                parts[1];
 
-    // 🎯 DEFINIR CATEGORIA
-    if (text.startsWith("/categoria")) {
+            if (!newCategory) {
 
-        const parts = text.split(" ");
+                return ctx.reply(`
 
-        const category = parts[1];
-
-        if (!category) {
-
-            return `
 ❌ Informe uma categoria.
 
-Exemplos:
+Exemplo:
  /categoria gamer
- /categoria audio
- /categoria smartwatch
-      `;
-        }
 
-        setCategory(user, category);
+`);
 
-        return `
+            }
+
+            await saveSettings(
+
+                chatId,
+
+                newCategory,
+
+                frequency
+
+            );
+
+            logger.info(
+                `Categoria alterada: ${chatId} -> ${newCategory}`
+            );
+
+            return ctx.reply(`
+
 ✅ Categoria definida com sucesso!
 
 🎯 Nova categoria:
-${category}
+${newCategory}
 
 Agora suas promoções serão personalizadas.
-    `;
-    }
 
-    // ⏰ DEFINIR FREQUÊNCIA
-    if (text.startsWith("/frequencia")) {
+`);
 
-        const parts = text.split(" ");
+        }
 
-        const frequency = parseInt(parts[1]);
+        // ⏰ COMANDO /frequencia
+        if (
 
-        if (!frequency || frequency <= 0) {
+            text.startsWith(
+                "/frequencia"
+            )
 
-            return `
-❌ Informe uma frequência válida.
+        ) {
+
+            const parts =
+                text.split(" ");
+
+            const newFrequency =
+                Number(parts[1]);
+
+            if (
+
+                !newFrequency ||
+                newFrequency < 1
+
+            ) {
+
+                return ctx.reply(`
+
+❌ Frequência inválida.
 
 Exemplo:
  /frequencia 5
-      `;
-        }
 
-        setFrequency(user, frequency);
+`);
 
-        return `
+            }
+
+            await saveSettings(
+
+                chatId,
+
+                category,
+
+                newFrequency
+
+            );
+
+            logger.info(
+                `Frequência alterada: ${chatId} -> ${newFrequency} min`
+            );
+
+            return ctx.reply(`
+
 ✅ Frequência atualizada!
 
 ⏰ Nova frequência:
-${frequency} minuto(s)
+${newFrequency} minuto(s)
 
 As promoções automáticas seguirão essa frequência.
-    `;
-    }
 
-    // ⏸️ PAUSAR
-    if (text === "/pausar") {
+`);
 
-        setActive(user, 0);
+        }
 
-        return `
-⏸️ Promoções pausadas com sucesso.
+        // 🔥 COMANDO promo
+        if (
 
-Você não receberá promoções automáticas até ativar novamente.
-    `;
-    }
+            text.toLowerCase() ===
+            "promo"
 
-    // ▶️ ATIVAR
-    if (text === "/ativar") {
+        ) {
 
-        setActive(user, 1);
+            const product =
+                getRandomProduct(category);
 
-        return `
-▶️ Promoções ativadas novamente.
+            if (!product) {
 
-As promoções automáticas voltarão a ser enviadas.
-    `;
-    }
+                return ctx.reply(`
 
-    // 📊 STATS
-    if (text === "/stats") {
+❌ Nenhuma promoção encontrada para:
 
-        const stats = await getStats();
+${category}
 
-        const category = await getCategory(user);
-        const frequency = await getFrequency(user);
-        const active = await isActive(user);
+`);
 
-        return `
+            }
+
+            const message = `
+
+🔥 OFERTA IMPERDÍVEL!
+
+🛍️ ${product.name}
+✨ ${product.description}
+
+💰 ${product.price}
+⚠️ Estoque limitado!
+
+👉 Compre agora:
+${product.link}
+
+`;
+
+            await ctx.reply(message);
+
+            await incrementPromos();
+
+            logger.info(
+                `Promo enviada para ${chatId}`
+            );
+
+            console.log(
+                "✅ Resposta enviada"
+            );
+
+            return;
+
+        }
+
+        // 📊 COMANDO /stats
+        if (
+
+            text.toLowerCase() ===
+            "/stats"
+
+        ) {
+
+            return ctx.reply(`
+
 📊 *DEALFLOW AI STATS*
 
 📤 Promoções enviadas:
-${stats.sent_promos}
+0
 
-━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━
 
 📌 Suas configurações:
 
@@ -200,104 +276,120 @@ ${category}
 ⏰ Frequência:
 ${frequency} minuto(s)
 
-🎛️ Status:
-${active ? "🟢 Ativado" : "🔴 Pausado"}
-    `;
-    }
+🤖 Status:
+🟢 Ativado
 
-    // 🔥 PROMOÇÕES
-    if (text === "1" || text === "promo") {
+`, {
 
-        try {
+                parse_mode:
+                    "Markdown"
 
-            const category = await getCategory(user);
+            });
 
-            const product = await getRandomProduct(category);
+        }
 
-            if (!product) {
+        // ⏸️ COMANDO /pausar
+        if (
 
-                return `
-⚠️ Nenhuma promoção encontrada no momento.
+            text.toLowerCase() ===
+            "/pausar"
 
-Tente novamente mais tarde.
-        `;
-            }
+        ) {
 
-            return generateCopy(product);
+            await saveSettings(
 
-        } catch (error) {
+                chatId,
 
-            console.error(
-                "❌ Erro ao gerar promoção:",
-                error.message
+                category,
+
+                frequency,
+                0
+
             );
 
-            return `
-❌ Erro ao buscar promoção.
+            logger.info(
+                `Usuário pausado: ${chatId}`
+            );
 
-Tente novamente em instantes.
-      `;
+            return ctx.reply(`
+
+⏸️ Promoções pausadas com sucesso.
+
+Você não receberá promoções automáticas até ativar novamente.
+
+`);
+
         }
+
+        // ▶️ COMANDO /ativar
+        if (
+
+            text.toLowerCase() ===
+            "/ativar"
+
+        ) {
+
+            await saveSettings(
+
+                chatId,
+
+                category,
+
+                frequency,
+                1
+
+            );
+
+            logger.info(
+                `Usuário ativado: ${chatId}`
+            );
+
+            return ctx.reply(`
+
+▶️ Promoções ativadas novamente.
+
+As promoções automáticas voltarão a ser enviadas.
+
+`);
+
+        }
+
+        // 🤖 Mensagem padrão
+        await ctx.reply(`
+
+🚀 DealFlow AI Online
+
+Comandos disponíveis:
+
+🎯 /categoria gamer
+⏰ /frequencia 5
+📊 /stats
+⏸️ /pausar
+▶️ /ativar
+
+Ou envie:
+promo
+
+`);
+
+    } catch (error) {
+
+        console.log(error);
+
+        logger.error(
+            `Erro bot: ${error.message}`
+        );
+
+        await ctx.reply(
+            "❌ Erro interno no bot."
+        );
+
     }
 
-    // ❓ AJUDA
-    if (text === "2" || text === "ajuda") {
-
-        const category = await getCategory(user);
-        const frequency = await getFrequency(user);
-        const active = await isActive(user);
-
-        return `
-❓ *AJUDA DEALFLOW AI*
-
-📊 Comandos:
-
-menu → abrir menu
-promo → receber promoção
-
-🎯 Categorias:
- /categoria gamer
- /categoria audio
- /categoria smartwatch
-
-⏰ Frequência:
- /frequencia 5
-
-🎛️ Controle:
- /pausar
- /ativar
-
-📊 Estatísticas:
- /stats
-
-━━━━━━━━━━━━━━━
-
-📌 Configuração atual:
-
-🎯 Categoria:
-${category}
-
-⏰ Frequência:
-${frequency} minuto(s)
-
-🎛️ Status:
-${active ? "🟢 Ativado" : "🔴 Pausado"}
-
-🚀 Mais recursos em breve!
-    `;
-    }
-
-    // ❌ COMANDO INVÁLIDO
-    return `
-❌ Comando não reconhecido.
-
-Digite:
-📊 menu
-
-para ver as opções disponíveis.
-  `;
 }
 
 module.exports = {
+
     processMessage,
+
 };

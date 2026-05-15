@@ -7,7 +7,7 @@ const {
 } = require("../database/stats");
 
 const {
-    getChats,
+    getAllChats,
 } = require("../database/chats");
 
 const {
@@ -22,7 +22,7 @@ async function dashboard(req, res) {
             await getStats();
 
         const chats =
-            await getChats();
+            await getAllChats();
 
         const users =
             await getAllUsers();

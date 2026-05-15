@@ -1,36 +1,147 @@
-const db = require("./db");
+const db =
+    require("./db");
 
-// 💾 Adiciona chat no banco (ignora se já existir)
-function addChat(chatId) {
-    db.run(
-        "INSERT OR IGNORE INTO chats (chat_id) VALUES (?)",
-        [chatId],
-        (err) => {
-            if (err) {
-                console.error("❌ Erro ao salvar chat:", err.message);
-            } else {
-                console.log("💾 Chat salvo:", chatId);
+// 💾 Salvar chat
+function saveChat(chatId) {
+
+    return new Promise((resolve, reject) => {
+
+        db.run(
+
+            `
+      INSERT OR IGNORE INTO chats (
+        chat_id
+      )
+
+      VALUES (?)
+      `,
+
+            [chatId],
+
+            error => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve();
+
             }
-        }
-    );
+
+        );
+
+    });
+
 }
 
-// 📊 Retorna todos os chats (agora assíncrono)
-function getChats() {
+// 📥 Buscar todos chats
+function getAllChats() {
+
     return new Promise((resolve, reject) => {
-        db.all("SELECT chat_id FROM chats", [], (err, rows) => {
-            if (err) {
-                console.error("❌ Erro ao buscar chats:", err.message);
-                reject(err);
-            } else {
-                const chatIds = rows.map((row) => row.chat_id);
-                resolve(chatIds);
+
+        db.all(
+
+            `
+      SELECT *
+      FROM chats
+      ORDER BY rowid DESC
+      `,
+
+            [],
+
+            (error, rows) => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve(rows);
+
             }
-        });
+
+        );
+
     });
+
+}
+
+// 🔍 Buscar chat específico
+function getChat(chatId) {
+
+    return new Promise((resolve, reject) => {
+
+        db.get(
+
+            `
+      SELECT *
+      FROM chats
+      WHERE chat_id = ?
+      `,
+
+            [chatId],
+
+            (error, row) => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve(row);
+
+            }
+
+        );
+
+    });
+
+}
+
+// 🗑️ Remover chat
+function deleteChat(chatId) {
+
+    return new Promise((resolve, reject) => {
+
+        db.run(
+
+            `
+      DELETE FROM chats
+      WHERE chat_id = ?
+      `,
+
+            [chatId],
+
+            error => {
+
+                if (error) {
+
+                    return reject(error);
+
+                }
+
+                resolve();
+
+            }
+
+        );
+
+    });
+
 }
 
 module.exports = {
-    addChat,
-    getChats,
+
+    saveChat,
+
+    getAllChats,
+
+    getChat,
+
+    deleteChat,
+
 };

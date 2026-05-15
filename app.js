@@ -1,6 +1,7 @@
 require("dotenv").config();
 
-const express = require("express");
+const express =
+    require("express");
 
 const session =
     require("express-session");
@@ -19,11 +20,27 @@ const swaggerUi =
 const swaggerSpec =
     require("./src/config/swagger");
 
-// 🔊 Logger Socket
+// 🔊 Logger
 const {
+
     setSocket,
+    sendRuntimeLog,
+
 } = require(
     "./src/services/logger"
+);
+
+// 📊 Métricas
+const {
+    getStats,
+} = require(
+    "./src/database/stats"
+);
+
+const {
+    getAllUsers,
+} = require(
+    "./src/database/settings"
 );
 
 // 🤖 Telegram
@@ -56,7 +73,9 @@ const adminRoutes =
 const apiRoutes =
     require("./src/routes/apiRoutes");
 
-const app = express();
+// 🚀 App
+const app =
+    express();
 
 // 🌐 HTTP Server
 const server =
@@ -66,10 +85,10 @@ const server =
 const io =
     new Server(server);
 
-// 🔗 Vincula socket ao logger
+// 🔗 Vincula Socket.IO ao logger
 setSocket(io);
 
-// 🔌 Conexão realtime
+// 🔌 Cliente realtime
 io.on("connection", socket => {
 
     console.log(
@@ -77,6 +96,46 @@ io.on("connection", socket => {
     );
 
 });
+
+// 📡 Live Metrics
+setInterval(async () => {
+
+    try {
+
+        const stats =
+            await getStats();
+
+        const users =
+            await getAllUsers();
+
+        io.emit("live-metrics", {
+
+            promos:
+                stats.sent_promos,
+
+            users:
+                users.length,
+
+            uptime:
+                Math.floor(
+                    process.uptime()
+                ),
+
+        });
+
+    } catch (error) {
+
+        console.log(
+
+            "❌ Erro live metrics:",
+
+            error.message
+
+        );
+
+    }
+
+}, 3000);
 
 // 🚀 Configuração EJS
 app.set(
@@ -91,7 +150,9 @@ app.set(
 
 // 📦 Middlewares
 app.use(express.urlencoded({
+
     extended: true
+
 }));
 
 app.use(express.json());
@@ -113,14 +174,16 @@ app.use(session({
 
 }));
 
-// 📚 Swagger Docs
+// 📚 Swagger
 app.use(
 
     "/api/docs",
 
     swaggerUi.serve,
 
-    swaggerUi.setup(swaggerSpec)
+    swaggerUi.setup(
+        swaggerSpec
+    )
 
 );
 
@@ -142,14 +205,23 @@ app.get("/", (req, res) => {
 
 });
 
-// 🚀 Inicialização servidor
+// 🚀 Inicializa servidor
 const PORT =
     process.env.PORT || 3000;
 
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
 
     console.log(
         `🚀 Servidor rodando na porta ${PORT}`
+    );
+
+    // 📢 Runtime log online
+    await sendRuntimeLog(
+
+        "🚀 Sistema Online",
+
+        "DealFlow AI iniciado com sucesso."
+
     );
 
 });
@@ -159,3 +231,78 @@ startTelegramBot();
 
 // ⏰ Inicializa Scheduler
 startScheduler(bot);
+
+// 🛑 Encerramento seguro
+process.on(
+
+    "SIGINT",
+
+    async () => {
+
+        await sendRuntimeLog(
+
+            "🛑 Sistema Offline",
+
+            "DealFlow AI foi encerrado.",
+
+            "warn"
+
+        );
+
+        process.exit();
+
+    }
+
+);
+
+// ❌ Captura erros críticos
+process.on(
+
+    "uncaughtException",
+
+    async error => {
+
+        console.log(
+            "❌ Uncaught Exception:",
+            error.message
+        );
+
+        await sendRuntimeLog(
+
+            "❌ Uncaught Exception",
+
+            error.message,
+
+            "error"
+
+        );
+
+    }
+
+);
+
+// ❌ Captura promise rejection
+process.on(
+
+    "unhandledRejection",
+
+    async error => {
+
+        console.log(
+            "❌ Unhandled Rejection:",
+            error
+        );
+
+        await sendRuntimeLog(
+
+            "❌ Unhandled Rejection",
+
+            String(error),
+
+            "error"
+
+        );
+
+    }
+
+);
