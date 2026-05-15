@@ -155,3 +155,9 @@
 [2026-05-15 18:40:52] INFO: Cliente realtime conectado
 [2026-05-15 18:41:09] INFO: Logout realizado
 [2026-05-15 18:41:23] WARN: Encerrando aplicação...
+[2026-05-15 18:53:47] INFO: Live Metrics iniciado
+[2026-05-15 18:53:47] INFO: Servidor rodando na porta 3000
+[2026-05-15 18:53:57] INFO: Promo enviada para 7999895751
+[2026-05-15 18:53:58] INFO: Promo enviada para 7999895751.0
+[2026-05-15 18:54:15] WARN: Encerrando aplicação...
+[2026-05-15 18:54:15] WARN: Encerrando aplicação...

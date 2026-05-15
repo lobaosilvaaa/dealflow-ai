@@ -1,6 +1,8 @@
-const express = require("express");
+const express =
+    require("express");
 
-const router = express.Router();
+const router =
+    express.Router();
 
 const {
 
@@ -20,24 +22,35 @@ const {
     "../middlewares/jwtMiddleware"
 );
 
+// 🔐 Middleware global JWT
+router.use(
+    verifyToken
+);
+
 /**
  * @swagger
- * /api/stats:
+ * tags:
+ *   name: DealFlow API
+ *   description: API oficial DealFlow AI
+ */
+
+/**
+ * @swagger
+ * /api/v1/stats:
  *   get:
- *     summary: Retorna estatísticas
+ *     summary: Retorna estatísticas da plataforma
+ *     tags: [DealFlow API]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Estatísticas da plataforma
+ *         description: Estatísticas carregadas com sucesso
  */
 
 // 📊 Estatísticas
 router.get(
 
-    "/api/stats",
-
-    verifyToken,
+    "/api/v1/stats",
 
     stats
 
@@ -45,9 +58,10 @@ router.get(
 
 /**
  * @swagger
- * /api/users:
+ * /api/v1/users:
  *   get:
- *     summary: Retorna usuários
+ *     summary: Retorna usuários registrados
+ *     tags: [DealFlow API]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -58,9 +72,7 @@ router.get(
 // 👥 Usuários
 router.get(
 
-    "/api/users",
-
-    verifyToken,
+    "/api/v1/users",
 
     users
 
@@ -68,22 +80,21 @@ router.get(
 
 /**
  * @swagger
- * /api/logs:
+ * /api/v1/logs:
  *   get:
- *     summary: Retorna logs
+ *     summary: Retorna logs recentes
+ *     tags: [DealFlow API]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Logs recentes
+ *         description: Logs carregados
  */
 
 // 📜 Logs
 router.get(
 
-    "/api/logs",
-
-    verifyToken,
+    "/api/v1/logs",
 
     logs
 
