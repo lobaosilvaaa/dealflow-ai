@@ -826,3 +826,38 @@
 [2026-05-17 13:38:54] INFO: Auth route acessada: GET /login
 [2026-05-17 13:38:57] WARN: Encerrando aplicação (SIGINT)
 [2026-05-17 13:38:57] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:41:54] INFO: Inicializando Live Metrics...
+[2026-05-17 13:41:54] INFO: Live Metrics iniciado
+[2026-05-17 13:41:54] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:41:54] INFO: Telegram bot iniciado
+[2026-05-17 13:41:54] INFO: Scheduler iniciado
+[2026-05-17 13:41:54] INFO: Tabela stats validada
+[2026-05-17 13:41:54] ERROR: Erro bootstrap stats: SQLITE_CONSTRAINT: UNIQUE constraint failed: stats.id
+[2026-05-17 13:43:45] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 13:43:45] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:44:35] INFO: Inicializando banco de dados...
+[2026-05-17 13:44:35] INFO: Tabela stats validada
+[2026-05-17 13:44:35] INFO: Banco de dados inicializado
+[2026-05-17 13:44:35] INFO: Inicializando Live Metrics...
+[2026-05-17 13:44:35] INFO: Live Metrics iniciado
+[2026-05-17 13:44:35] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:44:35] INFO: Telegram bot iniciado
+[2026-05-17 13:44:35] INFO: Scheduler iniciado
+[2026-05-17 13:44:35] INFO: Stats bootstrap criado
+[2026-05-17 13:44:47] INFO: Auth route acessada: GET /login
+[2026-05-17 13:44:53] INFO: Auth route acessada: POST /login
+[2026-05-17 13:44:53] INFO: Login administrativo realizado: admin
+[2026-05-17 13:44:54] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:44:54] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:44:54] INFO: Dashboard acessado
+[2026-05-17 13:45:11] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 13:45:11] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 13:45:11] INFO: Chat salvo: 7999895751
+[2026-05-17 13:45:11] INFO: Produto selecionado: Teclado Mecânico
+[2026-05-17 13:45:12] INFO: Promo incrementada
+[2026-05-17 13:45:12] INFO: Promo enviada para 7999895751
+[2026-05-17 13:45:16] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 13:45:16] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:45:17] WARN: Scheduler encerrado
+[2026-05-17 13:45:17] WARN: Live Metrics encerrado
+[2026-05-17 13:45:18] INFO: Servidor HTTP encerrado
