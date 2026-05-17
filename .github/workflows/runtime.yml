@@ -1,32 +1,83 @@
 name: DealFlowAI Runtime Logs
 
 on:
+
+  # 🚀 Execução manual
   workflow_dispatch:
 
+  # ⏰ Runtime automático
+  schedule:
+    - cron: "*/30 * * * *"
+
 jobs:
+
   runtime:
+
     runs-on: ubuntu-latest
 
     steps:
+
+      # 📦 Checkout
       - name: Checkout Repository
+
         uses: actions/checkout@v4
 
-      - name: Make script executable
+      # 🔐 Permissão script
+      - name: Make Script Executable
+
         run: chmod +x .github/scripts/discord-webhook.sh
 
+      # 📊 Runtime Metadata
+      - name: Extract Runtime Data
+
+        id: runtime
+
+        run: |
+
+          echo "TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+
+          echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+          echo "REPO=${{ github.repository }}" >> $GITHUB_OUTPUT
+
+          echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
+          echo "RUN_ID=${{ github.run_id }}" >> $GITHUB_OUTPUT
+
+      # 🚀 Runtime Log
       - name: Send Runtime Log
+
         env:
           DISCORD_RUNTIME_WEBHOOK: ${{ secrets.DISCORD_RUNTIME_WEBHOOK }}
+
         run: |
-          DESCRIPTION="DealFlowAI runtime system initialized successfully.
 
-          🖥️ Environment: production
-          📡 Status: Online
-          ⚙️ Workflow: runtime.yml"
+          DESCRIPTION=$(cat <<EOF
+          DealFlowAI runtime system initialized successfully.
 
-          ./.github/scripts/discord-webhook.sh \
-          "$DISCORD_RUNTIME_WEBHOOK" \
-          "DealFlowAI Runtime" \
-          "♻️ Runtime Event" \
-          "$DESCRIPTION" \
-          5763719
+          🟢 Status: Operational
+          🖥️ Environment: Production
+          🌿 Branch: ${{ steps.runtime.outputs.BRANCH }}
+          🔖 SHA: ${{ steps.runtime.outputs.SHA }}
+          📦 Repository: ${{ steps.runtime.outputs.REPO }}
+          ⚙️ Workflow: runtime.yml
+          🆔 Run ID: ${{ steps.runtime.outputs.RUN_ID }}
+          🕒 Timestamp: ${{ steps.runtime.outputs.TIMESTAMP }}
+
+          🚀 Runtime monitoring active.
+          EOF
+          )
+
+                    ./.github/scripts/discord-webhook.sh \
+                    "$DISCORD_RUNTIME_WEBHOOK" \
+                    "DealFlowAI Runtime" \
+                    "♻️ Runtime Event" \
+                    "$DESCRIPTION" \
+                    5763719
+
+      # ✅ Finalização
+      - name: Runtime Completed
+
+        run: |
+
+          echo "Runtime workflow finalized successfully."
