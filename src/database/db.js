@@ -1,11 +1,91 @@
+// 🚀 DealFlowAI Database Core
+
 const sqlite3 =
     require("sqlite3").verbose();
+
+const path =
+    require("path");
+
+const fs =
+    require("fs");
+
+// 🌎 Caminho banco
+const DB_PATH =
+    path.join(
+        __dirname,
+        "../../database.sqlite"
+    );
+
+// 📂 Garante diretório
+const dbDirectory =
+    path.dirname(DB_PATH);
+
+if (
+
+    !fs.existsSync(dbDirectory)
+
+) {
+
+    fs.mkdirSync(
+
+        dbDirectory,
+
+        {
+
+            recursive: true
+
+        }
+
+    );
+
+}
 
 // 💾 Cria/abre banco
 const db =
     new sqlite3.Database(
-        "./database.sqlite"
+
+        DB_PATH,
+
+        error => {
+
+            if (error) {
+
+                console.log(
+                    "❌ Erro conexão SQLite:",
+                    error.message
+                );
+
+                process.exit(1);
+
+            }
+
+            console.log(
+                "💾 SQLite conectado"
+            );
+
+        }
+
     );
+
+// 🚀 Performance SQLite
+db.serialize(() => {
+
+    // ⚡ WAL mode
+    db.run(`
+        PRAGMA journal_mode = WAL
+    `);
+
+    // ⚡ Foreign keys
+    db.run(`
+        PRAGMA foreign_keys = ON
+    `);
+
+    // ⚡ Timeout
+    db.run(`
+        PRAGMA busy_timeout = 5000
+    `);
+
+});
 
 // 🚀 Inicialização banco
 db.serialize(() => {
@@ -17,7 +97,9 @@ db.serialize(() => {
 
             id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            chat_id TEXT UNIQUE
+            chat_id TEXT UNIQUE NOT NULL,
+
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
         )
 
@@ -30,13 +112,17 @@ db.serialize(() => {
 
             id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            chat_id TEXT UNIQUE,
+            chat_id TEXT UNIQUE NOT NULL,
 
             category TEXT DEFAULT 'geral',
 
             frequency INTEGER DEFAULT 1,
 
-            active INTEGER DEFAULT 1
+            active INTEGER DEFAULT 1,
+
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
         )
 
@@ -49,7 +135,26 @@ db.serialize(() => {
 
             id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            sent_promos INTEGER DEFAULT 0
+            sent_promos INTEGER DEFAULT 0,
+
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+
+        )
+
+    `);
+
+    // 📜 Logs runtime
+    db.run(`
+
+        CREATE TABLE IF NOT EXISTS runtime_logs (
+
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            level TEXT,
+
+            message TEXT,
+
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
         )
 
@@ -85,16 +190,33 @@ db.serialize(() => {
 
                     `
                     INSERT INTO stats (
+
                         sent_promos
+
                     )
 
                     VALUES (0)
-                    `
+                    `,
 
-                );
+                    insertError => {
 
-                console.log(
-                    "📈 Stats bootstrap criado"
+                        if (insertError) {
+
+                            console.log(
+                                "❌ Erro bootstrap:",
+                                insertError.message
+                            );
+
+                            return;
+
+                        }
+
+                        console.log(
+                            "📈 Stats bootstrap criado"
+                        );
+
+                    }
+
                 );
 
             }
@@ -103,10 +225,53 @@ db.serialize(() => {
 
     );
 
+    // 📌 Índices performance
+    db.run(`
+        CREATE INDEX IF NOT EXISTS idx_chat_id
+        ON chats(chat_id)
+    `);
+
+    db.run(`
+        CREATE INDEX IF NOT EXISTS idx_user_settings_chat_id
+        ON user_settings(chat_id)
+    `);
+
     console.log(
         "💾 Banco de dados inicializado"
     );
 
 });
+
+// 🚀 Graceful shutdown
+process.on(
+
+    "SIGINT",
+
+    () => {
+
+        db.close(error => {
+
+            if (error) {
+
+                console.log(
+                    "❌ Erro fechamento SQLite:",
+                    error.message
+                );
+
+                process.exit(1);
+
+            }
+
+            console.log(
+                "💾 SQLite encerrado"
+            );
+
+            process.exit(0);
+
+        });
+
+    }
+
+);
 
 module.exports = db;
