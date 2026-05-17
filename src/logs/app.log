@@ -474,3 +474,20 @@
 [2026-05-17 12:28:40] WARN: Telegram encerrado via SIGINT
 [2026-05-17 12:28:40] WARN: Encerrando aplicação...
 [2026-05-17 12:28:40] WARN: Servidor encerrado
+[2026-05-17 12:30:38] INFO: Live Metrics iniciado
+[2026-05-17 12:30:38] INFO: Telegram bot iniciado
+[2026-05-17 12:30:38] INFO: Telegram bot iniciado
+[2026-05-17 12:30:38] INFO: Scheduler iniciado
+[2026-05-17 12:30:38] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:30:45] INFO: JWT ausente
+[2026-05-17 12:30:48] INFO: Promo enviada para 7999895751
+[2026-05-17 12:30:49] INFO: Promo enviada para 7999895751.0
+[2026-05-17 12:30:50] INFO: Login administrativo realizado
+[2026-05-17 12:30:50] INFO: Cliente realtime conectado: K1uABr2BE6N_rMH5AAAB
+[2026-05-17 12:30:50] INFO: JWT ausente
+[2026-05-17 12:30:54] INFO: Logout realizado
+[2026-05-17 12:30:54] WARN: Cliente realtime desconectado: K1uABr2BE6N_rMH5AAAB
+[2026-05-17 12:30:54] INFO: JWT ausente
+[2026-05-17 12:30:55] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:30:55] WARN: Encerrando aplicação...
+[2026-05-17 12:30:55] WARN: Servidor encerrado
