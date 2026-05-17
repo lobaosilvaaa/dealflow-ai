@@ -423,3 +423,28 @@
 [2026-05-17 12:24:51] WARN: Telegram encerrado via SIGINT
 [2026-05-17 12:24:51] WARN: Encerrando aplicação...
 [2026-05-17 12:24:51] WARN: Servidor encerrado
+[2026-05-17 12:26:10] INFO: Live Metrics iniciado
+[2026-05-17 12:26:10] INFO: Telegram bot iniciado
+[2026-05-17 12:26:10] INFO: Telegram bot iniciado
+[2026-05-17 12:26:10] INFO: Scheduler iniciado
+[2026-05-17 12:26:10] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:26:14] INFO: JWT ausente
+[2026-05-17 12:26:19] INFO: Login administrativo realizado
+[2026-05-17 12:26:19] INFO: Cliente realtime conectado: dC0dkXGPtBYbdQKTAAAB
+[2026-05-17 12:26:19] INFO: JWT ausente
+[2026-05-17 12:26:21] INFO: Promo enviada para 7999895751
+[2026-05-17 12:26:21] INFO: Promo enviada para 7999895751.0
+[2026-05-17 12:26:26] INFO: Usuário pausado: 7999895751
+[2026-05-17 12:26:26] WARN: Cliente realtime desconectado: dC0dkXGPtBYbdQKTAAAB
+[2026-05-17 12:26:26] INFO: Cliente realtime conectado: 5YQv4SmnS8uk7kaUAAAD
+[2026-05-17 12:26:26] INFO: JWT ausente
+[2026-05-17 12:26:28] INFO: Usuário ativado: 7999895751
+[2026-05-17 12:26:28] WARN: Cliente realtime desconectado: 5YQv4SmnS8uk7kaUAAAD
+[2026-05-17 12:26:28] INFO: Cliente realtime conectado: TyVVFK8SMzbwIS3rAAAF
+[2026-05-17 12:26:28] INFO: JWT ausente
+[2026-05-17 12:26:30] INFO: Logout realizado
+[2026-05-17 12:26:30] WARN: Cliente realtime desconectado: TyVVFK8SMzbwIS3rAAAF
+[2026-05-17 12:26:30] INFO: JWT ausente
+[2026-05-17 12:26:33] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:26:33] WARN: Encerrando aplicação...
+[2026-05-17 12:26:33] WARN: Servidor encerrado

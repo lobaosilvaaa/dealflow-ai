@@ -1,3 +1,5 @@
+// 🚀 DealFlowAI Admin Controller
+
 const {
 
     pauseUser,
@@ -9,10 +11,25 @@ const {
 );
 
 const {
-    logger
+
+    logger,
+    sendRuntimeLog
+
 } = require(
     "../services/logger"
 );
+
+// 🛡️ Validação Chat ID
+function validateChatId(chatId) {
+
+    return (
+
+        typeof chatId === "string" &&
+        chatId.trim().length > 0
+
+    );
+
+}
 
 // ⏸️ Pausar usuário
 async function pause(req, res) {
@@ -23,13 +40,43 @@ async function pause(req, res) {
             chatId
         } = req.params;
 
+        // 🛡️ Validação
+        if (
+
+            !validateChatId(chatId)
+
+        ) {
+
+            logger.warn(
+                "Tentativa de pausa com chatId inválido"
+            );
+
+            return res.status(400).send(
+                "❌ Chat ID inválido"
+            );
+
+        }
+
+        // ⏸️ Pausa usuário
         await pauseUser(chatId);
 
         logger.info(
             `Usuário pausado: ${chatId}`
         );
 
-        res.redirect(
+        // 📡 Runtime log
+        await sendRuntimeLog(
+
+            "⏸️ Usuário Pausado",
+
+            `Usuário ${chatId} foi pausado pelo painel administrativo.`,
+
+            "warn"
+
+        );
+
+        // 🚀 Redirect
+        return res.redirect(
             "/dashboard"
         );
 
@@ -39,7 +86,20 @@ async function pause(req, res) {
             `Erro ao pausar usuário: ${error.message}`
         );
 
-        res.send(
+        // 📡 Runtime log
+        await sendRuntimeLog(
+
+            "❌ Erro Admin",
+
+            `Erro ao pausar usuário ${req.params.chatId}
+
+${error.message}`,
+
+            "error"
+
+        );
+
+        return res.status(500).send(
             "❌ Erro ao pausar usuário"
         );
 
@@ -56,13 +116,43 @@ async function activate(req, res) {
             chatId
         } = req.params;
 
+        // 🛡️ Validação
+        if (
+
+            !validateChatId(chatId)
+
+        ) {
+
+            logger.warn(
+                "Tentativa de ativação com chatId inválido"
+            );
+
+            return res.status(400).send(
+                "❌ Chat ID inválido"
+            );
+
+        }
+
+        // ▶️ Ativa usuário
         await activateUser(chatId);
 
         logger.info(
             `Usuário ativado: ${chatId}`
         );
 
-        res.redirect(
+        // 📡 Runtime log
+        await sendRuntimeLog(
+
+            "▶️ Usuário Ativado",
+
+            `Usuário ${chatId} foi ativado pelo painel administrativo.`,
+
+            "success"
+
+        );
+
+        // 🚀 Redirect
+        return res.redirect(
             "/dashboard"
         );
 
@@ -72,7 +162,20 @@ async function activate(req, res) {
             `Erro ao ativar usuário: ${error.message}`
         );
 
-        res.send(
+        // 📡 Runtime log
+        await sendRuntimeLog(
+
+            "❌ Erro Admin",
+
+            `Erro ao ativar usuário ${req.params.chatId}
+
+${error.message}`,
+
+            "error"
+
+        );
+
+        return res.status(500).send(
             "❌ Erro ao ativar usuário"
         );
 
@@ -89,13 +192,43 @@ async function remove(req, res) {
             chatId
         } = req.params;
 
+        // 🛡️ Validação
+        if (
+
+            !validateChatId(chatId)
+
+        ) {
+
+            logger.warn(
+                "Tentativa de remoção com chatId inválido"
+            );
+
+            return res.status(400).send(
+                "❌ Chat ID inválido"
+            );
+
+        }
+
+        // 🗑️ Remove usuário
         await deleteUser(chatId);
 
         logger.info(
             `Usuário removido: ${chatId}`
         );
 
-        res.redirect(
+        // 📡 Runtime log
+        await sendRuntimeLog(
+
+            "🗑️ Usuário Removido",
+
+            `Usuário ${chatId} foi removido pelo painel administrativo.`,
+
+            "warn"
+
+        );
+
+        // 🚀 Redirect
+        return res.redirect(
             "/dashboard"
         );
 
@@ -105,7 +238,20 @@ async function remove(req, res) {
             `Erro ao remover usuário: ${error.message}`
         );
 
-        res.send(
+        // 📡 Runtime log
+        await sendRuntimeLog(
+
+            "❌ Erro Admin",
+
+            `Erro ao remover usuário ${req.params.chatId}
+
+${error.message}`,
+
+            "error"
+
+        );
+
+        return res.status(500).send(
             "❌ Erro ao remover usuário"
         );
 
