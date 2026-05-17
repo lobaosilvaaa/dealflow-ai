@@ -986,3 +986,81 @@
 [2026-05-17 14:06:34] WARN: Encerrando aplicação (SIGINT)
 [2026-05-17 14:06:35] WARN: Scheduler já parado
 [2026-05-17 14:06:35] WARN: Live Metrics já parado
+[2026-05-17 14:10:54] INFO: Inicializando banco de dados...
+[2026-05-17 14:10:54] INFO: Tabela stats validada
+[2026-05-17 14:10:54] INFO: Banco de dados inicializado
+[2026-05-17 14:10:54] INFO: Inicializando Live Metrics...
+[2026-05-17 14:10:54] INFO: Live Metrics iniciado
+[2026-05-17 14:10:54] INFO: Servidor rodando na porta 3000
+[2026-05-17 14:10:54] INFO: Telegram bot iniciado
+[2026-05-17 14:10:54] INFO: Scheduler iniciado
+[2026-05-17 14:10:54] INFO: Cliente realtime conectado: PEHJQQ6JUBwZ5NZJAAAB
+[2026-05-17 14:10:55] INFO: Mensagem recebida: 7999895751 -> /start
+[2026-05-17 14:10:56] INFO: Mensagem recebida: 7999895751 -> /start
+[2026-05-17 14:10:56] INFO: Chat salvo: 7999895751
+[2026-05-17 14:10:56] INFO: Chat salvo: 7999895751
+[2026-05-17 14:10:56] INFO: Configuração salva: 7999895751
+[2026-05-17 14:10:56] INFO: Novo usuário registrado: 7999895751
+[2026-05-17 14:10:56] INFO: Start executado: 7999895751
+[2026-05-17 14:11:04] INFO: Produto selecionado: Mouse Gamer RGB
+[2026-05-17 14:11:04] INFO: Copy gerada: Mouse Gamer RGB
+[2026-05-17 14:11:05] INFO: Promo incrementada
+[2026-05-17 14:11:05] INFO: Promo enviada para 7999895751
+[2026-05-17 14:11:10] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 14:11:10] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 14:11:10] WARN: Acesso não autenticado: /dashboard
+[2026-05-17 14:11:10] INFO: Auth route acessada: GET /login
+[2026-05-17 14:11:10] WARN: Cliente realtime desconectado: PEHJQQ6JUBwZ5NZJAAAB
+[2026-05-17 14:11:10] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:10] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:19] INFO: Auth route acessada: POST /login
+[2026-05-17 14:11:19] INFO: Login administrativo realizado: admin
+[2026-05-17 14:11:19] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 14:11:19] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 14:11:19] INFO: Dashboard acessado
+[2026-05-17 14:11:19] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:19] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:19] INFO: Cliente realtime conectado: aQFqePYoKRNZ2jKaAAAD
+[2026-05-17 14:11:30] INFO: Auth route acessada: POST /admin/pause/7999895751
+[2026-05-17 14:11:30] INFO: Admin route acessada: POST /admin/pause/7999895751
+[2026-05-17 14:11:30] WARN: Usuário pausado: 7999895751
+[2026-05-17 14:11:30] INFO: Usuário pausado: 7999895751
+[2026-05-17 14:11:31] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 14:11:31] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 14:11:31] INFO: Dashboard acessado
+[2026-05-17 14:11:31] WARN: Cliente realtime desconectado: aQFqePYoKRNZ2jKaAAAD
+[2026-05-17 14:11:31] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:31] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:31] INFO: Cliente realtime conectado: lcz_Rvu7-zAX6m9IAAAF
+[2026-05-17 14:11:35] INFO: Auth route acessada: POST /admin/activate/7999895751
+[2026-05-17 14:11:35] INFO: Admin route acessada: POST /admin/activate/7999895751
+[2026-05-17 14:11:35] INFO: Usuário ativado: 7999895751
+[2026-05-17 14:11:35] INFO: Usuário ativado: 7999895751
+[2026-05-17 14:11:35] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 14:11:35] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 14:11:35] INFO: Dashboard acessado
+[2026-05-17 14:11:35] WARN: Cliente realtime desconectado: lcz_Rvu7-zAX6m9IAAAF
+[2026-05-17 14:11:35] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:35] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:11:35] INFO: Cliente realtime conectado: 7SKaWLOC1u1tUl1PAAAH
+[2026-05-17 14:12:04] INFO: Produto selecionado: Mouse Gamer RGB
+[2026-05-17 14:12:04] INFO: Copy gerada: Mouse Gamer RGB
+[2026-05-17 14:12:05] INFO: Promo incrementada
+[2026-05-17 14:12:05] INFO: Promo enviada para 7999895751
+[2026-05-17 14:13:04] INFO: Produto selecionado: Mouse Gamer RGB
+[2026-05-17 14:13:04] INFO: Copy gerada: Mouse Gamer RGB
+[2026-05-17 14:13:05] INFO: Promo incrementada
+[2026-05-17 14:13:05] INFO: Promo enviada para 7999895751
+[2026-05-17 14:13:25] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 14:13:25] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 14:13:25] INFO: Dashboard acessado
+[2026-05-17 14:13:25] WARN: Cliente realtime desconectado: 7SKaWLOC1u1tUl1PAAAH
+[2026-05-17 14:13:25] INFO: Cliente realtime conectado: G9mgrZkFJXLmvKBJAAAJ
+[2026-05-17 14:14:04] INFO: Produto selecionado: Teclado Mecânico
+[2026-05-17 14:14:04] INFO: Copy gerada: Teclado Mecânico
+[2026-05-17 14:14:05] INFO: Promo incrementada
+[2026-05-17 14:14:05] INFO: Promo enviada para 7999895751
+[2026-05-17 14:14:49] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 14:14:49] WARN: Telegram encerrado via SIGINT
+[2026-05-17 14:14:50] WARN: Scheduler encerrado
+[2026-05-17 14:14:50] WARN: Live Metrics encerrado

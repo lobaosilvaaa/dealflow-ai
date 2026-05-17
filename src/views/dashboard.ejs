@@ -21,8 +21,11 @@
 
 <body data-promos="<%= sentPromos %>" data-users="<%= totalUsers %>">
 
+    <!-- 🌌 Background FX -->
+    <div class="background-overlay"></div>
+
     <!-- 🚀 Topbar -->
-    <div class="topbar">
+    <header class="topbar">
 
         <div>
 
@@ -31,9 +34,8 @@
             </h1>
 
             <p class="subtitle">
-
-                Plataforma SaaS de automação inteligente
-
+                Plataforma SaaS de automação inteligente,
+                analytics realtime e observabilidade.
             </p>
 
         </div>
@@ -42,8 +44,7 @@
 
             <div class="environment-badge">
 
-                🌎
-                <%= environment || "development" %>
+                🟢 ONLINE
 
             </div>
 
@@ -55,17 +56,21 @@
 
         </div>
 
-    </div>
+    </header>
 
-    <!-- 📊 Cards -->
-    <div class="cards">
+    <!-- 📊 Metrics -->
+    <section class="cards">
 
-        <!-- 📤 Promoções -->
-        <div class="card">
+        <!-- 📤 Promos -->
+        <div class="card metric-card">
 
-            <h2>
-                📤 Promoções enviadas
-            </h2>
+            <div class="metric-header">
+
+                <span>
+                    📤 Promoções enviadas
+                </span>
+
+            </div>
 
             <p id="promosCount">
                 <%= sentPromos %>
@@ -73,12 +78,16 @@
 
         </div>
 
-        <!-- 👥 Usuários -->
-        <div class="card">
+        <!-- 👥 Users -->
+        <div class="card metric-card">
 
-            <h2>
-                👥 Usuários registrados
-            </h2>
+            <div class="metric-header">
+
+                <span>
+                    👥 Usuários registrados
+                </span>
+
+            </div>
 
             <p id="usersCount">
                 <%= totalUsers %>
@@ -87,39 +96,43 @@
         </div>
 
         <!-- ⏱️ Uptime -->
-        <div class="card">
+        <div class="card metric-card">
 
-            <h2>
-                ⏱️ Uptime
-            </h2>
+            <div class="metric-header">
+
+                <span>
+                    ⏱️ Uptime
+                </span>
+
+            </div>
 
             <p id="uptimeCount">
-
                 <%= Math.floor(uptime) %>s
-
             </p>
 
         </div>
 
-        <!-- 💾 Memória -->
-        <div class="card">
+        <!-- 💾 Memory -->
+        <div class="card metric-card">
 
-            <h2>
-                💾 Memória
-            </h2>
+            <div class="metric-header">
+
+                <span>
+                    💾 Memória
+                </span>
+
+            </div>
 
             <p id="memoryCount">
-
                 <%= memoryUsage || 0 %> MB
-
             </p>
 
         </div>
 
-    </div>
+    </section>
 
     <!-- 📈 Analytics -->
-    <div class="card">
+    <section class="card">
 
         <div class="section-header">
 
@@ -127,11 +140,11 @@
                 📈 Analytics
             </h2>
 
-            <span class="live-badge">
+            <div class="live-badge">
 
                 🟢 LIVE
 
-            </span>
+            </div>
 
         </div>
 
@@ -141,10 +154,10 @@
 
         </div>
 
-    </div>
+    </section>
 
     <!-- 📜 Logs -->
-    <div class="card">
+    <section class="card">
 
         <div class="section-header">
 
@@ -152,42 +165,44 @@
                 📜 Logs Recentes
             </h2>
 
-            <span class="live-badge">
+            <div class="live-badge">
 
                 ⚡ Realtime
 
-            </span>
+            </div>
 
         </div>
 
         <div class="logs-container" id="logsContainer">
 
-            <% if (logs.length===0) { %>
+            <% if (logs && logs.length> 0) { %>
 
-                <div class="log-item">
+                <% logs.forEach(log=> { %>
 
-                    Nenhum log encontrado.
+                    <div class="log-item">
 
-                </div>
+                        <%= log %>
 
-                <% } %>
+                    </div>
 
-                    <% logs.forEach(log=> { %>
+                    <% }) %>
 
-                        <div class="log-item">
+                        <% } else { %>
 
-                            <%= log %>
+                            <div class="empty-state">
 
-                        </div>
+                                Nenhum log encontrado.
 
-                        <% }) %>
+                            </div>
+
+                            <% } %>
 
         </div>
 
-    </div>
+    </section>
 
     <!-- 👥 Usuários -->
-    <div class="card">
+    <section class="card">
 
         <div class="section-header">
 
@@ -195,11 +210,11 @@
                 👥 Usuários
             </h2>
 
-            <span class="live-badge">
+            <div class="live-badge">
 
                 <%= totalUsers %> online
 
-            </span>
+            </div>
 
         </div>
 
@@ -237,112 +252,111 @@
 
                 <tbody>
 
-                    <% if (users.length===0) { %>
+                    <% if (users && users.length> 0) { %>
 
-                        <tr>
+                        <% users.forEach(user=> { %>
 
-                            <td colspan="5">
+                            <tr>
 
-                                Nenhum usuário registrado.
+                                <td>
+                                    <%= user.chat_id %>
+                                </td>
 
-                            </td>
+                                <td>
+                                    <%= user.category %>
+                                </td>
 
-                        </tr>
+                                <td>
+                                    <%= user.frequency %> min
+                                </td>
 
-                        <% } %>
+                                <td>
 
-                            <% users.forEach(user=> { %>
+                                    <% if (user.active) { %>
 
-                                <tr>
+                                        <span class="status-active">
 
-                                    <td>
+                                            🟢 Ativo
 
-                                        <%= user.chat_id %>
+                                        </span>
 
-                                    </td>
+                                        <% } else { %>
 
-                                    <td>
+                                            <span class="status-paused">
 
-                                        <%= user.category %>
-
-                                    </td>
-
-                                    <td>
-
-                                        <%= user.frequency %> min
-
-                                    </td>
-
-                                    <td>
-
-                                        <% if (user.active) { %>
-
-                                            <span class="status-active">
-
-                                                🟢 Ativo
+                                                🔴 Pausado
 
                                             </span>
 
+                                            <% } %>
+
+                                </td>
+
+                                <td>
+
+                                    <div class="actions">
+
+                                        <% if (user.active) { %>
+
+                                            <form method="POST" action="/admin/pause/<%= user.chat_id %>">
+
+                                                <button class="btn-pause">
+
+                                                    ⏸️ Pausar
+
+                                                </button>
+
+                                            </form>
+
                                             <% } else { %>
 
-                                                <span class="status-paused">
+                                                <form method="POST" action="/admin/activate/<%= user.chat_id %>">
 
-                                                    🔴 Pausado
+                                                    <button class="btn-activate">
 
-                                                </span>
-
-                                                <% } %>
-
-                                    </td>
-
-                                    <td>
-
-                                        <div class="actions">
-
-                                            <% if (user.active) { %>
-
-                                                <form method="POST" action="/admin/pause/<%= user.chat_id %>">
-
-                                                    <button class="btn-pause" type="submit">
-
-                                                        ⏸️ Pausar
+                                                        ▶️ Ativar
 
                                                     </button>
 
                                                 </form>
 
-                                                <% } else { %>
+                                                <% } %>
 
-                                                    <form method="POST" action="/admin/activate/<%= user.chat_id %>">
+                                                    <form method="POST" action="/admin/delete/<%= user.chat_id %>">
 
-                                                        <button class="btn-activate" type="submit">
+                                                        <button class="btn-delete">
 
-                                                            ▶️ Ativar
+                                                            🗑️ Remover
 
                                                         </button>
 
                                                     </form>
 
-                                                    <% } %>
+                                    </div>
 
-                                                        <form method="POST" action="/admin/delete/<%= user.chat_id %>"
-                                                            onsubmit="return confirm('Deseja remover este usuário?')">
+                                </td>
 
-                                                            <button class="btn-delete" type="submit">
+                            </tr>
 
-                                                                🗑️ Remover
+                            <% }) %>
 
-                                                            </button>
+                                <% } else { %>
 
-                                                        </form>
+                                    <tr>
 
-                                        </div>
+                                        <td colspan="5">
 
-                                    </td>
+                                            <div class="empty-state">
 
-                                </tr>
+                                                Nenhum usuário registrado.
 
-                                <% }) %>
+                                            </div>
+
+                                        </td>
+
+                                    </tr>
+
+                                    <% } %>
 
                 </tbody>
 
@@ -350,10 +364,10 @@
 
         </div>
 
-    </div>
+    </section>
 
-    <!-- ⚙️ System Info -->
-    <div class="card">
+    <!-- ⚙️ System -->
+    <section class="card">
 
         <div class="section-header">
 
@@ -367,49 +381,55 @@
 
             <div class="system-item">
 
-                <strong>
-                    🌎 Ambiente:
-                </strong>
-
                 <span>
-
-                    <%= environment || "development" %>
-
+                    🌎 Ambiente
                 </span>
+
+                <strong>
+                    development
+                </strong>
 
             </div>
 
             <div class="system-item">
 
-                <strong>
-                    🟢 Node:
-                </strong>
-
                 <span>
-
-                    <%= nodeVersion || "N/A" %>
-
+                    ⚡ Node.js
                 </span>
+
+                <strong>
+                    <%= process.version %>
+                </strong>
 
             </div>
 
             <div class="system-item">
 
-                <strong>
-                    💾 RAM:
-                </strong>
-
                 <span>
+                    💾 RAM
+                </span>
 
+                <strong>
                     <%= memoryUsage || 0 %> MB
+                </strong>
 
+            </div>
+
+            <div class="system-item">
+
+                <span>
+                    🔌 Socket.IO
                 </span>
+
+                <strong>
+                    ONLINE
+                </strong>
 
             </div>
 
         </div>
 
-    </div>
+    </section>
 
     <!-- 🔌 Socket.IO -->
     <script src="/socket.io/socket.io.js"></script>

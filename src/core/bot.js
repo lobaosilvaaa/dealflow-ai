@@ -73,10 +73,13 @@ async function processMessage(ctx) {
 
         const username =
             ctx.from?.username ||
+            ctx.from?.first_name ||
             "unknown";
 
         const text =
-            ctx.message.text?.trim();
+            ctx.message.text
+                ?.trim()
+                ?.toLowerCase();
 
         // 🛡️ Texto obrigatório
         if (!text) {
@@ -85,18 +88,6 @@ async function processMessage(ctx) {
 
         }
 
-        console.log(
-            "📩 Mensagem recebida:"
-        );
-
-        console.log(
-            `Chat ID: ${chatId}`
-        );
-
-        console.log(
-            `Mensagem: ${text}`
-        );
-
         logger.info(
             `Mensagem recebida: ${chatId} -> ${text}`
         );
@@ -104,15 +95,55 @@ async function processMessage(ctx) {
         // 💾 Salva chat
         await saveChat(chatId);
 
-        console.log(
-            `💾 Chat salvo: ${chatId}`
+        logger.info(
+            `Chat salvo: ${chatId}`
         );
 
-        // 📥 Configurações atuais
-        const settings =
+        // 🔍 Busca configurações
+        let settings =
             await getSettings(chatId);
 
-        // 🎯 Categoria atual
+        // 🆕 Novo usuário
+        if (!settings) {
+
+            await saveSettings(
+
+                chatId,
+
+                "geral",
+
+                1,
+
+                1
+
+            );
+
+            logger.info(
+                `Novo usuário registrado: ${chatId}`
+            );
+
+            settings =
+                await getSettings(chatId);
+
+            // 📡 Runtime
+            await sendRuntimeLog(
+
+                "👤 Novo Usuário",
+
+                `Novo usuário registrado no DealFlowAI.
+
+👤 Username: ${username}
+🆔 Chat ID: ${chatId}
+🎯 Categoria: geral
+⏰ Frequência: 1 minuto`,
+
+                "info"
+
+            );
+
+        }
+
+        // 🎯 Config atual
         const category =
             settings?.category || "geral";
 
@@ -124,10 +155,10 @@ async function processMessage(ctx) {
         const active =
             settings?.active ?? 1;
 
-        // 🚀 COMANDO /start
+        // 🚀 START
         if (
 
-            text.toLowerCase() === "/start"
+            text === "/start"
 
         ) {
 
@@ -137,20 +168,79 @@ async function processMessage(ctx) {
 
             return ctx.reply(`
 
-🚀 Bem-vindo ao DealFlow AI!
+🚀 Bem-vindo ao DealFlow AI
 
 Sua plataforma inteligente de promoções automáticas.
+
+━━━━━━━━━━━━━━━━━━
+
+📌 Configuração atual:
+
+🎯 Categoria:
+${category}
+
+⏰ Frequência:
+${frequency} minuto(s)
+
+🤖 Status:
+${active ? "🟢 Ativado" : "🔴 Pausado"}
+
+━━━━━━━━━━━━━━━━━━
 
 Digite:
 menu
 
-para visualizar os comandos disponíveis.
+para visualizar todos os comandos.
 
 `);
 
         }
 
-        // 🚀 COMANDO /categoria
+        // 📚 MENU
+        if (
+
+            text === "menu"
+
+        ) {
+
+            return ctx.reply(`
+
+🚀 *DealFlow AI Online*
+
+━━━━━━━━━━━━━━━━━━
+
+📌 Comandos disponíveis:
+
+🎯 /categoria gamer
+🌎 /categoria geral
+
+⏰ /frequencia 5
+
+📊 /stats
+
+⏸️ /pausar
+▶️ /ativar
+
+━━━━━━━━━━━━━━━━━━
+
+🔥 Para receber promoção instantânea:
+
+promo
+
+━━━━━━━━━━━━━━━━━━
+
+🤖 Sistema realtime ativo.
+
+`, {
+
+                parse_mode:
+                    "Markdown"
+
+            });
+
+        }
+
+        // 🎯 Categoria
         if (
 
             text.startsWith(
@@ -194,14 +284,13 @@ Exemplo:
                 `Categoria alterada: ${chatId} -> ${newCategory}`
             );
 
-            // 📡 Runtime
             await sendRuntimeLog(
 
                 "🎯 Categoria Alterada",
 
                 `Usuário alterou categoria.
 
-👤 User: ${username}
+👤 Username: ${username}
 🆔 Chat ID: ${chatId}
 🎯 Categoria: ${newCategory}`,
 
@@ -211,18 +300,16 @@ Exemplo:
 
             return ctx.reply(`
 
-✅ Categoria definida com sucesso!
+✅ Categoria atualizada!
 
 🎯 Nova categoria:
 ${newCategory}
-
-Agora suas promoções serão personalizadas.
 
 `);
 
         }
 
-        // ⏰ COMANDO /frequencia
+        // ⏰ Frequência
         if (
 
             text.startsWith(
@@ -239,7 +326,7 @@ Agora suas promoções serão personalizadas.
 
             if (
 
-                !newFrequency ||
+                isNaN(newFrequency) ||
                 newFrequency < 1
 
             ) {
@@ -268,7 +355,7 @@ Exemplo:
             );
 
             logger.info(
-                `Frequência alterada: ${chatId} -> ${newFrequency} min`
+                `Frequência alterada: ${chatId} -> ${newFrequency}`
             );
 
             return ctx.reply(`
@@ -278,17 +365,14 @@ Exemplo:
 ⏰ Nova frequência:
 ${newFrequency} minuto(s)
 
-As promoções automáticas seguirão essa frequência.
-
 `);
 
         }
 
-        // 🔥 COMANDO promo
+        // 🔥 PROMO
         if (
 
-            text.toLowerCase() ===
-            "promo"
+            text === "promo"
 
         ) {
 
@@ -311,17 +395,16 @@ para voltar a receber promoções.
             const product =
                 getRandomProduct(category);
 
+            // 🛡️ Produto inexistente
             if (!product) {
 
                 logger.warn(
-                    `Nenhuma promoção encontrada: ${category}`
+                    `Produto não encontrado: ${category}`
                 );
 
                 return ctx.reply(`
 
-❌ Nenhuma promoção encontrada para:
-
-${category}
+❌ Nenhuma promoção encontrada.
 
 `);
 
@@ -344,25 +427,21 @@ ${product.link}
 
             await ctx.reply(message);
 
+            // 📈 Incrementa métricas
             await incrementPromos();
 
             logger.info(
                 `Promo enviada para ${chatId}`
             );
 
-            console.log(
-                "✅ Resposta enviada"
-            );
-
             return;
 
         }
 
-        // 📊 COMANDO /stats
+        // 📊 STATS
         if (
 
-            text.toLowerCase() ===
-            "/stats"
+            text === "/stats"
 
         ) {
 
@@ -375,6 +454,8 @@ ${product.link}
             return ctx.reply(`
 
 📊 *DEALFLOW AI STATS*
+
+━━━━━━━━━━━━━━━━━━
 
 📤 Promoções enviadas:
 ${stats?.sent_promos || 0}
@@ -404,11 +485,10 @@ ${active ? "🟢 Ativado" : "🔴 Pausado"}
 
         }
 
-        // ⏸️ COMANDO /pausar
+        // ⏸️ PAUSAR
         if (
 
-            text.toLowerCase() ===
-            "/pausar"
+            text === "/pausar"
 
         ) {
 
@@ -419,6 +499,7 @@ ${active ? "🟢 Ativado" : "🔴 Pausado"}
                 category,
 
                 frequency,
+
                 0
 
             );
@@ -429,19 +510,16 @@ ${active ? "🟢 Ativado" : "🔴 Pausado"}
 
             return ctx.reply(`
 
-⏸️ Promoções pausadas com sucesso.
-
-Você não receberá promoções automáticas até ativar novamente.
+⏸️ Promoções pausadas.
 
 `);
 
         }
 
-        // ▶️ COMANDO /ativar
+        // ▶️ ATIVAR
         if (
 
-            text.toLowerCase() ===
-            "/ativar"
+            text === "/ativar"
 
         ) {
 
@@ -452,6 +530,7 @@ Você não receberá promoções automáticas até ativar novamente.
                 category,
 
                 frequency,
+
                 1
 
             );
@@ -464,48 +543,11 @@ Você não receberá promoções automáticas até ativar novamente.
 
 ▶️ Promoções ativadas novamente.
 
-As promoções automáticas voltarão a ser enviadas.
-
 `);
 
         }
 
-        // 🤖 Menu principal
-        if (
-
-            text.toLowerCase() === "menu"
-
-        ) {
-
-            return ctx.reply(`
-
-🚀 *DealFlow AI Online*
-
-━━━━━━━━━━━━━━━━━━
-
-📌 Comandos disponíveis:
-
-🎯 /categoria gamer
-⏰ /frequencia 5
-📊 /stats
-⏸️ /pausar
-▶️ /ativar
-
-━━━━━━━━━━━━━━━━━━
-
-🔥 Para receber promoções:
-promo
-
-`, {
-
-                parse_mode:
-                    "Markdown"
-
-            });
-
-        }
-
-        // ❌ Resposta padrão
+        // ❌ Fallback
         return ctx.reply(`
 
 ❌ Comando não reconhecido.
@@ -523,7 +565,7 @@ menu
             `Erro bot: ${error.message}`
         );
 
-        // 📡 Runtime alert
+        // 📡 Runtime Alert
         await sendRuntimeLog(
 
             "❌ Bot Error",
@@ -542,11 +584,6 @@ menu
             );
 
         } catch (replyError) {
-
-            console.log(
-                "Erro reply:",
-                replyError.message
-            );
 
             logger.error(
                 `Erro reply bot: ${replyError.message}`
