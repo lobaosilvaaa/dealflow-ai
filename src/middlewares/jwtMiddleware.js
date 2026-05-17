@@ -1,14 +1,24 @@
+// 🚀 DealFlowAI JWT Middleware
+
 const jwt =
     require("jsonwebtoken");
 
 const {
-    logger
+
+    logger,
+    sendRuntimeLog
+
 } = require(
     "../services/logger"
 );
 
+// 🌎 Ambiente
+const ENVIRONMENT =
+    process.env.NODE_ENV ||
+    "development";
+
 // 🔐 Verifica JWT
-function verifyToken(
+async function verifyToken(
 
     req,
     res,
@@ -24,8 +34,24 @@ function verifyToken(
         // ⛔ Header ausente
         if (!authHeader) {
 
-            logger.info(
+            logger.warn(
                 "JWT ausente"
+            );
+
+            // 📡 Runtime
+            await sendRuntimeLog(
+
+                "⚠️ JWT Missing",
+
+                `Requisição sem token JWT.
+
+🌐 Route: ${req.originalUrl}
+📡 Method: ${req.method}
+🌎 Environment: ${ENVIRONMENT}
+🖥️ IP: ${req.ip}`,
+
+                "warn"
+
             );
 
             return res.status(401).json({
@@ -34,6 +60,9 @@ function verifyToken(
 
                 timestamp:
                     new Date(),
+
+                environment:
+                    ENVIRONMENT,
 
                 error:
                     "Token não fornecido"
@@ -55,12 +84,30 @@ function verifyToken(
                 "Bearer inválido"
             );
 
+            // 📡 Runtime
+            await sendRuntimeLog(
+
+                "⚠️ Invalid Bearer",
+
+                `Bearer token inválido.
+
+🌐 Route: ${req.originalUrl}
+📡 Method: ${req.method}
+🖥️ IP: ${req.ip}`,
+
+                "warn"
+
+            );
+
             return res.status(401).json({
 
                 success: false,
 
                 timestamp:
                     new Date(),
+
+                environment:
+                    ENVIRONMENT,
 
                 error:
                     "Formato Bearer inválido"
@@ -72,6 +119,27 @@ function verifyToken(
         // 🔑 Extrai token
         const token =
             authHeader.split(" ")[1];
+
+        // ⛔ Token vazio
+        if (!token) {
+
+            logger.warn(
+                "JWT vazio"
+            );
+
+            return res.status(401).json({
+
+                success: false,
+
+                timestamp:
+                    new Date(),
+
+                error:
+                    "Token vazio"
+
+            });
+
+        }
 
         // 🔐 Verifica JWT
         const decoded =
@@ -93,12 +161,34 @@ function verifyToken(
 
         };
 
-        next();
+        logger.info(
+            `JWT validado: ${decoded.username || "unknown"}`
+        );
+
+        // 🚀 Continua
+        return next();
 
     } catch (error) {
 
         logger.warn(
             `JWT inválido: ${error.message}`
+        );
+
+        // 📡 Runtime
+        await sendRuntimeLog(
+
+            "❌ JWT Invalid",
+
+            `Falha validação JWT.
+
+🌐 Route: ${req.originalUrl}
+📡 Method: ${req.method}
+🖥️ IP: ${req.ip}
+
+${error.message}`,
+
+            "error"
+
         );
 
         return res.status(401).json({
@@ -107,6 +197,9 @@ function verifyToken(
 
             timestamp:
                 new Date(),
+
+            environment:
+                ENVIRONMENT,
 
             error:
                 "Token inválido"
