@@ -35,7 +35,7 @@ jobs:
 
           cache: "npm"
 
-      # 📊 Extrai dados deploy
+      # 📊 Extrai dados do deploy
       - name: Extract Deploy Data
         id: data
 
@@ -168,7 +168,7 @@ jobs:
 
           echo "Running tests..."
 
-          npm test --if-present
+          npm run test --if-present
 
       # 🏗️ Build aplicação
       - name: Run Build
