@@ -609,3 +609,65 @@
 [2026-05-17 12:43:06] INFO: Promo enviada para 7999895751.0
 [2026-05-17 12:43:20] WARN: Telegram encerrado via SIGINT
 [2026-05-17 12:43:20] WARN: Encerrando aplicação...
+[2026-05-17 12:44:52] INFO: Live Metrics iniciado
+[2026-05-17 12:44:52] INFO: Telegram bot iniciado
+[2026-05-17 12:44:52] INFO: Telegram bot iniciado
+[2026-05-17 12:44:52] INFO: Scheduler iniciado
+[2026-05-17 12:44:52] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:44:55] ERROR: Erro getAllUsers: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:44:55] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:44:58] ERROR: Erro getAllUsers: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:44:58] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:45:01] ERROR: Erro getAllUsers: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:45:01] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:45:01] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:45:01] WARN: Encerrando aplicação...
+[2026-05-17 12:45:19] INFO: Live Metrics iniciado
+[2026-05-17 12:45:19] INFO: Telegram bot iniciado
+[2026-05-17 12:45:19] INFO: Telegram bot iniciado
+[2026-05-17 12:45:19] INFO: Scheduler iniciado
+[2026-05-17 12:45:19] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:45:19] ERROR: Uncaught Exception: SQLITE_CONSTRAINT: UNIQUE constraint failed: stats.id
+[2026-05-17 12:45:43] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:45:43] WARN: Encerrando aplicação...
+[2026-05-17 12:46:43] INFO: Live Metrics iniciado
+[2026-05-17 12:46:43] INFO: Telegram bot iniciado
+[2026-05-17 12:46:43] INFO: Telegram bot iniciado
+[2026-05-17 12:46:43] INFO: Scheduler iniciado
+[2026-05-17 12:46:43] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:46:43] INFO: Tabela stats validada
+[2026-05-17 12:46:43] ERROR: Erro bootstrap stats: SQLITE_CONSTRAINT: UNIQUE constraint failed: stats.id
+[2026-05-17 12:46:46] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:46] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:49] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:49] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:52] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:52] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:55] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:55] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:58] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:46:58] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:47:01] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:47:01] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:47:04] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:47:04] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:47:07] ERROR: Erro getStats: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:47:07] ERROR: Erro live metrics: SQLITE_ERROR: no such column: updated_at
+[2026-05-17 12:47:08] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:47:08] WARN: Encerrando aplicação...
+[2026-05-17 12:48:47] INFO: Live Metrics iniciado
+[2026-05-17 12:48:47] INFO: Telegram bot iniciado
+[2026-05-17 12:48:47] INFO: Telegram bot iniciado
+[2026-05-17 12:48:47] INFO: Scheduler iniciado
+[2026-05-17 12:48:47] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:48:47] INFO: Tabela stats validada
+[2026-05-17 12:48:59] INFO: Mensagem recebida: 7999895751 -> menu
+[2026-05-17 12:48:59] INFO: Mensagem recebida: 7999895751 -> menu
+[2026-05-17 12:48:59] INFO: Chat salvo: 7999895751
+[2026-05-17 12:49:03] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 12:49:04] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 12:49:04] INFO: Chat salvo: 7999895751
+[2026-05-17 12:49:04] INFO: Promo incrementada
+[2026-05-17 12:49:04] INFO: Promo enviada para 7999895751
+[2026-05-17 12:49:28] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:49:28] WARN: Encerrando aplicação...

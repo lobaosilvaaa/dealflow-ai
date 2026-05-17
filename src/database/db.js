@@ -131,17 +131,172 @@ db.serialize(() => {
     // 📈 Estatísticas globais
     db.run(`
 
-        CREATE TABLE IF NOT EXISTS stats (
+    CREATE TABLE IF NOT EXISTS stats (
 
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
 
-            sent_promos INTEGER DEFAULT 0,
+        sent_promos INTEGER DEFAULT 0,
 
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-        )
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
-    `);
+    )
+
+`, error => {
+
+        if (error) {
+
+            console.log(
+                "❌ Erro tabela stats:",
+                error.message
+            );
+
+        }
+
+    });
+
+    // 🚀 Migração defensiva
+    db.all(
+
+        `
+    PRAGMA table_info(stats)
+    `,
+
+        [],
+
+        (error, columns) => {
+
+            if (error) {
+
+                console.log(
+                    "❌ Erro migration stats:",
+                    error.message
+                );
+
+                return;
+
+            }
+
+            const columnNames =
+                columns.map(
+                    column => column.name
+                );
+
+            // ➕ created_at
+            if (
+
+                !columnNames.includes(
+                    "created_at"
+                )
+
+            ) {
+
+                db.run(`
+
+                ALTER TABLE stats
+
+                ADD COLUMN created_at
+                DATETIME DEFAULT CURRENT_TIMESTAMP
+
+            `);
+
+                console.log(
+                    "🚀 Coluna created_at adicionada"
+                );
+
+            }
+
+            // ➕ updated_at
+            if (
+
+                !columnNames.includes(
+                    "updated_at"
+                )
+
+            ) {
+
+                db.run(`
+
+                ALTER TABLE stats
+
+                ADD COLUMN updated_at
+                DATETIME DEFAULT CURRENT_TIMESTAMP
+
+            `);
+
+                console.log(
+                    "🚀 Coluna updated_at adicionada"
+                );
+
+            }
+
+            // 🚀 Bootstrap seguro
+            db.get(
+
+                `
+            SELECT * FROM stats
+            LIMIT 1
+            `,
+
+                [],
+
+                (bootstrapError, row) => {
+
+                    if (bootstrapError) {
+
+                        console.log(
+                            "❌ Erro bootstrap stats:",
+                            bootstrapError.message
+                        );
+
+                        return;
+
+                    }
+
+                    // 📦 Cria somente se vazio
+                    if (!row) {
+
+                        db.run(
+
+                            `
+                        INSERT INTO stats (
+                            sent_promos
+                        )
+
+                        VALUES (0)
+                        `,
+
+                            insertError => {
+
+                                if (insertError) {
+
+                                    console.log(
+                                        "❌ Erro insert stats:",
+                                        insertError.message
+                                    );
+
+                                    return;
+
+                                }
+
+                                console.log(
+                                    "📈 Stats bootstrap criado"
+                                );
+
+                            }
+
+                        );
+
+                    }
+
+                }
+
+            );
+
+        }
+
+    );
 
     // 📜 Logs runtime
     db.run(`
