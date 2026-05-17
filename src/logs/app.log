@@ -745,3 +745,27 @@
 [2026-05-17 13:04:32] WARN: Cliente realtime desconectado: NUw91QRNqa3kgOq-AAAB
 [2026-05-17 13:04:46] WARN: Telegram encerrado via SIGINT
 [2026-05-17 13:04:46] WARN: Encerrando aplicação...
+[2026-05-17 13:27:39] INFO: Inicializando Live Metrics...
+[2026-05-17 13:27:39] INFO: Live Metrics iniciado
+[2026-05-17 13:27:39] INFO: Telegram bot iniciado
+[2026-05-17 13:27:39] INFO: Scheduler iniciado
+[2026-05-17 13:27:39] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:27:39] INFO: Tabela stats validada
+[2026-05-17 13:27:51] INFO: Auth route acessada: GET /login
+[2026-05-17 13:27:58] INFO: Auth route acessada: POST /login
+[2026-05-17 13:27:58] INFO: Login administrativo realizado: admin
+[2026-05-17 13:27:58] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:27:58] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:27:58] INFO: Dashboard acessado
+[2026-05-17 13:27:58] INFO: Cliente realtime conectado: AVJWgKo2szn6w3mZAAAB
+[2026-05-17 13:28:07] INFO: Mensagem recebida: 7999895751 -> menu
+[2026-05-17 13:28:07] INFO: Mensagem recebida: 7999895751 -> menu
+[2026-05-17 13:28:07] INFO: Chat salvo: 7999895751
+[2026-05-17 13:28:14] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 13:28:14] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 13:28:14] INFO: Chat salvo: 7999895751
+[2026-05-17 13:28:14] INFO: Produto selecionado: Teclado Mecânico
+[2026-05-17 13:28:14] INFO: Promo incrementada
+[2026-05-17 13:28:14] INFO: Promo enviada para 7999895751
+[2026-05-17 13:28:28] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:28:28] WARN: Encerrando aplicação...

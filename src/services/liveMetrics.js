@@ -1,5 +1,10 @@
+// 🚀 DealFlowAI Live Metrics Service
+
 const {
+
     logger,
+    sendRuntimeLog
+
 } = require(
     "./logger"
 );
@@ -22,6 +27,9 @@ let metricsInterval = null;
 // 📦 Último payload
 let lastPayload = null;
 
+// ⏱️ Timestamp último envio
+let lastEmitAt = null;
+
 // 📡 Inicializa métricas realtime
 function startLiveMetrics(io) {
 
@@ -36,38 +44,77 @@ function startLiveMetrics(io) {
 
     }
 
+    logger.info(
+        "Inicializando Live Metrics..."
+    );
+
     metricsInterval = setInterval(async () => {
 
         try {
 
+            // 📊 Estatísticas
             const stats =
                 await getStats();
 
+            // 👥 Usuários
             const users =
                 await getAllUsers();
 
-            // 📊 Payload realtime
+            // 💾 Memória
+            const memoryUsage =
+                process.memoryUsage();
+
+            // 📦 Payload realtime
             const payload = {
 
                 promos:
-                    stats.sent_promos,
+                    stats?.sent_promos || 0,
 
                 users:
-                    users.length,
+                    users.length || 0,
 
                 uptime:
                     Math.floor(
                         process.uptime()
                     ),
 
-                memory:
-                    Math.round(
+                memory: {
 
-                        process.memoryUsage().rss
-                        / 1024
-                        / 1024
+                    rss:
+                        Math.round(
 
-                    ),
+                            memoryUsage.rss
+                            / 1024
+                            / 1024
+
+                        ),
+
+                    heapUsed:
+                        Math.round(
+
+                            memoryUsage.heapUsed
+                            / 1024
+                            / 1024
+
+                        ),
+
+                    heapTotal:
+                        Math.round(
+
+                            memoryUsage.heapTotal
+                            / 1024
+                            / 1024
+
+                        ),
+
+                },
+
+                environment:
+                    process.env.NODE_ENV ||
+                    "development",
+
+                nodeVersion:
+                    process.version,
 
                 timestamp:
                     new Date(),
@@ -77,7 +124,7 @@ function startLiveMetrics(io) {
 
             };
 
-            // 🚫 Evita broadcast repetido
+            // 🚫 Evita broadcast duplicado
             if (
 
                 JSON.stringify(payload) ===
@@ -91,19 +138,38 @@ function startLiveMetrics(io) {
 
             // 📡 Broadcast realtime
             io.emit(
+
                 "live-metrics",
+
                 payload
+
             );
 
-            // 💾 Salva payload
+            // 💾 Cache payload
             lastPayload =
                 payload;
+
+            // ⏱️ Timestamp
+            lastEmitAt =
+                Date.now();
 
         } catch (error) {
 
             logger.error(
 
                 `Erro live metrics: ${error.message}`
+
+            );
+
+            // 📡 Runtime log
+            await sendRuntimeLog(
+
+                "❌ Live Metrics Error",
+
+                error.stack ||
+                error.message,
+
+                "error"
 
             );
 
@@ -118,21 +184,74 @@ function startLiveMetrics(io) {
 }
 
 // 🛑 Encerra realtime
-function stopLiveMetrics() {
+async function stopLiveMetrics() {
 
-    if (metricsInterval) {
+    try {
+
+        if (!metricsInterval) {
+
+            logger.warn(
+                "Live Metrics já parado"
+            );
+
+            return;
+
+        }
 
         clearInterval(
             metricsInterval
         );
 
-        metricsInterval = null;
+        metricsInterval =
+            null;
+
+        lastPayload =
+            null;
+
+        lastEmitAt =
+            null;
 
         logger.warn(
             "Live Metrics encerrado"
         );
 
+        // 📡 Runtime log
+        await sendRuntimeLog(
+
+            "🛑 Live Metrics Offline",
+
+            "Realtime metrics service encerrado.",
+
+            "warn"
+
+        );
+
+    } catch (error) {
+
+        logger.error(
+            `Erro stopLiveMetrics: ${error.message}`
+        );
+
     }
+
+}
+
+// 📊 Status realtime
+function getLiveMetricsStatus() {
+
+    return {
+
+        active:
+            Boolean(metricsInterval),
+
+        lastEmitAt,
+
+        uptime:
+            Math.floor(
+                process.uptime()
+            ),
+
+    };
 
 }
 
@@ -141,5 +260,7 @@ module.exports = {
     startLiveMetrics,
 
     stopLiveMetrics,
+
+    getLiveMetricsStatus,
 
 };
