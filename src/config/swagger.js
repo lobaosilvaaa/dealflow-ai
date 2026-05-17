@@ -1,6 +1,17 @@
+// 🚀 DealFlowAI Swagger Configuration
+
 const swaggerJsdoc =
     require("swagger-jsdoc");
 
+// 🌎 Ambiente
+const PORT =
+    process.env.PORT || 3000;
+
+const HOST =
+    process.env.APP_URL ||
+    `http://localhost:${PORT}`;
+
+// 📚 Swagger Spec
 const swaggerSpec =
     swaggerJsdoc({
 
@@ -18,18 +29,44 @@ const swaggerSpec =
 
                 description:
                     `
-                    API oficial da plataforma DealFlow AI.
+# 🚀 DealFlow AI API
 
-                    Plataforma SaaS para automação de promoções,
-                    analytics realtime e observabilidade.
+Plataforma SaaS para automação inteligente de promoções, analytics realtime e observabilidade distribuída.
 
-                    Recursos:
-                    - JWT Authentication
-                    - Dashboard Realtime
-                    - WebSockets
-                    - Analytics Live
-                    - Logs Distribuídos
+## 🔥 Recursos
+
+- JWT Authentication
+- Dashboard Realtime
+- Socket.IO
+- WebSockets
+- Live Metrics
+- Runtime Monitoring
+- Distributed Logs
+- Swagger/OpenAPI
+- Telegram Automation
+
+## 🔐 Segurança
+
+Todas as rotas protegidas utilizam:
+
+- Bearer Token
+- JWT Authentication
+- Middleware Authorization
+
+## 📡 Observabilidade
+
+A plataforma possui:
+
+- Runtime Logs
+- Discord Webhooks
+- Live Monitoring
+- Error Tracking
+- Healthcheck
+- Realtime Analytics
                     `,
+
+                termsOfService:
+                    "https://dealflow.ai/terms",
 
                 contact: {
 
@@ -47,7 +84,10 @@ const swaggerSpec =
                 license: {
 
                     name:
-                        "MIT"
+                        "MIT",
+
+                    url:
+                        "https://opensource.org/licenses/MIT"
 
                 }
 
@@ -58,10 +98,20 @@ const swaggerSpec =
                 {
 
                     url:
+                        HOST,
+
+                    description:
+                        "Servidor Atual"
+
+                },
+
+                {
+
+                    url:
                         "http://localhost:3000",
 
                     description:
-                        "Servidor local DEV"
+                        "Servidor Local DEV"
 
                 }
 
@@ -72,10 +122,30 @@ const swaggerSpec =
                 {
 
                     name:
+                        "Authentication",
+
+                    description:
+                        "Endpoints de autenticação"
+
+                },
+
+                {
+
+                    name:
                         "DealFlow API",
 
                     description:
                         "Endpoints principais da plataforma"
+
+                },
+
+                {
+
+                    name:
+                        "Health",
+
+                    description:
+                        "Healthcheck e monitoramento"
 
                 }
 
@@ -91,7 +161,182 @@ const swaggerSpec =
 
                         scheme: "bearer",
 
-                        bearerFormat: "JWT"
+                        bearerFormat: "JWT",
+
+                        description:
+                            "Insira o token JWT no formato: Bearer TOKEN"
+
+                    }
+
+                },
+
+                schemas: {
+
+                    StatsResponse: {
+
+                        type: "object",
+
+                        properties: {
+
+                            success: {
+
+                                type: "boolean"
+
+                            },
+
+                            stats: {
+
+                                type: "object",
+
+                                properties: {
+
+                                    sentPromos: {
+
+                                        type: "integer",
+
+                                        example: 120
+
+                                    },
+
+                                    totalUsers: {
+
+                                        type: "integer",
+
+                                        example: 25
+
+                                    },
+
+                                    uptime: {
+
+                                        type: "integer",
+
+                                        example: 3600
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    UserResponse: {
+
+                        type: "object",
+
+                        properties: {
+
+                            success: {
+
+                                type: "boolean"
+
+                            },
+
+                            users: {
+
+                                type: "array",
+
+                                items: {
+
+                                    type: "object",
+
+                                    properties: {
+
+                                        chat_id: {
+
+                                            type: "string",
+
+                                            example: "123456789"
+
+                                        },
+
+                                        category: {
+
+                                            type: "string",
+
+                                            example: "gamer"
+
+                                        },
+
+                                        frequency: {
+
+                                            type: "integer",
+
+                                            example: 60
+
+                                        },
+
+                                        active: {
+
+                                            type: "integer",
+
+                                            example: 1
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    LogsResponse: {
+
+                        type: "object",
+
+                        properties: {
+
+                            success: {
+
+                                type: "boolean"
+
+                            },
+
+                            logs: {
+
+                                type: "array",
+
+                                items: {
+
+                                    type: "string"
+
+                                }
+
+                            }
+
+                        }
+
+                    },
+
+                    ErrorResponse: {
+
+                        type: "object",
+
+                        properties: {
+
+                            success: {
+
+                                type: "boolean",
+
+                                example: false
+
+                            },
+
+                            error: {
+
+                                type: "string",
+
+                                example: "Token inválido"
+
+                            }
+
+                        }
 
                     }
 
@@ -119,5 +364,6 @@ const swaggerSpec =
 
     });
 
+// 🚀 Exporta spec
 module.exports =
     swaggerSpec;
