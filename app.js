@@ -2,6 +2,23 @@
 
 require("dotenv").config();
 
+// 🚨 Segurança ENV
+if (
+
+    !process.env.TELEGRAM_BOT_TOKEN ||
+    !process.env.SESSION_SECRET ||
+    !process.env.JWT_SECRET
+
+) {
+
+    console.log(
+        "❌ Variáveis .env ausentes"
+    );
+
+    process.exit(1);
+
+}
+
 const express =
     require("express");
 
@@ -10,6 +27,18 @@ const session =
 
 const http =
     require("http");
+
+const path =
+    require("path");
+
+const helmet =
+    require("helmet");
+
+const compression =
+    require("compression");
+
+const cors =
+    require("cors");
 
 const {
     Server,
@@ -35,7 +64,10 @@ const {
 
 // 📡 Live Metrics
 const {
+
     startLiveMetrics,
+    stopLiveMetrics
+
 } = require(
     "./src/services/liveMetrics"
 );
@@ -52,7 +84,10 @@ const {
 
 // ⏰ Scheduler
 const {
+
     startScheduler,
+    stopScheduler
+
 } = require(
     "./src/services/scheduler"
 );
@@ -78,6 +113,15 @@ const app =
 const server =
     http.createServer(app);
 
+// 🌎 Ambiente
+const ENVIRONMENT =
+    process.env.NODE_ENV ||
+    "development";
+
+// ⚙️ Porta
+const PORT =
+    process.env.PORT || 3000;
+
 // 🔌 Socket.IO
 const io =
     new Server(server, {
@@ -93,53 +137,44 @@ const io =
 // 🔗 Socket no logger
 setSocket(io);
 
-// 📡 Inicializa live metrics
-startLiveMetrics(io);
-
-// 🔌 Cliente realtime
-io.on("connection", socket => {
-
-    logger.info(
-        `Cliente realtime conectado: ${socket.id}`
-    );
-
-    socket.on("disconnect", () => {
-
-        logger.warn(
-            `Cliente realtime desconectado: ${socket.id}`
-        );
-
-    });
-
-});
-
-// ⚙️ Configurações
-const PORT =
-    process.env.PORT || 3000;
-
-// 🚀 EJS
-app.set(
-    "view engine",
-    "ejs"
+// 🛡️ Helmet
+app.use(
+    helmet()
 );
 
-app.set(
-    "views",
-    "./src/views"
+// 📦 Compression
+app.use(
+    compression()
 );
 
-// 📦 Middlewares
+// 🌐 CORS
+app.use(cors());
+
+// 📦 Body Parser
 app.use(express.urlencoded({
 
     extended: true
 
 }));
 
-app.use(express.json());
+app.use(express.json({
+
+    limit: "10mb"
+
+}));
 
 // 🌐 Arquivos estáticos
 app.use(
-    express.static("public")
+
+    express.static(
+
+        path.join(
+            __dirname,
+            "public"
+        )
+
+    )
+
 );
 
 // 🔐 Sessão
@@ -154,9 +189,12 @@ app.use(session({
 
     cookie: {
 
-        secure: false,
+        secure:
+            ENVIRONMENT === "production",
 
         httpOnly: true,
+
+        sameSite: "lax",
 
         maxAge:
             1000 * 60 * 60 * 24
@@ -164,6 +202,23 @@ app.use(session({
     }
 
 }));
+
+// 🚀 EJS
+app.set(
+    "view engine",
+    "ejs"
+);
+
+app.set(
+
+    "views",
+
+    path.join(
+        __dirname,
+        "src/views"
+    )
+
+);
 
 // 📚 Swagger
 app.use(
@@ -175,6 +230,42 @@ app.use(
     swaggerUi.setup(
         swaggerSpec
     )
+
+);
+
+// 📡 Live Metrics
+startLiveMetrics(io);
+
+// 🔌 Cliente realtime
+io.on(
+
+    "connection",
+
+    socket => {
+
+        logger.info(
+
+            `Cliente realtime conectado: ${socket.id}`
+
+        );
+
+        socket.on(
+
+            "disconnect",
+
+            () => {
+
+                logger.warn(
+
+                    `Cliente realtime desconectado: ${socket.id}`
+
+                );
+
+            }
+
+        );
+
+    }
 
 );
 
@@ -190,17 +281,69 @@ app.use(apiRoutes);
 // 🏠 Home
 app.get("/", (req, res) => {
 
-    res.send(
-        "🚀 DealFlow AI rodando"
-    );
+    return res.json({
+
+        success: true,
+
+        service:
+            "DealFlowAI",
+
+        environment:
+            ENVIRONMENT,
+
+        status:
+            "online",
+
+        uptime:
+            Math.floor(
+                process.uptime()
+            ),
+
+    });
 
 });
 
-// ❌ Rota inexistente
+// ❤️ Healthcheck
+app.get("/health", (req, res) => {
+
+    return res.json({
+
+        success: true,
+
+        status:
+            "healthy",
+
+        environment:
+            ENVIRONMENT,
+
+        uptime:
+            Math.floor(
+                process.uptime()
+            ),
+
+        memory:
+            Math.round(
+
+                process.memoryUsage().rss
+                / 1024
+                / 1024
+
+            ),
+
+        timestamp:
+            new Date(),
+
+    });
+
+});
+
+// ❌ 404 Global
 app.use((req, res) => {
 
     logger.warn(
+
         `Rota inexistente: ${req.originalUrl}`
+
     );
 
     return res.status(404).json({
@@ -214,55 +357,140 @@ app.use((req, res) => {
 
 });
 
-// 🚀 Inicializa servidor
-server.listen(PORT, async () => {
+// ❌ Error Handler Global
+app.use((
 
-    logger.info(
-        `Servidor rodando na porta ${PORT}`
+    error,
+    req,
+    res,
+    next
+
+) => {
+
+    logger.error(
+        error.stack ||
+        error.message
     );
 
-    await sendRuntimeLog(
+    return res.status(500).json({
 
-        "🚀 Sistema Online",
+        success: false,
 
-        "DealFlow AI iniciado com sucesso.",
+        error:
+            "Erro interno servidor"
 
-        "success"
-
-    );
+    });
 
 });
 
-// 🤖 Inicializa Telegram
-startTelegramBot();
+// 🚀 Inicializa servidor
+server.listen(
 
-// ⏰ Inicializa Scheduler
-startScheduler(bot);
-
-// 🛑 Shutdown seguro
-process.on(
-
-    "SIGINT",
+    PORT,
 
     async () => {
 
-        logger.warn(
-            "Encerrando aplicação..."
+        logger.info(
+
+            `Servidor rodando na porta ${PORT}`
+
         );
 
+        // 🤖 Telegram
+        startTelegramBot();
+
+        // ⏰ Scheduler
+        startScheduler(bot);
+
+        // 📡 Runtime
+        await sendRuntimeLog(
+
+            "🚀 Sistema Online",
+
+            `DealFlow AI iniciado com sucesso.
+
+🌎 Environment: ${ENVIRONMENT}
+🚀 Port: ${PORT}
+⚡ Status: Online`,
+
+            "core",
+
+            "healthy",
+
+            "🚀 Startup"
+
+        );
+
+    }
+
+);
+
+// 🛑 Graceful Shutdown
+async function gracefulShutdown(signal) {
+
+    try {
+
+        logger.warn(
+            `Encerrando aplicação (${signal})`
+        );
+
+        // 📡 Runtime
         await sendRuntimeLog(
 
             "🛑 Sistema Offline",
 
-            "DealFlow AI foi encerrado.",
+            `DealFlow AI encerrado (${signal})`,
 
-            "warn"
+            "core",
+
+            "offline",
+
+            "🛑 Shutdown"
 
         );
 
-        process.exit();
+        // 🛑 Serviços
+        await stopScheduler();
+
+        await stopLiveMetrics();
+
+        // 🌐 Fecha server
+        server.close(() => {
+
+            logger.info(
+                "Servidor HTTP encerrado"
+            );
+
+            process.exit(0);
+
+        });
+
+    } catch (error) {
+
+        logger.error(
+            `Erro shutdown: ${error.message}`
+        );
+
+        process.exit(1);
 
     }
+
+}
+
+// 🛑 Signals
+process.on(
+
+    "SIGINT",
+
+    () => gracefulShutdown("SIGINT")
+
+);
+
+process.on(
+
+    "SIGTERM",
+
+    () => gracefulShutdown("SIGTERM")
 
 );
 
@@ -286,7 +514,11 @@ process.on(
             error.stack ||
             error.message,
 
-            "error"
+            "core",
+
+            "error",
+
+            "💥 Exceptions"
 
         );
 
@@ -313,7 +545,11 @@ process.on(
 
             String(error),
 
-            "error"
+            "core",
+
+            "error",
+
+            "💥 Promises"
 
         );
 
