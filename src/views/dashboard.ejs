@@ -5,6 +5,8 @@
 
     <meta charset="UTF-8">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>
         DealFlow AI Dashboard
     </title>
@@ -22,19 +24,43 @@
     <!-- 🚀 Topbar -->
     <div class="topbar">
 
-        <h1>
-            🚀 DealFlow AI Dashboard
-        </h1>
+        <div>
 
-        <a href="/logout" class="logout">
-            🚪 Logout
-        </a>
+            <h1>
+                🚀 DealFlow AI Dashboard
+            </h1>
+
+            <p class="subtitle">
+
+                Plataforma SaaS de automação inteligente
+
+            </p>
+
+        </div>
+
+        <div class="topbar-actions">
+
+            <div class="environment-badge">
+
+                🌎
+                <%= environment || "development" %>
+
+            </div>
+
+            <a href="/logout" class="logout">
+
+                🚪 Logout
+
+            </a>
+
+        </div>
 
     </div>
 
     <!-- 📊 Cards -->
     <div class="cards">
 
+        <!-- 📤 Promoções -->
         <div class="card">
 
             <h2>
@@ -47,6 +73,7 @@
 
         </div>
 
+        <!-- 👥 Usuários -->
         <div class="card">
 
             <h2>
@@ -59,6 +86,7 @@
 
         </div>
 
+        <!-- ⏱️ Uptime -->
         <div class="card">
 
             <h2>
@@ -66,7 +94,24 @@
             </h2>
 
             <p id="uptimeCount">
+
                 <%= Math.floor(uptime) %>s
+
+            </p>
+
+        </div>
+
+        <!-- 💾 Memória -->
+        <div class="card">
+
+            <h2>
+                💾 Memória
+            </h2>
+
+            <p id="memoryCount">
+
+                <%= memoryUsage || 0 %> MB
+
             </p>
 
         </div>
@@ -76,9 +121,19 @@
     <!-- 📈 Analytics -->
     <div class="card">
 
-        <h2>
-            📈 Analytics
-        </h2>
+        <div class="section-header">
+
+            <h2>
+                📈 Analytics
+            </h2>
+
+            <span class="live-badge">
+
+                🟢 LIVE
+
+            </span>
+
+        </div>
 
         <div class="analytics-wrapper">
 
@@ -91,144 +146,270 @@
     <!-- 📜 Logs -->
     <div class="card">
 
-        <h2>
-            📜 Logs Recentes
-        </h2>
+        <div class="section-header">
+
+            <h2>
+                📜 Logs Recentes
+            </h2>
+
+            <span class="live-badge">
+
+                ⚡ Realtime
+
+            </span>
+
+        </div>
 
         <div class="logs-container" id="logsContainer">
 
-            <% logs.forEach(log=> { %>
+            <% if (logs.length===0) { %>
 
                 <div class="log-item">
 
-                    <%= log %>
+                    Nenhum log encontrado.
 
                 </div>
 
-                <% }) %>
+                <% } %>
+
+                    <% logs.forEach(log=> { %>
+
+                        <div class="log-item">
+
+                            <%= log %>
+
+                        </div>
+
+                        <% }) %>
 
         </div>
 
     </div>
 
     <!-- 👥 Usuários -->
-    <table>
+    <div class="card">
 
-        <thead>
+        <div class="section-header">
 
-            <tr>
+            <h2>
+                👥 Usuários
+            </h2>
 
-                <th>
-                    Chat ID
-                </th>
+            <span class="live-badge">
 
-                <th>
-                    Categoria
-                </th>
+                <%= totalUsers %> online
 
-                <th>
-                    Frequência
-                </th>
+            </span>
 
-                <th>
-                    Status
-                </th>
+        </div>
 
-                <th>
-                    Ações
-                </th>
+        <div class="table-wrapper">
 
-            </tr>
+            <table>
 
-        </thead>
+                <thead>
 
-        <tbody>
+                    <tr>
 
-            <% users.forEach(user=> { %>
+                        <th>
+                            Chat ID
+                        </th>
 
-                <tr>
+                        <th>
+                            Categoria
+                        </th>
 
-                    <td>
-                        <%= user.chat_id %>
-                    </td>
+                        <th>
+                            Frequência
+                        </th>
 
-                    <td>
-                        <%= user.category %>
-                    </td>
+                        <th>
+                            Status
+                        </th>
 
-                    <td>
-                        <%= user.frequency %> min
-                    </td>
+                        <th>
+                            Ações
+                        </th>
 
-                    <td>
+                    </tr>
 
-                        <% if (user.active) { %>
+                </thead>
 
-                            <span class="status-active">
-                                🟢 Ativo
-                            </span>
+                <tbody>
 
-                            <% } else { %>
+                    <% if (users.length===0) { %>
 
-                                <span class="status-paused">
-                                    🔴 Pausado
-                                </span>
+                        <tr>
 
-                                <% } %>
+                            <td colspan="5">
 
-                    </td>
+                                Nenhum usuário registrado.
 
-                    <td>
+                            </td>
 
-                        <div class="actions">
+                        </tr>
 
-                            <% if (user.active) { %>
+                        <% } %>
 
-                                <form method="POST" action="/admin/pause/<%= user.chat_id %>">
+                            <% users.forEach(user=> { %>
 
-                                    <button class="btn-pause">
+                                <tr>
 
-                                        ⏸️ Pausar
+                                    <td>
 
-                                    </button>
+                                        <%= user.chat_id %>
 
-                                </form>
+                                    </td>
 
-                                <% } else { %>
+                                    <td>
 
-                                    <form method="POST" action="/admin/activate/<%= user.chat_id %>">
+                                        <%= user.category %>
 
-                                        <button class="btn-activate">
+                                    </td>
 
-                                            ▶️ Ativar
+                                    <td>
 
-                                        </button>
+                                        <%= user.frequency %> min
 
-                                    </form>
+                                    </td>
 
-                                    <% } %>
+                                    <td>
 
-                                        <form method="POST" action="/admin/delete/<%= user.chat_id %>">
+                                        <% if (user.active) { %>
 
-                                            <button class="btn-delete">
+                                            <span class="status-active">
 
-                                                🗑️ Remover
+                                                🟢 Ativo
 
-                                            </button>
+                                            </span>
 
-                                        </form>
+                                            <% } else { %>
 
-                        </div>
+                                                <span class="status-paused">
 
-                    </td>
+                                                    🔴 Pausado
 
-                </tr>
+                                                </span>
 
-                <% }) %>
+                                                <% } %>
 
-        </tbody>
+                                    </td>
 
-    </table>
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <% if (user.active) { %>
+
+                                                <form method="POST" action="/admin/pause/<%= user.chat_id %>">
+
+                                                    <button class="btn-pause" type="submit">
+
+                                                        ⏸️ Pausar
+
+                                                    </button>
+
+                                                </form>
+
+                                                <% } else { %>
+
+                                                    <form method="POST" action="/admin/activate/<%= user.chat_id %>">
+
+                                                        <button class="btn-activate" type="submit">
+
+                                                            ▶️ Ativar
+
+                                                        </button>
+
+                                                    </form>
+
+                                                    <% } %>
+
+                                                        <form method="POST" action="/admin/delete/<%= user.chat_id %>"
+                                                            onsubmit="return confirm('Deseja remover este usuário?')">
+
+                                                            <button class="btn-delete" type="submit">
+
+                                                                🗑️ Remover
+
+                                                            </button>
+
+                                                        </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                                <% }) %>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- ⚙️ System Info -->
+    <div class="card">
+
+        <div class="section-header">
+
+            <h2>
+                ⚙️ System Info
+            </h2>
+
+        </div>
+
+        <div class="system-grid">
+
+            <div class="system-item">
+
+                <strong>
+                    🌎 Ambiente:
+                </strong>
+
+                <span>
+
+                    <%= environment || "development" %>
+
+                </span>
+
+            </div>
+
+            <div class="system-item">
+
+                <strong>
+                    🟢 Node:
+                </strong>
+
+                <span>
+
+                    <%= nodeVersion || "N/A" %>
+
+                </span>
+
+            </div>
+
+            <div class="system-item">
+
+                <strong>
+                    💾 RAM:
+                </strong>
+
+                <span>
+
+                    <%= memoryUsage || 0 %> MB
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <!-- 🔌 Socket.IO -->
     <script src="/socket.io/socket.io.js"></script>

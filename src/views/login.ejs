@@ -2,30 +2,115 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Login - DealFlow AI</title>
 
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        Login • DealFlow AI
+    </title>
+
+    <!-- 🎨 CSS -->
     <link rel="stylesheet" href="/css/login.css">
 
 </head>
 
 <body>
 
-    <div class="box">
+    <!-- 🌌 Background -->
+    <div class="background-overlay"></div>
 
-        <h2>🔐 DealFlow AI</h2>
+    <!-- 🚀 Login Container -->
+    <div class="login-container">
 
-        <form method="POST" action="/login">
+        <!-- 🚀 Brand -->
+        <div class="brand">
 
-            <input type="text" name="username" placeholder="Usuário" required>
+            <h1>
+                🚀 DealFlow AI
+            </h1>
 
-            <input type="password" name="password" placeholder="Senha" required>
+            <p>
 
-            <button type="submit">
-                Entrar
-            </button>
+                Plataforma SaaS de automação,
+                analytics e observabilidade realtime.
 
-        </form>
+            </p>
+
+        </div>
+
+        <!-- 🔐 Login Box -->
+        <div class="box">
+
+            <div class="login-header">
+
+                <h2>
+                    🔐 Login Administrativo
+                </h2>
+
+                <span class="status-badge">
+
+                    🟢 Online
+
+                </span>
+
+            </div>
+
+            <!-- 📝 Form -->
+            <form method="POST" action="/login" class="login-form">
+
+                <!-- 👤 Username -->
+                <div class="input-group">
+
+                    <label>
+                        Usuário
+                    </label>
+
+                    <input type="text" name="username" placeholder="Digite seu usuário" autocomplete="username"
+                        required>
+
+                </div>
+
+                <!-- 🔑 Password -->
+                <div class="input-group">
+
+                    <label>
+                        Senha
+                    </label>
+
+                    <input type="password" name="password" placeholder="Digite sua senha"
+                        autocomplete="current-password" required>
+
+                </div>
+
+                <!-- 🚀 Submit -->
+                <button type="submit" class="login-button">
+
+                    🚀 Entrar no Dashboard
+
+                </button>
+
+            </form>
+
+            <!-- ⚙️ Footer -->
+            <div class="login-footer">
+
+                <span>
+
+                    ⚙️ DealFlow AI Runtime
+
+                </span>
+
+                <span>
+
+                    Node.js • Express • Socket.IO
+
+                </span>
+
+            </div>
+
+        </div>
 
     </div>
 
