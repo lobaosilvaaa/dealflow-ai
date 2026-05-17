@@ -360,3 +360,18 @@
 [2026-05-17 12:13:50] WARN: Encerrando aplicação...
 [2026-05-17 12:13:50] WARN: Cliente realtime desconectado: i_7nSMiA3XOgkXDNAAAD
 [2026-05-17 12:13:50] WARN: Servidor encerrado
+[2026-05-17 12:15:28] INFO: Live Metrics iniciado
+[2026-05-17 12:15:28] INFO: Telegram bot iniciado
+[2026-05-17 12:15:28] INFO: Telegram bot iniciado
+[2026-05-17 12:15:28] INFO: Scheduler iniciado
+[2026-05-17 12:15:28] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:15:31] INFO: Cliente realtime conectado: jarq9Ly0988uRYUOAAAB
+[2026-05-17 12:15:39] INFO: Promo enviada para 7999895751
+[2026-05-17 12:15:39] INFO: Promo enviada para 7999895751.0
+[2026-05-17 12:15:54] INFO: Mensagem recebida: 7999895751 -> menu
+[2026-05-17 12:15:59] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 12:15:59] INFO: Promo enviada para 7999895751
+[2026-05-17 12:16:13] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:16:13] WARN: Encerrando aplicação...
+[2026-05-17 12:16:13] WARN: Cliente realtime desconectado: jarq9Ly0988uRYUOAAAB
+[2026-05-17 12:16:13] WARN: Servidor encerrado

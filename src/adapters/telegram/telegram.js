@@ -1,3 +1,5 @@
+// 🚀 DealFlowAI Telegram Adapter
+
 const {
     Telegraf
 } = require(
@@ -10,7 +12,27 @@ const {
     "../../core/bot"
 );
 
-// 🤖 Instância do bot
+const {
+    logger,
+    sendRuntimeLog
+} = require(
+    "../../services/logger"
+);
+
+// 🛡️ Token obrigatório
+if (
+
+    !process.env.TELEGRAM_BOT_TOKEN
+
+) {
+
+    throw new Error(
+        "TELEGRAM_BOT_TOKEN não definido"
+    );
+
+}
+
+// 🤖 Instância bot
 const bot =
     new Telegraf(
         process.env.TELEGRAM_BOT_TOKEN
@@ -19,31 +41,118 @@ const bot =
 // 🚀 Inicializa Telegram
 function startTelegramBot() {
 
-    // 📩 Recebe mensagens de texto
+    // 📩 Recebe mensagens texto
     bot.on("text", async ctx => {
 
         try {
 
+            // 🛡️ Context validation
+            if (
+
+                !ctx ||
+                !ctx.message
+
+            ) {
+
+                logger.warn(
+                    "Contexto Telegram inválido"
+                );
+
+                return;
+
+            }
+
+            const chatId =
+                ctx.chat?.id;
+
+            const username =
+                ctx.from?.username ||
+                "unknown";
+
+            const text =
+                ctx.message?.text ||
+                "";
+
+            // 📜 Log entrada
+            logger.info(
+
+                `Mensagem recebida: ${chatId} -> ${text}`
+
+            );
+
+            // 🚀 Runtime Discord
+            await sendRuntimeLog(
+
+                "📩 Telegram Message",
+
+                `Nova mensagem recebida.
+
+👤 User: ${username}
+🆔 Chat ID: ${chatId}
+💬 Message: ${text}`,
+
+                "info"
+
+            );
+
+            // 🤖 Processa bot
             await processMessage(ctx);
 
         } catch (error) {
+
+            logger.error(
+
+                `Erro Telegram: ${error.message}`
+
+            );
 
             console.log(
                 "❌ Erro Telegram:",
                 error.message
             );
 
+            // 🚨 Runtime alert
+            await sendRuntimeLog(
+
+                "❌ Telegram Error",
+
+                error.stack ||
+                error.message,
+
+                "error"
+
+            );
+
+            // 🛡️ Tenta responder
             try {
 
-                await ctx.reply(
-                    "❌ Erro interno no bot."
-                );
+                if (
+
+                    ctx &&
+                    typeof ctx.reply === "function"
+
+                ) {
+
+                    await ctx.reply(
+                        "❌ Erro interno no bot."
+                    );
+
+                }
 
             } catch (replyError) {
 
+                logger.error(
+
+                    `Erro reply Telegram: ${replyError.message}`
+
+                );
+
                 console.log(
+
                     "❌ Erro ao responder usuário:",
+
                     replyError.message
+
                 );
 
             }
@@ -55,8 +164,23 @@ function startTelegramBot() {
     // 🚀 Inicializa bot
     bot.launch();
 
+    logger.info(
+        "Telegram bot iniciado"
+    );
+
     console.log(
         "🤖 Telegram bot rodando..."
+    );
+
+    // 🚀 Runtime startup
+    sendRuntimeLog(
+
+        "🤖 Telegram Online",
+
+        "Telegram bot iniciado com sucesso.",
+
+        "success"
+
     );
 
     // 🛑 Encerramento seguro
@@ -64,7 +188,25 @@ function startTelegramBot() {
 
         "SIGINT",
 
-        () => bot.stop("SIGINT")
+        async () => {
+
+            logger.warn(
+                "Telegram encerrado via SIGINT"
+            );
+
+            await sendRuntimeLog(
+
+                "🛑 Telegram Offline",
+
+                "Telegram bot encerrado via SIGINT.",
+
+                "warn"
+
+            );
+
+            bot.stop("SIGINT");
+
+        }
 
     );
 
@@ -72,9 +214,49 @@ function startTelegramBot() {
 
         "SIGTERM",
 
-        () => bot.stop("SIGTERM")
+        async () => {
+
+            logger.warn(
+                "Telegram encerrado via SIGTERM"
+            );
+
+            await sendRuntimeLog(
+
+                "🛑 Telegram Offline",
+
+                "Telegram bot encerrado via SIGTERM.",
+
+                "warn"
+
+            );
+
+            bot.stop("SIGTERM");
+
+        }
 
     );
+
+    // 🚨 Captura erros internos Telegraf
+    bot.catch(async error => {
+
+        logger.error(
+
+            `Telegraf internal error: ${error.message}`
+
+        );
+
+        await sendRuntimeLog(
+
+            "❌ Telegraf Error",
+
+            error.stack ||
+            error.message,
+
+            "error"
+
+        );
+
+    });
 
 }
 
