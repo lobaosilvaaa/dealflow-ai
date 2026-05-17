@@ -22,7 +22,7 @@ const {
     "../middlewares/jwtMiddleware"
 );
 
-// 🔐 Middleware global JWT
+// 🔐 Middleware JWT apenas API
 router.use(
     verifyToken
 );

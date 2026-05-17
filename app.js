@@ -176,16 +176,7 @@ app.use(
 
 );
 
-// 🌐 Rotas
-app.use(authRoutes);
-
-app.use(dashboardRoutes);
-
-app.use(adminRoutes);
-
-app.use(apiRoutes);
-
-// 🏠 Home
+// 🏠 Home pública
 app.get("/", (req, res) => {
 
     res.send(
@@ -194,7 +185,7 @@ app.get("/", (req, res) => {
 
 });
 
-// ❤️ Healthcheck
+// ❤️ Healthcheck público
 app.get("/health", (req, res) => {
 
     res.json({
@@ -218,6 +209,17 @@ app.get("/health", (req, res) => {
     });
 
 });
+
+// 🌐 Rotas públicas
+app.use(authRoutes);
+
+// 🔐 Dashboard protegido por sessão
+app.use(dashboardRoutes);
+
+app.use(adminRoutes);
+
+// 🔐 API protegida por JWT
+app.use(apiRoutes);
 
 // 🚀 Inicializa servidor
 server.listen(PORT, async () => {

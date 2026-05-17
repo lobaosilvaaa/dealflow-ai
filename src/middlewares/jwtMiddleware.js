@@ -24,7 +24,7 @@ function verifyToken(
         // ⛔ Header ausente
         if (!authHeader) {
 
-            logger.warn(
+            logger.info(
                 "JWT ausente"
             );
 

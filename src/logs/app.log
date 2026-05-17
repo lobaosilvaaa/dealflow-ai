@@ -184,3 +184,105 @@
 [2026-05-15 19:22:48] WARN: Encerrando aplicação...
 [2026-05-15 19:22:48] WARN: Encerrando aplicação...
 [2026-05-15 19:22:48] WARN: Servidor encerrado
+[2026-05-17 10:44:04] INFO: Live Metrics iniciado
+[2026-05-17 10:44:04] INFO: Telegram bot iniciado
+[2026-05-17 10:44:04] INFO: Scheduler iniciado
+[2026-05-17 10:44:04] INFO: Servidor rodando na porta 3000
+[2026-05-17 10:44:14] WARN: JWT ausente
+[2026-05-17 10:44:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:44:15] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:44:24] INFO: Login administrativo realizado
+[2026-05-17 10:44:24] INFO: Cliente realtime conectado: g5SswXSpb-zaLCwuAAAB
+[2026-05-17 10:44:24] WARN: JWT ausente
+[2026-05-17 10:44:31] WARN: Cliente realtime desconectado: g5SswXSpb-zaLCwuAAAB
+[2026-05-17 10:44:54] WARN: JWT ausente
+[2026-05-17 10:44:54] WARN: JWT ausente
+[2026-05-17 10:45:14] INFO: Promo enviada para 7999895751
+[2026-05-17 10:45:24] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:46:14] INFO: Promo enviada para 7999895751
+[2026-05-17 10:46:24] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:47:14] INFO: Promo enviada para 7999895751
+[2026-05-17 10:47:24] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:48:14] INFO: Promo enviada para 7999895751
+[2026-05-17 10:48:24] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:49:14] INFO: Promo enviada para 7999895751
+[2026-05-17 10:49:24] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:50:14] INFO: Promo enviada para 7999895751
+[2026-05-17 10:50:24] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:51:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:51:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:52:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:52:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:53:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:53:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:54:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:54:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:55:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:55:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:56:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:56:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:57:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:57:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:58:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:58:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 10:59:15] INFO: Promo enviada para 7999895751
+[2026-05-17 10:59:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:00:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:00:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:01:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:01:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:02:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:02:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:03:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:03:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:04:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:04:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:05:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:05:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:06:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:06:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:07:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:07:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:08:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:08:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:09:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:09:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:10:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:10:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:11:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:11:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:12:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:12:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:13:15] INFO: Promo enviada para 7999895751
+[2026-05-17 11:13:25] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:14:16] INFO: Promo enviada para 7999895751
+[2026-05-17 11:14:26] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:15:16] INFO: Promo enviada para 7999895751
+[2026-05-17 11:15:26] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:16:16] INFO: Promo enviada para 7999895751
+[2026-05-17 11:16:26] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:17:16] INFO: Promo enviada para 7999895751
+[2026-05-17 11:17:26] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:17:27] WARN: Encerrando aplicação...
+[2026-05-17 11:17:27] WARN: Servidor encerrado
+[2026-05-17 11:17:38] INFO: Live Metrics iniciado
+[2026-05-17 11:17:38] INFO: Telegram bot iniciado
+[2026-05-17 11:17:38] INFO: Scheduler iniciado
+[2026-05-17 11:17:38] INFO: Servidor rodando na porta 3000
+[2026-05-17 11:17:42] WARN: JWT ausente
+[2026-05-17 11:17:48] INFO: Promo enviada para 7999895751
+[2026-05-17 11:17:49] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:18:48] INFO: Promo enviada para 7999895751
+[2026-05-17 11:18:58] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:19:28] WARN: JWT ausente
+[2026-05-17 11:19:28] WARN: JWT ausente
+[2026-05-17 11:19:31] WARN: JWT ausente
+[2026-05-17 11:19:37] INFO: Login administrativo realizado
+[2026-05-17 11:19:37] INFO: Cliente realtime conectado: aA-vRt8TI8WKjAYKAAAB
+[2026-05-17 11:19:37] WARN: JWT ausente
+[2026-05-17 11:19:48] INFO: Promo enviada para 7999895751
+[2026-05-17 11:19:58] INFO: Promo enviada para 7999895751.0
+[2026-05-17 11:20:48] INFO: Promo enviada para 7999895751
+[2026-05-17 11:20:52] WARN: Encerrando aplicação...
+[2026-05-17 11:20:53] WARN: Cliente realtime desconectado: aA-vRt8TI8WKjAYKAAAB
+[2026-05-17 11:20:53] WARN: Servidor encerrado
