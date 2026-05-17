@@ -861,3 +861,59 @@
 [2026-05-17 13:45:17] WARN: Scheduler encerrado
 [2026-05-17 13:45:17] WARN: Live Metrics encerrado
 [2026-05-17 13:45:18] INFO: Servidor HTTP encerrado
+[2026-05-17 13:46:13] INFO: Inicializando banco de dados...
+[2026-05-17 13:46:13] INFO: Tabela stats validada
+[2026-05-17 13:46:13] INFO: Banco de dados inicializado
+[2026-05-17 13:46:13] INFO: Inicializando Live Metrics...
+[2026-05-17 13:46:13] INFO: Live Metrics iniciado
+[2026-05-17 13:46:13] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:46:13] INFO: Telegram bot iniciado
+[2026-05-17 13:46:13] INFO: Scheduler iniciado
+[2026-05-17 13:46:17] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:46:17] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:46:17] WARN: Acesso não autenticado: /dashboard
+[2026-05-17 13:46:17] INFO: Auth route acessada: GET /login
+[2026-05-17 13:49:20] INFO: Auth route acessada: GET /login
+[2026-05-17 13:49:30] INFO: Auth route acessada: POST /login
+[2026-05-17 13:49:30] INFO: Login administrativo realizado: admin
+[2026-05-17 13:49:31] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:49:31] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:49:31] INFO: Dashboard acessado
+[2026-05-17 13:51:12] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:51:12] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:51:12] INFO: Dashboard acessado
+[2026-05-17 13:51:41] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 13:51:41] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:51:42] WARN: Scheduler encerrado
+[2026-05-17 13:51:42] WARN: Live Metrics encerrado
+[2026-05-17 13:51:42] INFO: Servidor HTTP encerrado
+[2026-05-17 13:51:48] INFO: Inicializando banco de dados...
+[2026-05-17 13:51:48] INFO: Tabela stats validada
+[2026-05-17 13:51:48] INFO: Banco de dados inicializado
+[2026-05-17 13:51:49] INFO: Inicializando Live Metrics...
+[2026-05-17 13:51:49] INFO: Live Metrics iniciado
+[2026-05-17 13:51:49] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:51:49] INFO: Telegram bot iniciado
+[2026-05-17 13:51:49] INFO: Scheduler iniciado
+[2026-05-17 13:51:51] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:51:51] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:51:51] WARN: Acesso não autenticado: /dashboard
+[2026-05-17 13:51:51] INFO: Auth route acessada: GET /login
+[2026-05-17 13:51:57] INFO: Auth route acessada: POST /login
+[2026-05-17 13:51:57] INFO: Login administrativo realizado: admin
+[2026-05-17 13:51:58] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:51:58] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:51:58] INFO: Dashboard acessado
+[2026-05-17 13:53:05] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:53:05] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:53:05] INFO: Dashboard acessado
+[2026-05-17 13:53:09] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:53:09] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:53:09] INFO: Dashboard acessado
+[2026-05-17 13:54:12] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 13:54:12] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 13:57:11] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 13:57:11] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:57:12] WARN: Scheduler encerrado
+[2026-05-17 13:57:12] WARN: Live Metrics encerrado
+[2026-05-17 13:57:13] INFO: Servidor HTTP encerrado
