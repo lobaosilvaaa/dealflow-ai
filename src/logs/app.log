@@ -671,3 +671,19 @@
 [2026-05-17 12:49:04] INFO: Promo enviada para 7999895751
 [2026-05-17 12:49:28] WARN: Telegram encerrado via SIGINT
 [2026-05-17 12:49:28] WARN: Encerrando aplicação...
+[2026-05-17 12:51:08] INFO: Live Metrics iniciado
+[2026-05-17 12:51:08] INFO: Telegram bot iniciado
+[2026-05-17 12:51:08] INFO: Telegram bot iniciado
+[2026-05-17 12:51:08] INFO: Scheduler iniciado
+[2026-05-17 12:51:08] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:51:08] INFO: Tabela stats validada
+[2026-05-17 12:51:15] INFO: JWT ausente
+[2026-05-17 12:51:21] INFO: Login administrativo realizado: admin
+[2026-05-17 12:51:21] INFO: Dashboard acessado
+[2026-05-17 12:51:21] INFO: Cliente realtime conectado: LighwXsxb7RcSCncAAAB
+[2026-05-17 12:51:21] INFO: JWT ausente
+[2026-05-17 12:51:27] INFO: Logout realizado: admin
+[2026-05-17 12:51:27] WARN: Cliente realtime desconectado: LighwXsxb7RcSCncAAAB
+[2026-05-17 12:51:27] INFO: JWT ausente
+[2026-05-17 12:51:32] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:51:32] WARN: Encerrando aplicação...
