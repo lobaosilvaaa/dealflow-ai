@@ -6,31 +6,61 @@ on:
       - main
 
 jobs:
+
   notify:
+
     runs-on: ubuntu-latest
 
     steps:
+
+      # 📦 Checkout
       - name: Checkout
+
         uses: actions/checkout@v4
+
         with:
           fetch-depth: 2
 
+      # 📊 Extrai dados
       - name: Extract Data
+
         id: data
+
         run: |
+
           {
             echo "MESSAGE<<EOF"
             echo "${{ github.event.head_commit.message }}"
             echo "EOF"
           } >> $GITHUB_OUTPUT
+
           echo "AUTHOR=${{ github.event.head_commit.author.name }}" >> $GITHUB_OUTPUT
+
           echo "REPO=${{ github.repository }}" >> $GITHUB_OUTPUT
+
           echo "URL=${{ github.event.head_commit.url }}" >> $GITHUB_OUTPUT
+
           echo "BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
-          FILES=$(git diff --name-only HEAD^ HEAD | wc -l)
+          echo "SHA=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-          FILE_LIST=$(git diff --name-only HEAD^ HEAD | awk '{print "• " $0}' | head -5)
+          # 🛡️ Protege primeiro commit
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+
+            FILES=$(git diff --name-only HEAD^ HEAD | wc -l)
+
+            FILE_LIST=$(git diff --name-only HEAD^ HEAD \
+              | awk '{print "• " $0}' \
+              | head -5 \
+              | cut -c1-700)
+
+          else
+
+            FILES=1
+
+            FILE_LIST="• Initial commit"
+
+          fi
 
           echo "FILES=$FILES" >> $GITHUB_OUTPUT
 
@@ -40,32 +70,59 @@ jobs:
             echo "EOF"
           } >> $GITHUB_OUTPUT
 
+      # 📡 Discord Webhook
       - name: Send Discord Webhook
+
+        if: github.actor != 'github-actions[bot]'
+
         env:
           DISCORD_COMMIT_WEBHOOK: ${{ secrets.DISCORD_COMMIT_WEBHOOK }}
+
         run: |
+
           MESSAGE="${{ steps.data.outputs.MESSAGE }}"
+
+          # 🛡️ Limita tamanho commit
+          MESSAGE=$(echo "$MESSAGE" | cut -c1-300)
 
           COLOR=5814783
           TYPE="📦 Commit"
+          STATUS="🟢 Stable"
 
+          # 🎨 Classificação commit
           if [[ "$MESSAGE" == feat* ]]; then
+
             COLOR=5763719
             TYPE="✨ Feature"
+            STATUS="🟢 Feature Release"
+
           elif [[ "$MESSAGE" == fix* ]]; then
+
             COLOR=15548997
             TYPE="🐛 Fix"
+            STATUS="🟠 Hotfix"
+
           elif [[ "$MESSAGE" == refactor* ]]; then
+
             COLOR=16776960
             TYPE="♻️ Refactor"
+            STATUS="🟡 Refactor"
+
           elif [[ "$MESSAGE" == docs* ]]; then
+
             COLOR=3447003
             TYPE="📝 Docs"
+            STATUS="🔵 Documentation"
+
           elif [[ "$MESSAGE" == chore* ]]; then
+
             COLOR=9807270
             TYPE="🛠️ Chore"
+            STATUS="⚪ Maintenance"
+
           fi
 
+          # 📦 Payload Discord
           PAYLOAD=$(jq -n \
             --arg username "DealFlowAI Logs" \
             --arg avatar_url "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png" \
@@ -73,8 +130,10 @@ jobs:
             --arg description "$MESSAGE" \
             --arg url "${{ steps.data.outputs.URL }}" \
             --arg type "$TYPE" \
+            --arg status "$STATUS" \
             --arg author "${{ steps.data.outputs.AUTHOR }}" \
             --arg branch "${{ steps.data.outputs.BRANCH }}" \
+            --arg sha "${{ steps.data.outputs.SHA }}" \
             --arg files "${{ steps.data.outputs.FILES }} alterados" \
             --arg file_list "${{ steps.data.outputs.FILE_LIST }}" \
             --arg repo "${{ steps.data.outputs.REPO }}" \
@@ -83,6 +142,7 @@ jobs:
             '{
               username: $username,
               avatar_url: $avatar_url,
+
               embeds: [
                 {
                   author: {
@@ -90,6 +150,7 @@ jobs:
                     icon_url:
                       "https://raw.githubusercontent.com/lobaosilvaaa/dealflow-ai/main/src/assets/LogoDealFlowAI.png"
                   },
+
                   title: $title,
                   description: $description,
                   color: $color,
@@ -102,6 +163,11 @@ jobs:
                       inline: true
                     },
                     {
+                      name: "📊 Status",
+                      value: $status,
+                      inline: true
+                    },
+                    {
                       name: "👤 Autor",
                       value: $author,
                       inline: true
@@ -109,6 +175,11 @@ jobs:
                     {
                       name: "🌿 Branch",
                       value: $branch,
+                      inline: true
+                    },
+                    {
+                      name: "🔖 SHA",
+                      value: $sha,
                       inline: true
                     },
                     {
@@ -137,6 +208,7 @@ jobs:
               ]
             }')
 
+          # 🚀 Envia webhook
           curl -X POST "$DISCORD_COMMIT_WEBHOOK" \
           -H "Content-Type: application/json" \
           -d "$PAYLOAD"
