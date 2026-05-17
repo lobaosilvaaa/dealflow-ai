@@ -3,26 +3,20 @@
   "version": "1.0.0",
   "description": "Plataforma SaaS para automação inteligente de promoções para Telegram e WhatsApp.",
   "main": "app.js",
-
   "type": "commonjs",
-
   "scripts": {
     "start": "node app.js",
     "dev": "node app.js",
     "test": "echo \"No automated tests configured\""
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lobaosilvaaa/dealflow-ai.git"
   },
-
   "bugs": {
     "url": "https://github.com/lobaosilvaaa/dealflow-ai/issues"
   },
-
   "homepage": "https://github.com/lobaosilvaaa/dealflow-ai#readme",
-
   "keywords": [
     "telegram-bot",
     "whatsapp-bot",
@@ -34,11 +28,8 @@
     "dashboard",
     "analytics"
   ],
-
   "author": "DealFlowAI Team",
-
   "license": "MIT",
-
   "dependencies": {
     "axios": "^1.15.2",
     "bcrypt": "^6.0.0",

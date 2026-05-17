@@ -917,3 +917,72 @@
 [2026-05-17 13:57:12] WARN: Scheduler encerrado
 [2026-05-17 13:57:12] WARN: Live Metrics encerrado
 [2026-05-17 13:57:13] INFO: Servidor HTTP encerrado
+[2026-05-17 13:58:34] INFO: Inicializando banco de dados...
+[2026-05-17 13:58:34] INFO: Tabela stats validada
+[2026-05-17 13:58:34] INFO: Banco de dados inicializado
+[2026-05-17 13:58:34] INFO: Inicializando Live Metrics...
+[2026-05-17 13:58:34] INFO: Live Metrics iniciado
+[2026-05-17 13:58:34] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:58:34] INFO: Telegram bot iniciado
+[2026-05-17 13:58:34] INFO: Scheduler iniciado
+[2026-05-17 13:58:40] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:58:40] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:58:40] WARN: Acesso não autenticado: /dashboard
+[2026-05-17 13:58:40] INFO: Auth route acessada: GET /login
+[2026-05-17 13:58:40] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 13:58:40] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 13:58:48] INFO: Auth route acessada: POST /login
+[2026-05-17 13:58:48] INFO: Login administrativo realizado: admin
+[2026-05-17 13:58:48] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:58:48] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:58:48] INFO: Dashboard acessado
+[2026-05-17 13:58:48] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 13:58:48] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 13:58:48] INFO: Cliente realtime conectado: dKPBmDaz7o1ineerAAAB
+[2026-05-17 14:00:12] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 14:00:12] WARN: Telegram encerrado via SIGINT
+[2026-05-17 14:00:13] WARN: Scheduler encerrado
+[2026-05-17 14:00:14] WARN: Live Metrics encerrado
+[2026-05-17 14:00:22] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 14:00:22] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 14:00:22] WARN: Scheduler já parado
+[2026-05-17 14:00:22] WARN: Live Metrics já parado
+[2026-05-17 14:00:22] WARN: Scheduler já parado
+[2026-05-17 14:00:22] WARN: Live Metrics já parado
+[2026-05-17 14:02:39] INFO: Inicializando banco de dados...
+[2026-05-17 14:02:39] INFO: Tabela stats validada
+[2026-05-17 14:02:39] INFO: Banco de dados inicializado
+[2026-05-17 14:02:39] INFO: Inicializando Live Metrics...
+[2026-05-17 14:02:39] INFO: Live Metrics iniciado
+[2026-05-17 14:02:39] INFO: Servidor rodando na porta 3000
+[2026-05-17 14:02:39] INFO: Telegram bot iniciado
+[2026-05-17 14:02:39] INFO: Scheduler iniciado
+[2026-05-17 14:02:44] INFO: Cliente realtime conectado: IM-17mJiyC3pZQ7IAAAB
+[2026-05-17 14:02:44] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:44] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:44] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:44] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:47] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 14:02:47] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 14:02:47] WARN: Acesso não autenticado: /dashboard
+[2026-05-17 14:02:48] INFO: Auth route acessada: GET /login
+[2026-05-17 14:02:48] WARN: Cliente realtime desconectado: IM-17mJiyC3pZQ7IAAAB
+[2026-05-17 14:02:48] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:48] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:53] INFO: Auth route acessada: POST /login
+[2026-05-17 14:02:53] INFO: Login administrativo realizado: admin
+[2026-05-17 14:02:54] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 14:02:54] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 14:02:54] INFO: Dashboard acessado
+[2026-05-17 14:02:54] INFO: Auth route acessada: GET /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:54] WARN: Rota inexistente: /.well-known/appspecific/com.chrome.devtools.json
+[2026-05-17 14:02:54] INFO: Auth route acessada: GET /js/chart.umd.js.map
+[2026-05-17 14:02:54] WARN: Rota inexistente: /js/chart.umd.js.map
+[2026-05-17 14:02:54] INFO: Cliente realtime conectado: lxKnyrjPQYnYvAs2AAAD
+[2026-05-17 14:05:27] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 14:05:27] WARN: Telegram encerrado via SIGINT
+[2026-05-17 14:05:27] WARN: Scheduler encerrado
+[2026-05-17 14:05:28] WARN: Live Metrics encerrado
+[2026-05-17 14:06:34] WARN: Encerrando aplicação (SIGINT)
+[2026-05-17 14:06:35] WARN: Scheduler já parado
+[2026-05-17 14:06:35] WARN: Live Metrics já parado
