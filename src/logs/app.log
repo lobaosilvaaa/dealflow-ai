@@ -519,3 +519,43 @@
 [2026-05-17 12:33:27] WARN: Telegram encerrado via SIGINT
 [2026-05-17 12:33:27] WARN: Encerrando aplicação...
 [2026-05-17 12:33:28] WARN: Servidor encerrado
+[2026-05-17 12:35:34] INFO: Live Metrics iniciado
+[2026-05-17 12:35:34] INFO: Telegram bot iniciado
+[2026-05-17 12:35:34] INFO: Telegram bot iniciado
+[2026-05-17 12:35:34] INFO: Scheduler iniciado
+[2026-05-17 12:35:34] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:35:40] INFO: JWT ausente
+[2026-05-17 12:35:44] INFO: Login administrativo realizado: admin
+[2026-05-17 12:35:44] INFO: Dashboard acessado
+[2026-05-17 12:35:44] INFO: Cliente realtime conectado: H_i1dBoGMB-B0sbBAAAB
+[2026-05-17 12:35:44] INFO: JWT ausente
+[2026-05-17 12:35:45] INFO: Promo enviada para 7999895751
+[2026-05-17 12:35:45] INFO: Promo enviada para 7999895751.0
+[2026-05-17 12:35:51] INFO: Mensagem recebida: 7999895751 -> menu
+[2026-05-17 12:35:55] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 12:35:56] INFO: Promo enviada para 7999895751
+[2026-05-17 12:36:10] INFO: Logout realizado: admin
+[2026-05-17 12:36:11] WARN: Cliente realtime desconectado: H_i1dBoGMB-B0sbBAAAB
+[2026-05-17 12:36:11] INFO: JWT ausente
+[2026-05-17 12:36:13] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:36:13] WARN: Encerrando aplicação...
+[2026-05-17 12:36:17] WARN: Encerrando aplicação...
+[2026-05-17 12:36:26] WARN: Encerrando aplicação...
+[2026-05-17 12:36:26] WARN: Encerrando aplicação...
+[2026-05-17 12:36:44] INFO: Promo enviada para 7999895751
+[2026-05-17 12:36:54] INFO: Promo enviada para 7999895751.0
+[2026-05-17 12:37:01] WARN: Encerrando aplicação...
+[2026-05-17 12:37:14] WARN: Encerrando aplicação...
+[2026-05-17 12:37:24] WARN: Encerrando aplicação...
+[2026-05-17 12:37:44] INFO: Promo enviada para 7999895751
+[2026-05-17 12:37:57] INFO: Live Metrics iniciado
+[2026-05-17 12:37:57] INFO: Telegram bot iniciado
+[2026-05-17 12:37:57] INFO: Telegram bot iniciado
+[2026-05-17 12:37:57] INFO: Scheduler iniciado
+[2026-05-17 12:37:57] INFO: Servidor rodando na porta 3000
+[2026-05-17 12:37:58] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 12:37:58] INFO: Mensagem recebida: 7999895751 -> promo
+[2026-05-17 12:37:58] INFO: Promo enviada para 7999895751
+[2026-05-17 12:38:07] WARN: Telegram encerrado via SIGINT
+[2026-05-17 12:38:07] WARN: Encerrando aplicação...
+[2026-05-17 12:38:07] WARN: Servidor encerrado

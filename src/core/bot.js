@@ -1,3 +1,5 @@
+// 🚀 DealFlowAI Core Bot
+
 const {
 
     saveChat,
@@ -19,6 +21,7 @@ const {
 const {
 
     incrementPromos,
+    getStats,
 
 } = require(
     "../database/stats"
@@ -33,7 +36,10 @@ const {
 );
 
 const {
-    logger
+
+    logger,
+    sendRuntimeLog
+
 } = require(
     "../services/logger"
 );
@@ -43,13 +49,41 @@ async function processMessage(ctx) {
 
     try {
 
+        // 🛡️ Validação contexto
+        if (
+
+            !ctx ||
+            !ctx.chat ||
+            !ctx.message
+
+        ) {
+
+            logger.warn(
+                "Contexto Telegram inválido"
+            );
+
+            return;
+
+        }
+
         const chatId =
             String(
                 ctx.chat.id
             );
 
+        const username =
+            ctx.from?.username ||
+            "unknown";
+
         const text =
-            ctx.message.text;
+            ctx.message.text?.trim();
+
+        // 🛡️ Texto obrigatório
+        if (!text) {
+
+            return;
+
+        }
 
         console.log(
             "📩 Mensagem recebida:"
@@ -61,6 +95,10 @@ async function processMessage(ctx) {
 
         console.log(
             `Mensagem: ${text}`
+        );
+
+        logger.info(
+            `Mensagem recebida: ${chatId} -> ${text}`
         );
 
         // 💾 Salva chat
@@ -85,6 +123,32 @@ async function processMessage(ctx) {
         // 🤖 Status atual
         const active =
             settings?.active ?? 1;
+
+        // 🚀 COMANDO /start
+        if (
+
+            text.toLowerCase() === "/start"
+
+        ) {
+
+            logger.info(
+                `Start executado: ${chatId}`
+            );
+
+            return ctx.reply(`
+
+🚀 Bem-vindo ao DealFlow AI!
+
+Sua plataforma inteligente de promoções automáticas.
+
+Digite:
+menu
+
+para visualizar os comandos disponíveis.
+
+`);
+
+        }
 
         // 🚀 COMANDO /categoria
         if (
@@ -128,6 +192,21 @@ Exemplo:
 
             logger.info(
                 `Categoria alterada: ${chatId} -> ${newCategory}`
+            );
+
+            // 📡 Runtime
+            await sendRuntimeLog(
+
+                "🎯 Categoria Alterada",
+
+                `Usuário alterou categoria.
+
+👤 User: ${username}
+🆔 Chat ID: ${chatId}
+🎯 Categoria: ${newCategory}`,
+
+                "info"
+
             );
 
             return ctx.reply(`
@@ -213,10 +292,30 @@ As promoções automáticas seguirão essa frequência.
 
         ) {
 
+            // ⛔ Usuário pausado
+            if (!active) {
+
+                return ctx.reply(`
+
+⏸️ Suas promoções estão pausadas.
+
+Use:
+/ativar
+
+para voltar a receber promoções.
+
+`);
+
+            }
+
             const product =
                 getRandomProduct(category);
 
             if (!product) {
+
+                logger.warn(
+                    `Nenhuma promoção encontrada: ${category}`
+                );
 
                 return ctx.reply(`
 
@@ -267,12 +366,21 @@ ${product.link}
 
         ) {
 
+            const stats =
+                await getStats();
+
+            const chats =
+                await getAllChats();
+
             return ctx.reply(`
 
 📊 *DEALFLOW AI STATS*
 
 📤 Promoções enviadas:
-0
+${stats?.sent_promos || 0}
+
+👥 Usuários:
+${chats.length}
 
 ━━━━━━━━━━━━━━━━━━
 
@@ -371,9 +479,11 @@ As promoções automáticas voltarão a ser enviadas.
 
             return ctx.reply(`
 
-🚀 DealFlow AI Online
+🚀 *DealFlow AI Online*
 
-Comandos disponíveis:
+━━━━━━━━━━━━━━━━━━
+
+📌 Comandos disponíveis:
 
 🎯 /categoria gamer
 ⏰ /frequencia 5
@@ -381,14 +491,21 @@ Comandos disponíveis:
 ⏸️ /pausar
 ▶️ /ativar
 
-Ou envie:
+━━━━━━━━━━━━━━━━━━
+
+🔥 Para receber promoções:
 promo
 
-`);
+`, {
+
+                parse_mode:
+                    "Markdown"
+
+            });
 
         }
 
-        // 🤖 Resposta padrão
+        // ❌ Resposta padrão
         return ctx.reply(`
 
 ❌ Comando não reconhecido.
@@ -406,6 +523,18 @@ menu
             `Erro bot: ${error.message}`
         );
 
+        // 📡 Runtime alert
+        await sendRuntimeLog(
+
+            "❌ Bot Error",
+
+            error.stack ||
+            error.message,
+
+            "error"
+
+        );
+
         try {
 
             await ctx.reply(
@@ -417,6 +546,10 @@ menu
             console.log(
                 "Erro reply:",
                 replyError.message
+            );
+
+            logger.error(
+                `Erro reply bot: ${replyError.message}`
             );
 
         }
