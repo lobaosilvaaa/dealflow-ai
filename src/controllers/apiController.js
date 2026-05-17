@@ -1,3 +1,5 @@
+// 🚀 DealFlowAI API Controller
+
 const fs =
     require("fs");
 
@@ -17,23 +19,33 @@ const {
 );
 
 const {
-    logger
+
+    logger,
+    sendRuntimeLog
+
 } = require(
     "../services/logger"
 );
+
+// 🌎 Ambiente
+const ENVIRONMENT =
+    process.env.NODE_ENV ||
+    "development";
 
 // 📊 Estatísticas
 async function stats(req, res) {
 
     try {
 
+        // 📊 Busca dados
         const data =
             await getStats();
 
         const users =
             await getAllUsers();
 
-        res.json({
+        // 📦 Payload
+        const payload = {
 
             success: true,
 
@@ -41,12 +53,12 @@ async function stats(req, res) {
                 new Date(),
 
             environment:
-                "development",
+                ENVIRONMENT,
 
             stats: {
 
                 sentPromos:
-                    data.sent_promos,
+                    data?.sent_promos || 0,
 
                 totalUsers:
                     users.length,
@@ -56,9 +68,31 @@ async function stats(req, res) {
                         process.uptime()
                     ),
 
+                memoryUsage:
+                    Math.round(
+
+                        process.memoryUsage().rss
+                        / 1024
+                        / 1024
+
+                    ),
+
+                nodeVersion:
+                    process.version,
+
             }
 
-        });
+        };
+
+        // 📜 Log API
+        logger.info(
+            "API /stats acessada"
+        );
+
+        // 🚀 Resposta
+        return res.json(
+            payload
+        );
 
     } catch (error) {
 
@@ -66,7 +100,19 @@ async function stats(req, res) {
             `API stats error: ${error.message}`
         );
 
-        res.status(500).json({
+        // 📡 Runtime alert
+        await sendRuntimeLog(
+
+            "❌ API Stats Error",
+
+            error.stack ||
+            error.message,
+
+            "error"
+
+        );
+
+        return res.status(500).json({
 
             success: false,
 
@@ -84,22 +130,37 @@ async function users(req, res) {
 
     try {
 
+        // 👥 Busca usuários
         const users =
             await getAllUsers();
 
-        res.json({
+        // 📦 Payload
+        const payload = {
 
             success: true,
 
             timestamp:
                 new Date(),
 
+            environment:
+                ENVIRONMENT,
+
             total:
                 users.length,
 
             users,
 
-        });
+        };
+
+        // 📜 Log API
+        logger.info(
+            "API /users acessada"
+        );
+
+        // 🚀 Resposta
+        return res.json(
+            payload
+        );
 
     } catch (error) {
 
@@ -107,7 +168,19 @@ async function users(req, res) {
             `API users error: ${error.message}`
         );
 
-        res.status(500).json({
+        // 📡 Runtime alert
+        await sendRuntimeLog(
+
+            "❌ API Users Error",
+
+            error.stack ||
+            error.message,
+
+            "error"
+
+        );
+
+        return res.status(500).json({
 
             success: false,
 
@@ -125,6 +198,7 @@ async function logs(req, res) {
 
     try {
 
+        // 📜 Caminho logs
         const logPath =
             path.join(
 
@@ -137,7 +211,11 @@ async function logs(req, res) {
         let logs = [];
 
         // 📖 Lê logs
-        if (fs.existsSync(logPath)) {
+        if (
+
+            fs.existsSync(logPath)
+
+        ) {
 
             const content =
                 fs.readFileSync(
@@ -156,19 +234,33 @@ async function logs(req, res) {
 
         }
 
-        res.json({
+        // 📦 Payload
+        const payload = {
 
             success: true,
 
             timestamp:
                 new Date(),
 
+            environment:
+                ENVIRONMENT,
+
             total:
                 logs.length,
 
             logs,
 
-        });
+        };
+
+        // 📜 Log API
+        logger.info(
+            "API /logs acessada"
+        );
+
+        // 🚀 Resposta
+        return res.json(
+            payload
+        );
 
     } catch (error) {
 
@@ -176,7 +268,80 @@ async function logs(req, res) {
             `API logs error: ${error.message}`
         );
 
-        res.status(500).json({
+        // 📡 Runtime alert
+        await sendRuntimeLog(
+
+            "❌ API Logs Error",
+
+            error.stack ||
+            error.message,
+
+            "error"
+
+        );
+
+        return res.status(500).json({
+
+            success: false,
+
+            error:
+                error.message,
+
+        });
+
+    }
+
+}
+
+// ❤️ Healthcheck
+async function health(req, res) {
+
+    try {
+
+        // 📦 Payload health
+        const payload = {
+
+            success: true,
+
+            status:
+                "online",
+
+            timestamp:
+                new Date(),
+
+            environment:
+                ENVIRONMENT,
+
+            uptime:
+                Math.floor(
+                    process.uptime()
+                ),
+
+            memoryUsage:
+                Math.round(
+
+                    process.memoryUsage().rss
+                    / 1024
+                    / 1024
+
+                ),
+
+            nodeVersion:
+                process.version,
+
+        };
+
+        return res.json(
+            payload
+        );
+
+    } catch (error) {
+
+        logger.error(
+            `API health error: ${error.message}`
+        );
+
+        return res.status(500).json({
 
             success: false,
 
@@ -196,5 +361,7 @@ module.exports = {
     users,
 
     logs,
+
+    health,
 
 };
