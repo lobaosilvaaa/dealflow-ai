@@ -1,3 +1,5 @@
+// 🚀 DealFlowAI API Routes
+
 const express =
     require("express");
 
@@ -9,6 +11,7 @@ const {
     stats,
     users,
     logs,
+    health,
 
 } = require(
     "../controllers/apiController"
@@ -22,9 +25,10 @@ const {
     "../middlewares/jwtMiddleware"
 );
 
-// 🔐 Middleware JWT apenas API
-router.use(
-    verifyToken
+const {
+    logger
+} = require(
+    "../services/logger"
 );
 
 /**
@@ -33,6 +37,43 @@ router.use(
  *   name: DealFlow API
  *   description: API oficial DealFlow AI
  */
+
+// ❤️ Healthcheck público
+router.get(
+
+    "/health",
+
+    health
+
+);
+
+// 📡 Middleware logs API
+router.use(
+
+    "/api",
+
+    (req, res, next) => {
+
+        logger.info(
+
+            `API acessada: ${req.method} ${req.originalUrl}`
+
+        );
+
+        next();
+
+    }
+
+);
+
+// 🔐 Middleware JWT apenas API privada
+router.use(
+
+    "/api/v1",
+
+    verifyToken
+
+);
 
 /**
  * @swagger
@@ -45,6 +86,8 @@ router.use(
  *     responses:
  *       200:
  *         description: Estatísticas carregadas com sucesso
+ *       401:
+ *         description: Token inválido
  */
 
 // 📊 Estatísticas
@@ -67,6 +110,8 @@ router.get(
  *     responses:
  *       200:
  *         description: Lista de usuários
+ *       401:
+ *         description: Token inválido
  */
 
 // 👥 Usuários
@@ -89,6 +134,8 @@ router.get(
  *     responses:
  *       200:
  *         description: Logs carregados
+ *       401:
+ *         description: Token inválido
  */
 
 // 📜 Logs
@@ -97,6 +144,32 @@ router.get(
     "/api/v1/logs",
 
     logs
+
+);
+
+// ❌ API inexistente
+router.use(
+
+    "/api",
+
+    (req, res) => {
+
+        logger.warn(
+
+            `API endpoint inexistente: ${req.originalUrl}`
+
+        );
+
+        return res.status(404).json({
+
+            success: false,
+
+            error:
+                "Endpoint não encontrado"
+
+        });
+
+    }
 
 );
 

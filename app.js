@@ -1,3 +1,5 @@
+// 🚀 DealFlowAI Core Application
+
 require("dotenv").config();
 
 const express =
@@ -91,10 +93,10 @@ const io =
 // 🔗 Socket no logger
 setSocket(io);
 
-// 📡 Inicializa métricas realtime
+// 📡 Inicializa live metrics
 startLiveMetrics(io);
 
-// 🔌 Cliente realtime conectado
+// 🔌 Cliente realtime
 io.on("connection", socket => {
 
     logger.info(
@@ -111,7 +113,7 @@ io.on("connection", socket => {
 
 });
 
-// ⚙️ Configuração
+// ⚙️ Configurações
 const PORT =
     process.env.PORT || 3000;
 
@@ -176,7 +178,16 @@ app.use(
 
 );
 
-// 🏠 Home pública
+// 🌐 Rotas
+app.use(authRoutes);
+
+app.use(dashboardRoutes);
+
+app.use(adminRoutes);
+
+app.use(apiRoutes);
+
+// 🏠 Home
 app.get("/", (req, res) => {
 
     res.send(
@@ -185,41 +196,23 @@ app.get("/", (req, res) => {
 
 });
 
-// ❤️ Healthcheck público
-app.get("/health", (req, res) => {
+// ❌ Rota inexistente
+app.use((req, res) => {
 
-    res.json({
+    logger.warn(
+        `Rota inexistente: ${req.originalUrl}`
+    );
 
-        success: true,
+    return res.status(404).json({
 
-        status:
-            "online",
+        success: false,
 
-        uptime:
-            Math.floor(
-                process.uptime()
-            ),
-
-        timestamp:
-            new Date(),
-
-        environment:
-            process.env.NODE_ENV || "development",
+        error:
+            "Rota não encontrada"
 
     });
 
 });
-
-// 🌐 Rotas públicas
-app.use(authRoutes);
-
-// 🔐 Dashboard protegido por sessão
-app.use(dashboardRoutes);
-
-app.use(adminRoutes);
-
-// 🔐 API protegida por JWT
-app.use(apiRoutes);
 
 // 🚀 Inicializa servidor
 server.listen(PORT, async () => {
@@ -232,43 +225,19 @@ server.listen(PORT, async () => {
 
         "🚀 Sistema Online",
 
-        "DealFlow AI iniciado com sucesso."
+        "DealFlow AI iniciado com sucesso.",
+
+        "success"
 
     );
 
 });
 
-// 🚀 Bootstrap principal
-async function bootstrap() {
+// 🤖 Inicializa Telegram
+startTelegramBot();
 
-    try {
-
-        // 🤖 Telegram
-        startTelegramBot();
-
-        logger.info(
-            "Telegram bot iniciado"
-        );
-
-        // ⏰ Scheduler
-        startScheduler(bot);
-
-        logger.info(
-            "Scheduler iniciado"
-        );
-
-    } catch (error) {
-
-        logger.error(
-            `Erro bootstrap: ${error.message}`
-        );
-
-    }
-
-}
-
-// 🚀 Inicializa serviços
-bootstrap();
+// ⏰ Inicializa Scheduler
+startScheduler(bot);
 
 // 🛑 Shutdown seguro
 process.on(
@@ -277,45 +246,21 @@ process.on(
 
     async () => {
 
-        try {
+        logger.warn(
+            "Encerrando aplicação..."
+        );
 
-            logger.warn(
-                "Encerrando aplicação..."
-            );
+        await sendRuntimeLog(
 
-            await sendRuntimeLog(
+            "🛑 Sistema Offline",
 
-                "🛑 Sistema Offline",
+            "DealFlow AI foi encerrado.",
 
-                "DealFlow AI foi encerrado.",
+            "warn"
 
-                "warn"
+        );
 
-            );
-
-            // 🔌 Fecha Socket.IO
-            io.close();
-
-            // 🌐 Fecha servidor HTTP
-            server.close(() => {
-
-                logger.warn(
-                    "Servidor encerrado"
-                );
-
-                process.exit(0);
-
-            });
-
-        } catch (error) {
-
-            logger.error(
-                `Erro shutdown: ${error.message}`
-            );
-
-            process.exit(1);
-
-        }
+        process.exit();
 
     }
 
@@ -338,6 +283,7 @@ process.on(
 
             "❌ Uncaught Exception",
 
+            error.stack ||
             error.message,
 
             "error"

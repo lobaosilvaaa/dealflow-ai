@@ -703,3 +703,45 @@
 [2026-05-17 12:54:00] INFO: Chat salvo: 7999895751
 [2026-05-17 12:54:18] WARN: Telegram encerrado via SIGINT
 [2026-05-17 12:54:18] WARN: Encerrando aplicação...
+[2026-05-17 13:01:14] INFO: Live Metrics iniciado
+[2026-05-17 13:01:14] INFO: Telegram bot iniciado
+[2026-05-17 13:01:14] INFO: Telegram bot iniciado
+[2026-05-17 13:01:14] INFO: Scheduler iniciado
+[2026-05-17 13:01:14] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:01:14] INFO: Tabela stats validada
+[2026-05-17 13:01:14] INFO: Cliente realtime conectado: 15x8GW6Om1UILq0bAAAB
+[2026-05-17 13:01:28] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:01:28] WARN: Auth endpoint inexistente: /dashboard
+[2026-05-17 13:01:28] WARN: Cliente realtime desconectado: 15x8GW6Om1UILq0bAAAB
+[2026-05-17 13:01:28] INFO: Auth route acessada: GET /favicon.ico
+[2026-05-17 13:01:28] WARN: Auth endpoint inexistente: /favicon.ico
+[2026-05-17 13:01:31] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:01:31] WARN: Auth endpoint inexistente: /dashboard
+[2026-05-17 13:01:37] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:01:37] WARN: Auth endpoint inexistente: /dashboard
+[2026-05-17 13:01:37] INFO: Auth route acessada: GET /favicon.ico
+[2026-05-17 13:01:37] WARN: Auth endpoint inexistente: /favicon.ico
+[2026-05-17 13:01:39] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:01:39] WARN: Auth endpoint inexistente: /dashboard
+[2026-05-17 13:03:09] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:03:09] WARN: Encerrando aplicação...
+[2026-05-17 13:04:12] INFO: Live Metrics iniciado
+[2026-05-17 13:04:12] INFO: Telegram bot iniciado
+[2026-05-17 13:04:12] INFO: Servidor rodando na porta 3000
+[2026-05-17 13:04:12] INFO: Tabela stats validada
+[2026-05-17 13:04:16] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:04:16] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:04:16] WARN: Acesso não autenticado: /dashboard
+[2026-05-17 13:04:17] INFO: Auth route acessada: GET /login
+[2026-05-17 13:04:24] INFO: Auth route acessada: POST /login
+[2026-05-17 13:04:24] INFO: Login administrativo realizado: admin
+[2026-05-17 13:04:24] INFO: Auth route acessada: GET /dashboard
+[2026-05-17 13:04:24] INFO: Dashboard route acessada: GET /dashboard
+[2026-05-17 13:04:24] INFO: Dashboard acessado
+[2026-05-17 13:04:24] INFO: Cliente realtime conectado: NUw91QRNqa3kgOq-AAAB
+[2026-05-17 13:04:32] INFO: Auth route acessada: GET /logout
+[2026-05-17 13:04:32] INFO: Logout realizado: admin
+[2026-05-17 13:04:32] INFO: Auth route acessada: GET /login
+[2026-05-17 13:04:32] WARN: Cliente realtime desconectado: NUw91QRNqa3kgOq-AAAB
+[2026-05-17 13:04:46] WARN: Telegram encerrado via SIGINT
+[2026-05-17 13:04:46] WARN: Encerrando aplicação...
